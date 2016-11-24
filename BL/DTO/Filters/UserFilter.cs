@@ -1,4 +1,5 @@
-﻿using Utils.Enums;
+﻿using BL.DTO.GroupDTOs;
+using Utils.Enums;
 
 namespace BL.DTO.Filters
 {

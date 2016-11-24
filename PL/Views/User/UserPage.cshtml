@@ -1,0 +1,47 @@
+﻿@model PL.Models.UserPageModel
+@{
+	ViewBag.Title = Model.User.FullName+ "Profile";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.User.FullName Profile</h2> 
+@Html.ActionLink("Send a Message","Create","Chat",new {id=Model.User.ID})
+
+@* TODO meh toto nepojde pokial nezmenim databazu *@
+@*<div>*@
+@*	@using (Html.BeginForm("UserPage", "User", FormMethod.Post))*@
+@*	{*@
+@*		@Html.TextAreaFor(m => m.NewPost.Message)*@
+@*		//privacy*@
+@*		<input type="submit" name="SendPost" value="Send" />*@
+@**@
+@**@
+@*	}*@
+@*</div>*@
+
+<div>
+
+	@foreach (var postDto in Model.Posts)
+	{
+		<div style="border: black solid 1px">
+			<h3>
+
+				
+				@Html.ActionLink(postDto.Sender.FullName, "UserPage", "User", new { id = postDto.Sender.ID }, null)
+
+				@if (postDto.GroupId != null)
+				{
+					<Text> sent to  </Text>
+
+					@Html.ActionLink(postDto.GroupId.ToString(),"GroupPage", "Group", new { id = postDto.GroupId }, null)
+
+				}
+			</h3>
+
+			<div> @postDto.Message</div>
+			
+			@Html.ActionLink("Reactions", "Reactions", "Post", new { id = postDto.ID }, null)
+
+		</div>
+	}
+</div>

@@ -1,0 +1,24 @@
+﻿@model PL.Models.ChatListModel
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+@foreach (var chat in Model.Chats)
+{
+	<div style="border: black solid 1px; margin: 10px">
+		<div style="margin: 10px">
+			
+			@Html.ActionLink(chat.Name, "OpenChat", "Chat", new { id = chat.ID }, null)
+
+		</div>
+		
+		<div>
+			@Html.ActionLink("Delete", "Delete", "Chat", new { id = chat.ID }, null)
+
+		</div>
+	</div>
+}
+
+

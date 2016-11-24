@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using BL.DTO.GroupDTOs;
 using Utils.Enums;
 
 namespace BL.DTO
 {
 	public class PostDTO
 	{
-		public PostDTO()
-		{
-//			Comments = new List<CommentDTO>();
-//			Reactions = new List<ReactionDTO>();
-		}
 		public int ID { get; set; }
 
 		public string Message { get; set; }
@@ -19,19 +15,15 @@ namespace BL.DTO
 
 		public DateTime Time { get; set; }
 
-		public int? GroupId { get; set; }//TODO new entity mapping
+		public GroupDTO Group { get; set; }//todo change to groupdto
 
 		public PostPrivacyLevel PrivacyLevel { get; set; }=PostPrivacyLevel.OnlyFriends;
 
 
-		//		public GroupDTO Group { get; set; }
-
-		//		public List<CommentDTO> Comments { get; set; }//TODO vymazat tieto Property
-		//		public List<ReactionDTO> Reactions { get; set; }
-
 		public override string ToString()
 		{
-			return $"{Sender.FullName} at  {Time} posted to {GroupId} groupId\n \" {Message}\"";
+			return Group == null ? $"{Sender.FullName} at  {Time} updated status \n \" {Message}\"" 
+								   : $"{Sender.FullName} at  {Time} posted to {Group.Name} groupId\n \" {Message}\"";
 		}
 
 		protected bool Equals(PostDTO other)

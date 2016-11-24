@@ -12,7 +12,7 @@ namespace DAL.Entities
 		public override void InitializeDatabase(AppDbContext context)
 		{
 			base.InitializeDatabase(context);
-//			Init(context);
+			Init(context);
 
 			context.SaveChanges();
 
@@ -132,19 +132,7 @@ namespace DAL.Entities
 
 			#endregion
 
-			#region GameInit
 
-			//			var game = new GameAccount
-			//			{
-			//				Gold = 123,
-			//				Name = "RayMan",
-			//				Owner = user3,
-			//				Tag = 0
-			//			};
-			//			user3.GameAccount = game;
-			//			context.GameAccounts.Add(game);
-
-			#endregion
 
 			context.Users.AddRange(new List<User> { user1, user2, user3 });
 		}

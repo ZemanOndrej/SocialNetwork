@@ -2,6 +2,7 @@
 using System.Linq;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.GroupDTOs;
 using BL.Services.Group;
 using BL.Services.User;
 

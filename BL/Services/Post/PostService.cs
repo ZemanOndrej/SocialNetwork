@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.Configuration.Conventions;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
@@ -24,14 +20,16 @@ namespace BL.Services.Post
 		private readonly PostRepository postRepository;
 		private readonly UserRepository userRepository;
 		private readonly PostListQuery postListQuery;
+		private readonly GroupRepository groupRepository;
 
 
 
-		public PostService(PostRepository postRepository, UserRepository userRepository, PostListQuery postListQuery)
+		public PostService(PostRepository postRepository, UserRepository userRepository, PostListQuery postListQuery, GroupRepository groupRepository)
 		{
 			this.postRepository = postRepository;
 			this.userRepository = userRepository;
 			this.postListQuery = postListQuery;
+			this.groupRepository = groupRepository;
 		}
 		#endregion
 
@@ -42,6 +40,8 @@ namespace BL.Services.Post
 			{
 				var postEnt = Mapper.Map<DAL.Entities.Post>(post);
 				postEnt.Sender = userRepository.GetById(post.Sender.ID);
+				if(post.Group!=null)
+					postEnt.Group = groupRepository.GetById(post.Group.ID);
 				postEnt.Time= DateTime.Now;
 				postRepository.Insert(postEnt);
 				uow.Commit();

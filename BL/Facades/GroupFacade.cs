@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.GroupDTOs;
 using BL.Services.Group;
 
 namespace BL.Facades

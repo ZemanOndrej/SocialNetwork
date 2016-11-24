@@ -2,6 +2,7 @@
 using System.Linq;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.GroupDTOs;
 using BL.Services.Comment;
 using BL.Services.Post;
 using BL.Services.Reaction;
@@ -27,7 +28,7 @@ namespace BL.Facades
 
 		public int SendPost( PostDTO post ,UserDTO user, GroupDTO group = null)
 		{
-			post.GroupId = group?.ID;
+			post.Group = group;
 			post.Sender = user;
 			
 			return postService.CreatePost(post);

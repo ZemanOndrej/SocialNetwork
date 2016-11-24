@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.GroupDTOs;
 using BL.Queries;
 using BL.Repositories;
 using DAL.Entities;

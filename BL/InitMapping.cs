@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BL.DTO;
+using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
 using DAL.Entities;
 
@@ -14,8 +15,8 @@ namespace BL
 				c.CreateMap<Group, GroupDTO>().ReverseMap();
 
 
-				c.CreateMap<Post, PostDTO>()
-					.ForMember(m => m.GroupId, opt => opt.MapFrom(src => src.Group.ID));
+				c.CreateMap<Post, PostDTO>();
+//					.ForMember(m => m.GroupId, opt => opt.MapFrom(src => src.Group.ID));
 
 				c.CreateMap<PostDTO, Post>()
 					.ForMember(opt => opt.Comments, x => x.Ignore())

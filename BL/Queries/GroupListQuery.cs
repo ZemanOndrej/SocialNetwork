@@ -7,6 +7,7 @@ using AutoMapper.QueryableExtensions;
 using BL.AppRigantiInfrastructure;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.GroupDTOs;
 using DAL.Entities;
 using Riganti.Utils.Infrastructure.Core;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BL.DTO
+namespace BL.DTO.GroupDTOs
 {
 	public class GroupDTO
 	{
