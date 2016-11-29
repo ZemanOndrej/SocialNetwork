@@ -192,6 +192,7 @@ namespace BL.Services.Chat
 					&& chatTmp.ChatUsers.Contains(privateChat.ChatUsers[1]))
 					return chatTmp.ID;
 			}
+
 			return -1;
 		}
 	
