@@ -191,8 +191,6 @@ namespace BL.Services.Chat
 				if (chatTmp.ChatUsers.Contains(privateChat.ChatUsers[0]) 
 					&& chatTmp.ChatUsers.Contains(privateChat.ChatUsers[1]))
 					return chatTmp.ID;
-
-//				return chatTmp.ChatUsers.OrderBy(x => x).SequenceEqual(privateChat.ChatUsers.OrderBy(x => x));
 			}
 			return -1;
 		}
