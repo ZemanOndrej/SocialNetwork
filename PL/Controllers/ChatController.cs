@@ -36,18 +36,10 @@ namespace PL.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Create(FormCollection collection)
+		public ActionResult Create(int id)
 		{
-			try
-			{
-				// TODO: Add insert logic here
-
-				return RedirectToAction("Index");
-			}
-			catch
-			{
-				return View();
-			}
+			var chatId =ChatFacade.CreateChat(UserFacade.GetUserById(1), UserFacade.GetUserById(id));
+			return RedirectToAction("OpenChat", new {id = chatId});
 		}
 
 

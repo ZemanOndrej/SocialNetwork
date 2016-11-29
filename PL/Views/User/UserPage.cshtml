@@ -5,8 +5,13 @@
 }
 
 <h2>@Model.User.FullName Profile</h2> 
-@Html.ActionLink("Send a Message","Create","Chat",new {id=Model.User.ID})
 
+@using (Html.BeginForm("Create","Chat",FormMethod.Post))
+{
+	<input value="@Model.User.ID" name="id" type="hidden"/>
+	<input type="submit" name="Send" value="Send a Message" />
+
+}
 @* TODO meh toto nepojde pokial nezmenim databazu *@
 @*<div>*@
 @*	@using (Html.BeginForm("UserPage", "User", FormMethod.Post))*@
@@ -29,11 +34,11 @@
 				
 				@Html.ActionLink(postDto.Sender.FullName, "UserPage", "User", new { id = postDto.Sender.ID }, null)
 
-				@if (postDto.GroupId != null)
+				@if (postDto.Group != null)
 				{
 					<Text> sent to  </Text>
 
-					@Html.ActionLink(postDto.GroupId.ToString(),"GroupPage", "Group", new { id = postDto.GroupId }, null)
+					@Html.ActionLink(postDto.Group.Name,"GroupPage", "Group", new { id = postDto.Group.ID }, null)
 
 				}
 			</h3>

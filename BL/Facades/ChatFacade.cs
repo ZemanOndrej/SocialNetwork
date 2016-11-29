@@ -29,7 +29,7 @@ namespace BL.Facades
 			if (name == null)
 			{
 				name = $"{user1.Name} and {user2.Name} chat";
-			}			
+			}
 
 			return chatService.CreateChat( new ChatDTO { ChatUsers = new List<UserDTO> { user1, user2 },Name = name});
 		}

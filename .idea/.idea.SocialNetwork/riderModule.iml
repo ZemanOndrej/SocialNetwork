@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RIDER_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../..">
+      <sourceFolder url="file://$MODULE_DIR$/../../BL" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../DAL" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/csc.exe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.Build.Tasks.CodeAnalysis.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.CodeAnalysis.CSharp.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.CodeAnalysis.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.CodeAnalysis.VisualBasic.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.CSharp.Core.targets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/Microsoft.VisualBasic.Core.targets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/System.Collections.Immutable.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/System.Reflection.Metadata.dll" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/vbc.exe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/VBCSCompiler.exe" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../packages/Microsoft.Net.Compilers.1.0.0/tools/VBCSCompiler.exe.config" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../PL" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../REST.API" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.Core" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.EntityFramework" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../SocialNetwork" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../Utils" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/../../BL/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../BL/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../DAL/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../DAL/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../PL/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../PL/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../REST.API/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../REST.API/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.Core/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.Core/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.EntityFramework/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Riganti.Utils.Infrastructure.EntityFramework/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SocialNetwork/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../SocialNetwork/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Utils/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Utils/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/../../packages" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
