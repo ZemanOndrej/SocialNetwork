@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Web.Http;
 using BL.DTO;
+using BL.DTO.UserDTOs;
 using BL.Facades;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace REST.API.Controllers
 		public UserFacade UserFacade { get; set; }
 
 
-		[System.Web.Mvc.Route("~/api/User/{id}")]
+		[System.Web.Mvc.Route("~/api/Account/{id}")]
 		public IHttpActionResult Get(int id)
 		{
 			var result = id <= 0 ? null : UserFacade.GetUserById(id);
@@ -31,17 +32,17 @@ namespace REST.API.Controllers
 				: (IHttpActionResult) Content(HttpStatusCode.OK,result);
 		}
 
-	    public IHttpActionResult Post([FromBody] UserDTO user)
+	    public IHttpActionResult Post([FromBody] AccountDTO account)
 	    {
 	        try
 	        {
-	            var tmp=UserFacade.CreateNewUser(user);
-	            user = UserFacade.GetUserById(tmp);
-	            return Content(HttpStatusCode.Created, user);
+	            var tmp=UserFacade.CreateNewUser(account);
+	            account = UserFacade.GetUserById(tmp);
+	            return Content(HttpStatusCode.Created, account);
 	        }
 	        catch (JsonException)
 	        {
-	            Debug.WriteLine($"Failed to deserialize value to GroupDto: {user}");
+	            Debug.WriteLine($"Failed to deserialize value to GroupDto: {account}");
 	            return StatusCode(HttpStatusCode.BadRequest);
 	        }
 	        catch (NullReferenceException ex)

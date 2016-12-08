@@ -14,7 +14,7 @@ namespace DAL.Entities
 		public DateTime Time { get; set; }
 
 		[Required]
-		public virtual User Sender { get; set; }
+		public virtual Account Sender { get; set; }
 
 
 		[Required]

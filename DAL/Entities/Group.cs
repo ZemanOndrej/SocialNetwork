@@ -10,8 +10,10 @@ namespace DAL.Entities
 	{
 		public Group()
 		{
-			Accounts = new List<User>();
+			Accounts = new List<Account>();
 			GroupPosts = new List<Post>();
+			Requests = new List<Request>();
+
 		}
 
 		[MaxLength(100)]
@@ -21,8 +23,9 @@ namespace DAL.Entities
 		[Column(TypeName = "datetime2")]
 		public DateTime DateCreated { get; set; }
 
-		public virtual List<User> Accounts { get; set; }
+		public virtual List<Account> Accounts { get; set; }
 		public virtual List<Post> GroupPosts { get; set; }
+		public virtual List<Request> Requests { get; set; }
 
 
 		protected bool Equals(Group other)

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BL.DTO;
 using BL.DTO.GroupDTOs;
+using BL.DTO.Request;
 using BL.DTO.UserDTOs;
 using DAL.Entities;
+using DAL.Entities.Identity;
 
 namespace BL
 {
@@ -34,16 +36,18 @@ namespace BL
 
 				c.CreateMap<Comment, CommentDTO>().ReverseMap();
 
-				c.CreateMap<UserDTO, User>()
+				c.CreateMap<AccountDTO, Account>()
 					.ForMember(opt => opt.Chats, x => x.Ignore())
 					.ForMember(opt => opt.Groups, x => x.Ignore())
 					.ForMember(opt => opt.LikedList, x => x.Ignore())
 					.ForMember(opt => opt.Posts, x => x.Ignore())
 //					.ForMember(opt=>opt.CommentList, x=>x.Ignore())
 					;
+				c.CreateMap<UserDTO, User>().ReverseMap();
 
-				c.CreateMap<User, UserDTO>();
+				c.CreateMap<Account, AccountDTO>();
 
+				c.CreateMap<Request, RequestDTO>().ReverseMap();
 
 
 				c.CreateMap<Friendship, FriendshipDTO>()

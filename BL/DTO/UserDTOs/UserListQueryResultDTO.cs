@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using BL.DTO.Filters;
 
-namespace BL.DTO
+namespace BL.DTO.UserDTOs
 {
 	public class UserListQueryResultDTO
 	{
@@ -13,10 +9,9 @@ namespace BL.DTO
 
 		public int ResultCount { get; set; }
 
-		public IEnumerable<UserDTO> ResultUsers { get; set; }
+		public IEnumerable<AccountDTO> ResultUsers { get; set; }
 
 		public int RequestedPage { get; set; }
-
 
 
 	}

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using AutoMapper;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Services.Group;
 using BL.Services.User;
 
@@ -21,43 +24,46 @@ namespace BL.Facades
 		}
 		#endregion
 
-		public int CreateNewUser(UserDTO user)
+//		public int CreateNewUser(UserDTO user)
+//		{
+//			return userService.Register(user);
+//		}
+		public ClaimsIdentity Login(string email, string password)
 		{
-			return userService.CreateUser(user);
+			return userService.Login(email, password);
+		}
+		public int CreateNewUser(AccountDTO account)
+		{
+			return userService.Register(account);
 		}
 
-		public void RemoveUser(UserDTO user)
+		public void RemoveUser(AccountDTO account)
 		{
-			userService.DeleteUser(user.ID);
+			userService.DeleteUser(account.ID);
 		}
 
-		public void UpdateUserInfo(UserDTO user)
+		public void UpdateUserInfo(AccountDTO account)
 		{
-			userService.EditUser(user);
+			userService.EditUser(account);
 		}
 
-		public UserDTO GetUserByEmail(string email)
+		public AccountDTO GetUserByEmail(string email)
 		{
 			return userService.ListUsers(new UserFilter { Email = email }).ResultUsers.FirstOrDefault();
 		}
 
-		public UserDTO GetUserById(int id)
+		public AccountDTO GetUserById(int id)
 		{
 			return userService.GetUserById(id);
 		}
 
 
-		public void AddUsersToFriends(UserDTO user1, UserDTO user2)
+		public void RemoveUsersFromFriends(int id1, int id2)
 		{
-			userService.AddUsersToFriends(user1,user2);
+			userService.RemoveUsersFromFriends(userService.GetUserById(id1),userService.GetUserById(id2));
 		}
 
-		public void RemoveUsersFromFriends(UserDTO user, UserDTO user2)
-		{
-			userService.RemoveUsersFromFriends(user,user2);
-		}
-
-		public List<UserDTO> GetUsersWithName(string str, int page = 0)
+		public List<AccountDTO> GetUsersWithName(string str, int page = 0)
 		{
 			return userService.ListUsers(new UserFilter
 			{
@@ -65,20 +71,26 @@ namespace BL.Facades
 			}, page).ResultUsers.ToList();
 		}
 
-		public List<UserDTO> ListFriendsOf(UserDTO user)
+		public List<AccountDTO> ListFriendsOf(AccountDTO account)
 		{
-			return userService.ListFriendsOfUser(user);
+			return userService.ListFriendsOfUser(account);
+
 		}
 		//page fix
-		public List<GroupDTO> ListGroupsWithUser(UserDTO user)
+		public List<GroupDTO> ListGroupsWithUser(AccountDTO account)
 		{
-			return userService.ListUsersGroups(user);
+			return userService.ListUsersGroups(account);
 		}
 
 
-		public List<UserDTO> ListAllUsers()
+		public List<AccountDTO> ListAllUsers()
 		{
 			return userService.ListUsers(new UserFilter()).ResultUsers.ToList();
+		}
+
+		public void AddUsersToFriends(AccountDTO account, AccountDTO account2)
+		{
+			userService.AddUsersToFriends(account,account2);
 		}
 	}
 }

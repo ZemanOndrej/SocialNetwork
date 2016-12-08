@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
+using BL.DTO.UserDTOs;
 
 namespace BL.Services.Comment
 {
@@ -13,7 +14,7 @@ namespace BL.Services.Comment
 	{
 		int CreateComment(CommentDTO comment);
 
-		int CreateComment(UserDTO user, CommentDTO comment, PostDTO post);
+		int CreateComment(AccountDTO account, CommentDTO comment, PostDTO post);
 
 		void EditCommentMessage(CommentDTO comment);
 

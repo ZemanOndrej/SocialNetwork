@@ -1,0 +1,31 @@
+﻿@model PL.Models.RequestModel
+
+@{
+	ViewBag.Title = "Your Requests";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>YourRequests</h2>
+<div>
+	@foreach (var req in Model.Requests)
+	{
+		<div>
+			@if (req.Group == null)
+			{
+				@Html.ActionLink(req.Sender.FullName, "UserPage", "Page", new { userId = req.Sender.ID }, null)
+				<p> added you to friendlist</p>
+				<div class="row">
+					<div class="col-md-1">
+						@Html.ActionLink("Accept", "Accept", "Request", new { id = req.ID}, null)
+
+					</div>
+					<div class="col-md-1">
+						@Html.ActionLink("Reject", "Delete", "Request", new { id = req.ID }, null)
+
+					</div>
+				</div>
+			}
+		</div>
+	}
+</div>
+

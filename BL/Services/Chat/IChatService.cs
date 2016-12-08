@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
+using BL.DTO.UserDTOs;
 
 namespace BL.Services.Chat
 {
@@ -19,16 +20,16 @@ namespace BL.Services.Chat
 
 		void EditChatName(ChatDTO chatDto);
 
-		void RemoveUserFromChat(ChatDTO chat, UserDTO user);
+		void RemoveUserFromChat(ChatDTO chat, AccountDTO account);
 
-		void AddUserToChat(ChatDTO chat ,UserDTO user);
+		void AddUserToChat(ChatDTO chat ,AccountDTO account);
 
 
 		ChatDTO GetChatById(int id);
 
 		ChatListQueryResultDTO ListChats(ChatFilter filter , int page=0);
 
-		List<UserDTO> GetUsersInChat(ChatDTO chat);
+		List<AccountDTO> GetUsersInChat(ChatDTO chat);
 
 
 

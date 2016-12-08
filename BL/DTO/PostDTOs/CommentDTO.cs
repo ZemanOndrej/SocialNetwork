@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BL.DTO.UserDTOs;
 
 namespace BL.DTO
 {
@@ -13,7 +14,7 @@ namespace BL.DTO
 
 		public DateTime Time { get; set; }
 
-		public UserDTO Sender { get; set; }
+		public AccountDTO Sender { get; set; }
 
 		public PostDTO Post { get; set; }
 

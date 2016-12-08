@@ -1,4 +1,5 @@
 ﻿using System;
+using BL.DTO.UserDTOs;
 
 namespace BL.DTO.Filters
 {
@@ -8,7 +9,7 @@ namespace BL.DTO.Filters
 
 		public string Text { get; set; }
 
-		public UserDTO Sender { get; set; }
+		public AccountDTO Sender { get; set; }
 
 		//		public DateTime Time { get; set; }
 

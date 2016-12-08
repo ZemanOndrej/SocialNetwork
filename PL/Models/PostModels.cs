@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
 using BL.DTO;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 
 namespace PL.Models
 {
-	public class FrontPageModel
+	
+
+	public class DefaultPageModel
 	{
+		public bool PendingFriendRequest { get; set; } = false;
+		public bool IsYourFriend { get; set; } = false;
+		public AccountDTO Account { get; set; }
 		public List<PostDTO> Posts { get; set; }
 		public PostDTO NewPost { get; set; }
+		public List<AccountDTO> Accounts { get; set; }
+		public GroupDTO Group { get; set; }
+
 
 	}
 
-	public class UserPageModel
-	{
-		public UserDTO User { get; set; }
-		public List<PostDTO> Posts { get; set; }
-		public PostDTO NewPost { get; set; }
-
-	}
 
 	public class OpenPostModel
 	{
@@ -30,6 +28,7 @@ namespace PL.Models
 		public List<CommentDTO> Comments { get; set; }
 		public CommentDTO NewComment { get; set; }
 		public ReactionDTO NewReaction { get; set; }
+		public string BackView { get; set; }
 
 		public int PostId { get; set; }
 	}
@@ -38,5 +37,10 @@ namespace PL.Models
 	{
 		public PostDTO Post { get; set; }
 		public GroupDTO Group { get; set; }
+	}
+	public class PostEditModel
+	{
+		public string BackView { get; set; }
+		public PostDTO Post { get; set; }
 	}
 }

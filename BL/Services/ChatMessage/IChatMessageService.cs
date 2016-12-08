@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
+using BL.DTO.UserDTOs;
 
 namespace BL.Services.ChatMessage
 {
 	public interface IChatMessageService
 	{
 
-		int PostMessageToChat(ChatDTO chat, UserDTO user, ChatMessageDTO message);
+		int PostMessageToChat(ChatDTO chat, AccountDTO account, ChatMessageDTO message);
 
 		void EditChatMessage(ChatMessageDTO messageDto);
 

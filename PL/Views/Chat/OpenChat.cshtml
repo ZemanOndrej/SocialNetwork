@@ -1,4 +1,5 @@
-﻿@model PL.Models.OpenChatModel
+﻿@using Microsoft.AspNet.Identity
+@model PL.Models.OpenChatModel
 @{
 	ViewBag.Title = Model.Chat.Name;
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,8 +11,8 @@
 	{
 		<div> @msg.Sender.FullName :@msg.Message</div>
 
-		@*			nejsom prihlaseny*@
-		if (msg.Sender.ID==1)
+
+		if (msg.Sender.ID==int.Parse(User.Identity.GetUserId()))
 		 {
 			 <div>
 		  		@Html.ActionLink("Delete", "DeleteMessage", "Chat", new { id = msg.ID }, null)

@@ -5,6 +5,7 @@ using AutoMapper;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Castle.Components.DictionaryAdapter;
@@ -82,12 +83,12 @@ namespace BL.Services.Chat
 
 		#region Update
 
-		public void RemoveUserFromChat(ChatDTO chat, UserDTO user)
+		public void RemoveUserFromChat(ChatDTO chat, AccountDTO account)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var chatEnt = chatRepository.GetById(chat.ID, c => c.ChatUsers, c => c.Messages);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 
 				chatEnt.ChatUsers.Remove(userEnt);
 
@@ -97,12 +98,12 @@ namespace BL.Services.Chat
 			}
 		}
 
-		public void AddUserToChat(ChatDTO chat, UserDTO user)
+		public void AddUserToChat(ChatDTO chat, AccountDTO account)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var chatEnt = chatRepository.GetById(chat.ID);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 
 				chatEnt.ChatUsers.Add(userEnt);
 
@@ -160,12 +161,12 @@ namespace BL.Services.Chat
 			}
 		}
 
-		public List<UserDTO> GetUsersInChat(ChatDTO chat)
+		public List<AccountDTO> GetUsersInChat(ChatDTO chat)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
 				var chatEnt = chatRepository.GetById(chat.ID, c => c.ChatUsers);
-				return Mapper.Map<List<UserDTO>>(chatEnt.ChatUsers);
+				return Mapper.Map<List<AccountDTO>>(chatEnt.ChatUsers);
 
 			}
 		}
@@ -184,7 +185,7 @@ namespace BL.Services.Chat
 
 		private int CheckIfPrivateChatExists(ChatDTO privateChat)
 		{
-			var tmpChatList = ListChats(new ChatFilter {User = privateChat.ChatUsers.FirstOrDefault()});
+			var tmpChatList = ListChats(new ChatFilter {Account = privateChat.ChatUsers.FirstOrDefault()});
 			foreach (var chatTmp in tmpChatList.ResultChats)
 			{
 				if (chatTmp.ChatUsers.Count != 2) continue;

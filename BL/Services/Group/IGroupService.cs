@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 
 namespace BL.Services.Group
@@ -21,10 +22,10 @@ namespace BL.Services.Group
 
 		void EditGroupName(GroupDTO group);
 
-		void AddUserToGroup( GroupDTO group,UserDTO user);
+		void AddUserToGroup( GroupDTO group,AccountDTO account);
 
-		void RemoveUserFromGroup( GroupDTO group,UserDTO user);
-		List<UserDTO> ListUsersInGroup(GroupDTO group);
+		void RemoveUserFromGroup( GroupDTO group,AccountDTO account);
+		List<AccountDTO> ListUsersInGroup(GroupDTO group);
 
 
 		GroupDTO GetGroupById(int id);

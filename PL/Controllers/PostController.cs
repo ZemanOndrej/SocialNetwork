@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using BL.DTO;
-using BL.DTO.GroupDTOs;
 using BL.Facades;
+using Microsoft.AspNet.Identity;
 using PL.Models;
 
 namespace PL.Controllers
 {
+	[Authorize]
 	public class PostController : Controller
 	{
 		public PostFacade PostFacade { get; set; }
@@ -17,57 +14,55 @@ namespace PL.Controllers
 		public GroupFacade GroupFacade { get; set; }
 
 
-
-		public ActionResult Edit(int id)
+		public ActionResult Edit(int id, string viewName)
 		{
 			var post = PostFacade.GetPostById(id);
-
-			return View(post);
+			return View(new PostEditModel {Post = post,BackView = viewName});
 		}
 
 		[HttpPost]
-		public ActionResult Edit(PostDTO post)
+		[ValidateAntiForgeryToken]
+		public ActionResult Edit(PostEditModel model)
 		{
-			PostFacade.UpdatePostMessage(post);
-			return RedirectToAction("FrontPage", "User");
+			PostFacade.UpdatePostMessage(model.Post);
+			return ResolveBackView(model);
 		}
 
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int id,string viewName)
 		{
 			var post = PostFacade.GetPostById(id);
-			return View(post);
+			return View(new PostEditModel {Post = post,BackView = viewName});
 		}
+
 			[HttpPost]
-		public ActionResult Delete(PostDTO post)
+		public ActionResult Delete(PostEditModel model)
 			{
-				PostFacade.DeletePost(post);
-				return RedirectToAction("FrontPage", "User");
+				PostFacade.DeletePost(model.Post.ID);
+				return ResolveBackView(model);
 
 			}
 
 
-		public ActionResult Reactions(int id)
+		public ActionResult Reactions(int id, string viewName)
 		{
 
 
 			var post = PostFacade.GetPostById(id);
-			//todo treba spravit aby aj commenty sa dali commentovat
 			var comments = PostFacade.GetCommentsOnPost(post);
 			var reactions = PostFacade.GetReactionsOnPost(post);
-			return View(new OpenPostModel { Post = post, Comments = comments, Reactions = reactions,PostId = post.ID});
+			return View(new OpenPostModel { Post = post, Comments = comments, Reactions = reactions,PostId = post.ID, BackView = viewName});
 		}
 
 		[HttpPost]
 		public ActionResult CreateComment(OpenPostModel model)
 		{
-			//logged in user
-			var user = UserFacade.GetUserByEmail(User.Identity.Name);
-			if (user == null) user = UserFacade.GetUserById(1);
+			//logged in account
+			var user = UserFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
 
 			if (model.Post == null) model.Post = PostFacade.GetPostById(model.PostId);
 
 			PostFacade.CommentPost(model.Post, model.NewComment, user);
-			return RedirectToAction("Reactions", new {id = model.PostId});
+			return RedirectToAction("Reactions", new {id = model.PostId,viewName=model.BackView });
 		}
 
 		[HttpPost]
@@ -76,5 +71,27 @@ namespace PL.Controllers
 			return RedirectToAction("Reactions", new { id = model.PostId });
 
 		}
+
+
+
+
+
+		#region Utils
+
+		public ActionResult ResolveBackView(PostEditModel model)
+		{
+			switch (model.BackView)
+			{
+				case "GroupPage":
+					return RedirectToAction("GroupPage", "Page",new {groupId=model.Post.Group.ID});
+				case "UserPage":
+					return RedirectToAction("UserPage", "Page", new {userId = model.Post.Sender.ID });
+				default:
+					return RedirectToAction(model.BackView, "Page");
+			}
+		}
+
+		#endregion
+		
 	}
 }

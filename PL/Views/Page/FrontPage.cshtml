@@ -1,0 +1,24 @@
+﻿@model PL.Models.DefaultPageModel
+@{
+	ViewBag.Title = "FrontPage";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>FrontPage</h2>
+
+
+<div>
+	@using (Html.BeginForm("FrontPage", "Page", FormMethod.Post))
+	{
+
+		@Html.TextAreaFor(m => m.NewPost.Message,new {@class ="form-control"})
+		@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel,"Select Privacy",new { @class = "form-control" })
+		<input type="submit" name="SendPost" value="Send" />
+
+
+	}
+</div>
+
+@{
+	Html.RenderPartial("PostList", Model);
+}

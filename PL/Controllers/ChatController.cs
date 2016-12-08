@@ -10,6 +10,7 @@ using PL.Models;
 
 namespace PL.Controllers
 {
+	[Authorize]
 	public class ChatController : Controller
 	{
 		public ChatFacade ChatFacade { get; set; }
@@ -19,12 +20,7 @@ namespace PL.Controllers
 		public ActionResult Index()
 		{
 			//neprihlaseny
-			if (string.IsNullOrEmpty(User.Identity.GetUserId()))
-			{
-				var chats = ChatFacade.ListAllUsersChats(UserFacade.GetUserById(1));
-				return View(new ChatListModel { Chats = chats });
-			}
-			var usersChats = ChatFacade.ListAllUsersChats(UserFacade.GetUserById(int.Parse(User.Identity.GetUserId())));
+			var usersChats = ChatFacade.ListAllUsersChats(int.Parse(User.Identity.GetUserId()));
 			
 			return View(new ChatListModel {Chats = usersChats});
 		}
@@ -38,7 +34,9 @@ namespace PL.Controllers
 		[HttpPost]
 		public ActionResult Create(int id)
 		{
-			var chatId =ChatFacade.CreateChat(UserFacade.GetUserById(1), UserFacade.GetUserById(id));
+			var chatId =ChatFacade.CreateChat(
+				UserFacade.GetUserById(int.Parse(User.Identity.GetUserId())),
+				UserFacade.GetUserById(id));
 			return RedirectToAction("OpenChat", new {id = chatId});
 		}
 
@@ -69,7 +67,7 @@ namespace PL.Controllers
 		[HttpPost]
 		public ActionResult OpenChat(OpenChatModel model)
 		{
-			var user = UserFacade.GetUserById(1);
+			var user = UserFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
 			var chat = ChatFacade.GetChatById(model.ChatId);
 			ChatFacade.SendChatMessageToChat(chat, user, model.NewChatMessage);
 			return RedirectToAction("OpenChat",new {id=chat.ID});

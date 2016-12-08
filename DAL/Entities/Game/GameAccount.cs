@@ -43,7 +43,7 @@ namespace DAL.Entities.Game
 //		public int Tag { get; set; } //like battle.net tag so you can have any name
 //
 //		[Required]
-//		public User Owner { get; set; }
+//		public Account Owner { get; set; }
 //
 //
 //		public int ID { get; set; }

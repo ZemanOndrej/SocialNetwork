@@ -1,0 +1,32 @@
+﻿@model PL.Models.DefaultPageModel
+@{
+	ViewBag.Title = @Model.Account.FullName;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" style="margin-top: 20px">
+	<div class="col-md-2" style="border: black solid 1px; margin-top: 113px">
+		<div>
+			FriendList
+			@{
+				Html.RenderPartial("AccountList",Model.Accounts);
+			}
+		</div>
+		
+	</div>
+	<div class="col-md-10">
+		<h2>Hi @Model.Account.FullName</h2>
+		<div>
+			@using (Html.BeginForm("ProfilePage", "Page", FormMethod.Post))
+			{
+				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control" })
+				@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel, "Select Privacy", new { @class = "form-control" })
+				<input type="submit" name="SendPost" value="Send"/>
+
+
+			}
+		</div>
+		@{
+			Html.RenderPartial("PostList", Model);
+		}
+	</div>
+</div>

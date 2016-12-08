@@ -1,4 +1,5 @@
 ﻿using System;
+using BL.DTO.UserDTOs;
 
 namespace BL.DTO
 {
@@ -8,7 +9,7 @@ namespace BL.DTO
 
 		public DateTime Time { get; set; }
 
-		public UserDTO Sender { get; set; }
+		public AccountDTO Sender { get; set; }
 
 		public ChatDTO Chat { get; set; }
 

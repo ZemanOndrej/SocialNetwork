@@ -3,9 +3,12 @@ using System.Linq;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Services.Comment;
+using BL.Services.Group;
 using BL.Services.Post;
 using BL.Services.Reaction;
+using BL.Services.User;
 using Utils.Enums;
 
 namespace BL.Facades
@@ -16,20 +19,22 @@ namespace BL.Facades
 		private readonly IPostService postService;
 		private readonly IReactionService reactionService;
 		private readonly ICommentService commentService;
+		private readonly IUserService userService;
 
-		public PostFacade(IPostService postService, IReactionService reactionService, ICommentService commentService)
+		public PostFacade(IPostService postService, IReactionService reactionService, ICommentService commentService, IUserService userService)
 		{
 			this.postService = postService;
 			this.reactionService = reactionService;
 			this.commentService = commentService;
+			this.userService = userService;
 		}
 	
 		#endregion
 
-		public int SendPost( PostDTO post ,UserDTO user, GroupDTO group = null)
+		public int SendPost( PostDTO post ,AccountDTO account, GroupDTO group = null)
 		{
 			post.Group = group;
-			post.Sender = user;
+			post.Sender = account;
 			
 			return postService.CreatePost(post);
 		}
@@ -37,6 +42,11 @@ namespace BL.Facades
 		public void DeletePost(PostDTO post)
 		{
 			postService.DeletePost(post.ID);
+		}
+
+		public void DeletePost(int id)
+		{
+			postService.DeletePost(id);
 		}
 
 		public void UpdatePostMessage(PostDTO post)
@@ -49,9 +59,34 @@ namespace BL.Facades
 			return postService.ListPosts(new PostFilter {Group = group}, page).ResultPosts.ToList();
 		}
 
-		public List<PostDTO> GetPostsFromUser(UserDTO user, int page = 0)
+		public List<PostDTO> GetPostsFromUser(AccountDTO account, int page = 0)
 		{
-			return postService.ListPosts(new PostFilter { Sender = user}, page).ResultPosts.ToList();
+			return postService.ListPosts(new PostFilter { Sender = account}, page).ResultPosts.ToList();
+
+		}
+
+		public List<PostDTO> GetPostsForUserFrontPage(int accountId, int page = 0)
+		{
+			//TODO visible posts from friends and groups
+
+			var account = userService.GetUserById(accountId);
+			return GetPostsForUserFrontPage(account, page);
+
+		}
+
+		public List<PostDTO> GetPostsForUserFrontPage(AccountDTO account, int page = 0)
+		{
+			//TODO visible posts from friends and groups
+
+			return postService.ListPosts(new PostFilter
+			{
+				FrontPageFilter = new FrontPageFilter
+				{
+					Account = account
+					,Friends = userService.ListFriendsOfUser(account)
+					,Groups = userService.ListUsersGroups(account)
+				}
+			}, page).ResultPosts.ToList();
 
 		}
 
@@ -80,17 +115,17 @@ namespace BL.Facades
 			commentService.DeleteComment(comment.ID);
 		}
 
-		public int CommentPost(PostDTO post, CommentDTO comment, UserDTO user)
+		public int CommentPost(PostDTO post, CommentDTO comment, AccountDTO account)
 		{
-			comment.Sender = user;
+			comment.Sender = account;
 			comment.Post = post;
 			return commentService.CreateComment(comment);
 		}
 
-		public int ReactOnPost(PostDTO post, ReactionDTO reaction, UserDTO user)
+		public int ReactOnPost(PostDTO post, ReactionDTO reaction, AccountDTO account)
 		{
 
-			return reactionService.CreateReaction(post,reaction,user);
+			return reactionService.CreateReaction(post,reaction,account);
 		}
 
 		public List<ReactionDTO> GetReactionsOnPost(PostDTO post)

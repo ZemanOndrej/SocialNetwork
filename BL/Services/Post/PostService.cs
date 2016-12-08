@@ -95,11 +95,14 @@ namespace BL.Services.Post
 		{
 			using (UnitOfWorkProvider.Create())
 			{
+				
 				var query = GetQuery(filter);
 				query.Skip = (page > 0 ? page - 1 : 0) * PostPageSize;
 				query.Take = PostPageSize;
 
-				query.AddSortCriteria(customer => customer.Time);
+				
+
+				query.AddSortCriteria(customer => customer.Time,SortDirection.Descending);
 
 				return new PostListQueryResultDTO
 				{
@@ -124,7 +127,6 @@ namespace BL.Services.Post
 			}
 		}
 		#endregion
-
 
 
 

@@ -34,11 +34,11 @@ namespace BL.Queries
 				.Contains(Filter.Name.ToLower()));
 			}
 
-			if (Filter.User != null)
+			if (Filter.Account != null)
 			{
 				query = query.Where(u => u.ChatUsers
-				.Contains(Context.Users
-					.FirstOrDefault(user => user.ID == Filter.User.ID)));
+				.Contains(Context.Accounts
+					.FirstOrDefault(user => user.ID == Filter.Account.ID)));
 			}
 			return query.ProjectTo<ChatDTO>();
 		}

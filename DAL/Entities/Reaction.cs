@@ -10,7 +10,7 @@ namespace DAL.Entities
 		public virtual Post Post { get; set; }
 
 		[Required]
-		public virtual User User { get; set; }
+		public virtual Account Account { get; set; }
 		
 		[Required]
 		public ReactionEnum UserReaction { get; set; }

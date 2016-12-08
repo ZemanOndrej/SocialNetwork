@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Services.Group;
 
 namespace BL.Facades
@@ -41,14 +42,14 @@ namespace BL.Facades
 			return groupService.GetGroupById(id);
 		}
 
-		public void AddUserToGroup(GroupDTO group, UserDTO user)
+		public void AddUserToGroup(GroupDTO group, AccountDTO account)
 		{
-			groupService.AddUserToGroup(group,user);
+			groupService.AddUserToGroup(group,account);
 		}
 
-		public void RemoveUserFromGroup(GroupDTO group, UserDTO user)
+		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
-			groupService.RemoveUserFromGroup(group,user);
+			groupService.RemoveUserFromGroup(group,account);
 		}
 
 		public List<GroupDTO> ListGroupsWithName(string name , int page=0)
@@ -58,7 +59,7 @@ namespace BL.Facades
 
 	
 
-		public List<UserDTO> ListUsersInGroup(GroupDTO group, int page = 0)
+		public List<AccountDTO> ListUsersInGroup(GroupDTO group, int page = 0)
 		{
 			return groupService.ListUsersInGroup(group);
 

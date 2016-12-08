@@ -1,4 +1,4 @@
-﻿@model BL.DTO.PostDTO
+﻿@model PL.Models.PostEditModel
 
 @{
 	ViewBag.Title = "Edit";
@@ -15,15 +15,16 @@
 		<h4>PostDTO</h4>
 		<hr />
 		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
-		@Html.HiddenFor(model => model.ID)
-		@Html.HiddenFor(m => m.Group.ID);
+		@Html.HiddenFor(model => model.Post.ID)
+		@Html.HiddenFor(m => m.Post.Group.ID);
+		@Html.HiddenFor(m=>m.BackView)
 
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })
+			@Html.LabelFor(model => model.Post.Message, new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+				@Html.EditorFor(model => model.Post.Message, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(model => model.Post.Message, "", new { @class = "text-danger" })
 			</div>
 		</div>
 
@@ -36,10 +37,19 @@
 }
 
 <div>
-@*	@(Model.GroupId != null ?*@
-@*		Html.ActionLink("Back", (string)TempData["LastAction"], (string)TempData["LastCotnroller"], new { id = Model.GroupId })*@
-@*		: Html.ActionLink("Back", (string)TempData["LastAction"], (string)TempData["LastCotnroller"]))*@
-	@Html.ActionLink("Back", "FrontPage", "User")
+
+	@switch (Model.BackView)
+	{
+		case "GroupPage":
+			@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
+			break;
+		case "UserPage":
+			@Html.ActionLink("Back", Model.BackView, "Page", new { userId = Model.Post.Sender.ID }, null)
+			break;
+		default:
+			@Html.ActionLink("Back", Model.BackView, "Page")
+			break;
+	}
 
 
 </div>

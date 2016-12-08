@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BL.DTO.UserDTOs;
 
 namespace BL.DTO
 {
@@ -6,10 +7,10 @@ namespace BL.DTO
 	{
 		public ChatDTO()
 		{
-			ChatUsers = new List<UserDTO>();
+			ChatUsers = new List<AccountDTO>();
 		}
 
-		public List<UserDTO> ChatUsers { get; set; }
+		public List<AccountDTO> ChatUsers { get; set; }
 
 
 		public string Name { get; set; }

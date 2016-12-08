@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using Utils.Enums;
 
 namespace BL.DTO
@@ -11,7 +12,7 @@ namespace BL.DTO
 
 		public string Message { get; set; }
 
-		public UserDTO Sender { get; set; }
+		public AccountDTO Sender { get; set; }
 
 		public DateTime Time { get; set; }
 

@@ -41,7 +41,7 @@ namespace PL
 			// configure mapping within BL
 			InitMapping.ConfigMapping();
 
-			// initialize default user accounts (admin, ...)
+			// initialize default account accounts (admin, ...)
 //			UserAccountInit.InitializeUserAccounts(container);
 
 			// set controller factory

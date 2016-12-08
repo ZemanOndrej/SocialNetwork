@@ -10,7 +10,10 @@ namespace PL.Controllers
 	{
 		public ActionResult Index()
 		{
-			
+			if (User.Identity.IsAuthenticated)
+			{
+				return RedirectToAction("FrontPage", "Page");
+			}
 			return View();
 		}
 

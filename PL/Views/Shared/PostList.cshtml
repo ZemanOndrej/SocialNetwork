@@ -1,0 +1,48 @@
+﻿@using Castle.Core.Internal
+@using Microsoft.AspNet.Identity
+@model PL.Models.DefaultPageModel
+<div>
+	@{
+
+		foreach (var postDto in Model.Posts)
+		{
+
+			<div style="border: black solid 1px">
+				<h3>
+
+
+					@Html.ActionLink(postDto.Sender.FullName, "UserPage", "Page", new { userId = postDto.Sender.ID }, null)
+
+					@if (postDto.Group != null)
+					{
+						<span> sent to  </span>
+
+						@Html.ActionLink(postDto.Group.Name, "GroupPage", "Page", new { groupId = postDto.Group.ID }, null)
+
+					}
+				</h3>
+
+				<div style="margin: 10px"> @postDto.Message</div>
+
+
+				<div class="row">
+					<div class="col-md-1">
+						@Html.ActionLink("Reactions", "Reactions", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+					</div>
+					@if (postDto.Sender.ID == int.Parse(User.Identity.GetUserId()))
+					{
+						<div class="col-md-1">
+							@Html.ActionLink("Delete", "Delete", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+						</div>
+						<div class="col-md-1">
+							@Html.ActionLink("Edit", "Edit", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+						</div>
+					}
+					<div class="col-md-2">
+						Sent at : @postDto.Time
+					</div>
+				</div>
+			</div>
+		}
+	}
+</div>

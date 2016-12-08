@@ -8,11 +8,11 @@ namespace DAL.Entities
 	{
 		public Chat()
 		{
-			ChatUsers = new List<User>();
+			ChatUsers = new List<Account>();
 			Messages = new List<ChatMessage>();
 		}
 
-		public virtual List<User> ChatUsers { get; set; }
+		public virtual List<Account> ChatUsers { get; set; }
 
 		public virtual List<ChatMessage> Messages { get; set; }
 

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DAL.Entities;
+using DAL.Entities.Identity;
+using DAL.Identity;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Utils.Enums;
 
 namespace DAL.Entities
@@ -20,40 +24,73 @@ namespace DAL.Entities
 
 		private static void Init(AppDbContext context)
 		{
+
+			var roleStore = new AppRoleStore(context);
+			var roleManager = new AppRoleManager(roleStore);
+			var userStore = new AppUserStore(context);
+			var userManager = new AppUserManager(userStore);
+			context.Roles.Add(new AppRole { Name = "admin" });
+			context.Roles.Add(new AppRole { Name = "user" });
+
 			#region UserInit
 
-			var user1 = new User
+			var password = "aaaaaa";
+
+			var user1 = new Account
 			{
-				Name = "forsenE",
+				Name = "Sebastian",
 				DateOfBirth = new DateTime(2000, 1, 1),
-				Surname = "Zeman",
+				Surname = "Fors",
 				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
-				Email = "Kappa@Kappa.cz",
-				Login = "Kappa"
+				User = new User { Email = "a@a.a",UserName = "Sebastian"}
 			};
-			var user2 = new User
+
+			var user2 = new Account
 			{
 				Name = "Alojz",
 				DateOfBirth = new DateTime(1337, 4, 20),
 				Surname = "Novak",
 				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
-				Email = "PogChamp@Kappa.cz",
-				Login = "Kappa1"
+				User = new User { Email ="PogChamp@Kappa.cz",UserName = "Kappa1" }
+
 			};
-			var user3 = new User
+			var user3 = new Account
 			{
 				Name = "Ondrej",
 				DateOfBirth = new DateTime(1996, 2, 13),
 				Surname = "Zeman",
 				Information = "forsenE forsen1 forsen2 forsen3 forsen4 forsenE",
-				Email = "forsenE@gmail.com",
-				Login = "RayMan"
+				User = new User { Email ="forsenE@gmail.com",UserName ="RayMan"}
+
+			};
+			var user4 = new Account
+			{
+				Name = "Admin",
+				DateOfBirth = new DateTime(2000, 1, 1),
+				Surname = "admin",
+				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
+				User = new User { Email = "q@q.q", UserName = "Admin" }
 			};
 
-			user1.FriendList.Add(new Friendship(user1, user2));
-			user1.FriendList.Add(new Friendship(user1, user3));
-			user2.FriendList.Add(new Friendship(user2, user3));
+			user1.User.Account = user1;
+			user2.User.Account = user2;
+			user3.User.Account = user3;
+			user4.User.Account = user4;
 
+			userManager.Create(user1.User, password);
+			userManager.Create(user2.User, password);
+			userManager.Create(user3.User, password);
+			userManager.Create(user4.User, password);
+			
+			userManager.AddToRole(user1.ID, "admin");
+			userManager.AddToRole(user2.ID, "user");
+			userManager.AddToRole(user3.ID, "user");
+			userManager.AddToRole(user4.ID, "admin");
+
+
+			context.Friendships.Add(new Friendship(user1, user3));
+			context.Friendships.Add(new Friendship(user2, user3));
+			context.Friendships.Add(new Friendship(user1, user2));
 
 
 			#endregion
@@ -66,6 +103,10 @@ namespace DAL.Entities
 				Name = "MUNI"
 			};
 
+			group1.Accounts.Add(user1);
+			group1.Name = "MUNI";
+			context.Groups.Add(group1);
+
 			#endregion
 
 			#region ChatInit
@@ -74,7 +115,7 @@ namespace DAL.Entities
 			{
 				Name = "groupchat user1 user2"
 			};
-			chatu1u2.ChatUsers.AddRange(new List<User> { user1, user2 });
+			chatu1u2.ChatUsers.AddRange(new List<Account> { user1, user2 });
 
 			var chatMsgU1U2 = new ChatMessage
 			{
@@ -85,9 +126,7 @@ namespace DAL.Entities
 
 			};
 			chatu1u2.Messages.Add(chatMsgU1U2);
-			group1.Accounts.Add(user1);
-			group1.Name = "MUNI";
-			context.Groups.Add(group1);
+
 
 			#endregion
 
@@ -103,7 +142,7 @@ namespace DAL.Entities
 
 			var reacU1 = new Reaction
 			{
-				User = user1,
+				Account = user1,
 				UserReaction = ReactionEnum.PogChamp
 			};
 			postU2.Reactions.Add(reacU1);
@@ -132,9 +171,17 @@ namespace DAL.Entities
 
 			#endregion
 
+			#region Requests
+
+			context.Requests.Add(new Request {Group = group1,Receiver = user1,Sender = user2 ,Time = DateTime.Now});
+			context.Requests.Add(new Request {Receiver = user4,Sender = user1, Time = DateTime.Now });
+			context.Requests.Add(new Request { Group = group1, Receiver = user4, Sender = user2, Time = DateTime.Now });
+
+			#endregion
+			
 
 
-			context.Users.AddRange(new List<User> { user1, user2, user3 });
+
 		}
 	}
 }

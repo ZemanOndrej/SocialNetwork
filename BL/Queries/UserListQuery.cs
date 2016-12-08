@@ -1,15 +1,19 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BL.AppRigantiInfrastructure;
 using BL.DTO;
 using BL.DTO.Filters;
+using BL.DTO.UserDTOs;
+using Castle.Core.Internal;
 using DAL.Entities;
 using Riganti.Utils.Infrastructure.Core;
 
 namespace BL.Queries
 {
-	public class UserListQuery : AppQuery<UserDTO>
+	public class UserListQuery : AppQuery<AccountDTO>
 	{
 
 		
@@ -18,10 +22,10 @@ namespace BL.Queries
 
 		public UserListQuery(IUnitOfWorkProvider provider) : base(provider){}
 
-		protected override IQueryable<UserDTO> GetQueryable()
+		protected override IQueryable<AccountDTO> GetQueryable()
 		{
 
-			IQueryable<User> query = Context.Users;
+			IQueryable<Account> query = Context.Accounts;
 
 
 
@@ -39,12 +43,14 @@ namespace BL.Queries
 
 			if (!string.IsNullOrEmpty(Filter.Login))
 			{
-				query = query.Where(u => u.Login.Equals(Filter.Login) );
+				query = query.Where(u => u.User.UserName.Equals(Filter.Login) );
 			}
 
 			if (!string.IsNullOrEmpty(Filter.Email))
 			{
-				query = query.Where(u => u.Email.Equals(Filter.Email) );
+
+
+				query = query.Where(u => u.User.Email.Equals(Filter.Email) );
 			}
 
 			if (Filter.Gender != null)
@@ -62,7 +68,7 @@ namespace BL.Queries
 				query = query.Where(u => u.Groups.Contains(new Group {ID = group.ID}));
 			}
 
-			return query.ProjectTo<UserDTO>();
+			return query.ProjectTo<AccountDTO>();
 		}
 
 

@@ -2,7 +2,6 @@
 {
 	public enum GroupPrivacyLevel
 	{
-//		Public,PrivateOnInvite,PrivateSendRequest
-		Public,Private
+		Private,Public
 	}
 }

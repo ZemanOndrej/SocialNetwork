@@ -3,6 +3,7 @@ using AutoMapper;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Riganti.Utils.Infrastructure.Core;
@@ -36,12 +37,12 @@ namespace BL.Services.ChatMessage
 		#endregion
 
 		#region CreateDelete
-		public int PostMessageToChat(ChatDTO chat, UserDTO user, ChatMessageDTO message)
+		public int PostMessageToChat(ChatDTO chat, AccountDTO account, ChatMessageDTO message)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var chatEnt = chatRepository.GetById(chat.ID);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 
 				var newChatMessage = Mapper.Map<ChatMessageDTO, DAL.Entities.ChatMessage>(message);
 				newChatMessage.Time = DateTime.Now;

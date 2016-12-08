@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\FriendListVisibilityLevel.cs" />
     <Compile Include="Enums\Game\BuildingName.cs" />
     <Compile Include="Enums\Game\Resource.cs" />
     <Compile Include="Enums\Game\UnitName.cs" />

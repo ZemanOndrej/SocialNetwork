@@ -1,0 +1,42 @@
+﻿@using PL.Models
+@model DefaultPageModel
+@{
+	ViewBag.Title = Model.Group.Name;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Group.Name</h2>
+
+<div class="row">
+	
+	<div class="col-md-2" style="border: black solid 1px; margin-top: 113px">
+		<div>
+			Group Members
+
+			@{
+				Html.RenderPartial("AccountList", Model.Accounts);
+			}
+			
+		</div>
+
+	</div>
+
+	<div class="col-md-10">
+		<div>
+			@using (Html.BeginForm("GroupPage", "Page", FormMethod.Post))
+			{
+				@Html.HiddenFor(m => m.Group.ID)
+				@Html.TextAreaFor(m => m.NewPost.Message, new {@class = "form-control"})
+				<input type="submit" name="SendPost" value="Send"/>
+
+
+			}
+		</div>
+
+		@{
+			Html.RenderPartial("PostList", Model);
+		}
+	</div>
+</div>
+
+

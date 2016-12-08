@@ -7,6 +7,7 @@ using AutoMapper;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Riganti.Utils.Infrastructure.Core;
@@ -34,15 +35,15 @@ namespace BL.Services.Reaction
 
 		#region CreateDelete
 
-		public int CreateReaction( PostDTO post, ReactionDTO reaction,UserDTO user)
+		public int CreateReaction( PostDTO post, ReactionDTO reaction,AccountDTO account)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var reactionEnt = Mapper.Map<DAL.Entities.Reaction>(reaction);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 				var postEnt = postRepository.GetById(post.ID);
 
-				reactionEnt.User = userEnt;
+				reactionEnt.Account = userEnt;
 				reactionEnt.Post = postEnt;
 
 				reactionRepository.Insert(reactionEnt);
@@ -69,7 +70,7 @@ namespace BL.Services.Reaction
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var reactionEnt = reactionRepository.GetById(reaction.ID,r=>r.User,r=>r.Post);
+				var reactionEnt = reactionRepository.GetById(reaction.ID,r=>r.Account,r=>r.Post);
 				reactionEnt.UserReaction = reaction.UserReaction;
 
 				reactionRepository.Update(reactionEnt);

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Utils.Enums;
 
 namespace PL.Models
 {
@@ -64,6 +66,36 @@ namespace PL.Models
 
     public class RegisterViewModel
     {
+		
+
+
+
+		[Required]
+		[Display(Name = "Name")]
+		[StringLength(100)]
+		public string Name { get; set; }
+
+		[Display(Name = "Information")]
+		[StringLength(500)]
+		public string Information { get; set; }
+
+		[Display(Name = "Date of Birth")]
+		[DataType(DataType.Date)]
+		public DateTime DateOfBirth { get; set; }
+
+		[Display(Name = "Gender")]
+		public Gender Gender { get; set; }
+
+		[Required]
+		[Display(Name = "Surname")]
+		[StringLength(100)]
+		public string Surname { get; set; }
+
+		[Required]
+		[StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
+		[Display(Name = "UserName")]
+		public string UserName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -79,6 +111,7 @@ namespace PL.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
     }
 
     public class ResetPasswordViewModel

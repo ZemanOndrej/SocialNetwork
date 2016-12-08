@@ -22,11 +22,10 @@ namespace DAL.Entities
 		public string Message { get; set; }
 
 		[Required]
-		public virtual User Sender { get; set; }
+		public virtual Account Sender { get; set; }
 
 		[Column(TypeName = "datetime2")]
 		public DateTime Time { get; set; }
-
 
 		public virtual Group Group { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using Utils.Enums;
+﻿using BL.DTO.UserDTOs;
+using Utils.Enums;
 
 namespace BL.DTO
 {
@@ -6,7 +7,7 @@ namespace BL.DTO
 	{
 		public PostDTO Post { get; set; }
 
-		public UserDTO Sender { get; set; }
+		public AccountDTO Sender { get; set; }
 
 		public ReactionEnum UserReaction { get; set; }
 

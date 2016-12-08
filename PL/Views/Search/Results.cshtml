@@ -1,0 +1,40 @@
+﻿@model PL.Models.SearchModel
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div>
+	<h2>Search keyword : @Model.Keyword</h2>
+</div>
+
+<div>
+	<h2>
+		Found Users
+	</h2>
+	@foreach (var user in Model.FoundAccounts)
+	{
+		<div>
+			<h3>
+				@Html.ActionLink(user.FullName, "UserPage", "Page", new {id = user.ID}, null)
+
+			</h3>
+		</div>
+	}
+</div>
+
+<div>
+	<h2>
+		Found Groups
+	</h2>
+	@foreach (var group in Model.FoundGroups)
+	{
+		<div>
+			<h3>
+				@Html.ActionLink(group.Name, "GroupPage", "Group", new { id = group.ID }, null)
+
+			</h3>
+		</div>
+	}
+</div>
+

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BL;
 using BL.DTO;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Facades;
 using BL.Services.Chat;
 using BL.Services.ChatMessage;
@@ -12,6 +13,7 @@ using BL.Services.Post;
 using BL.Services.Reaction;
 using BL.Services.User;
 using Castle.Windsor;
+using DAL.Entities.Identity;
 using Utils.Enums;
 
 
@@ -21,10 +23,10 @@ namespace SocialNetwork
 	public class Program
 	{
 		
-		private static UserDTO userDtoBoris;
-		private static UserDTO userDto2David;
-		private static UserDTO userDto3Jozko;
-		private static UserDTO userDto3Martin;
+		private static AccountDTO _accountDtoBoris;
+		private static AccountDTO _accountDto2David;
+		private static AccountDTO _accountDto3Jozko;
+		private static AccountDTO _accountDto3Martin;
 		private static GroupDTO groupMuni;
 		private static GroupDTO groupTwitch;
 		private static GroupDTO testGroup;
@@ -132,11 +134,11 @@ namespace SocialNetwork
 
 
 			Console.WriteLine("//////////////////CHAT FACADE TEST//////////////////");
-			ChatFacadeTest();
+//			ChatFacadeTest();
 			Console.WriteLine("//////////////////POST FACADE TEST//////////////////");
-			PostFacadeTest();
+//			PostFacadeTest();
 			Console.WriteLine("//////////////////GROUP FACADE TEST//////////////////");
-			GroupFacadeTest();
+//			GroupFacadeTest();
 			Console.WriteLine("//////////////////USER FACADE TEST//////////////////");
 			UserFacadeTest();
 
@@ -198,8 +200,8 @@ namespace SocialNetwork
 			chatFacade.ListAllUsersInChat(chatDavadBorisJozko).ForEach(u=> Console.WriteLine(u.FullName));
 
 			Console.WriteLine("|||||||||||||||||||  Remove Jozko from chat and add martin ||||||||||||||||||||||");
-			chatFacade.RemoveUserFromChat(chatDavadBorisJozko,userDto3Jozko);
-			chatFacade.AddUserToChat(chatDavadBorisJozko,userDto3Martin);
+			chatFacade.RemoveUserFromChat(chatDavadBorisJozko,_accountDto3Jozko);
+			chatFacade.AddUserToChat(chatDavadBorisJozko,_accountDto3Martin);
 			chatFacade.ListAllUsersInChat(chatDavadBorisJozko).ForEach(u => Console.WriteLine(u.FullName));
 
 			Console.WriteLine("|||||||||||||||||||  List All Chat Messages||||||||||||||||||||||");
@@ -220,13 +222,13 @@ namespace SocialNetwork
 			groupFacade.ListAllGroups().ForEach(Console.WriteLine);
 			Console.WriteLine("|||||||||||||||||||  Add Users to MUNI  ||||||||||||||||||||||");
 
-			groupFacade.AddUserToGroup(groupMuni,userDtoBoris);
-			groupFacade.AddUserToGroup(groupMuni,userDto2David);
-			groupFacade.AddUserToGroup(groupMuni,userDto3Martin);
+			groupFacade.AddUserToGroup(groupMuni,_accountDtoBoris);
+			groupFacade.AddUserToGroup(groupMuni,_accountDto2David);
+			groupFacade.AddUserToGroup(groupMuni,_accountDto3Martin);
 			Console.WriteLine("|||||||||||||||||||LIST USERS IN GROUP||||||||||||||||||||||");
 			groupFacade.ListUsersInGroup(groupMuni).ForEach(u => Console.WriteLine(u.FullName));
 			Console.WriteLine("|||||||||||||||||||  REMOVE USER FROM GROUP  ||||||||||||||||||||||");
-			groupFacade.RemoveUserFromGroup(groupMuni, userDto2David);
+			groupFacade.RemoveUserFromGroup(groupMuni, _accountDto2David);
 			Console.WriteLine("|||||||||||||||||||LIST USERS IN GROUP||||||||||||||||||||||");
 			groupFacade.ListUsersInGroup(groupMuni).ForEach(u => Console.WriteLine(u.FullName));
 			Console.WriteLine("|||||||||||||||||||  EDIT GroupName  ||||||||||||||||||||||");
@@ -247,33 +249,33 @@ namespace SocialNetwork
 			Console.WriteLine("|||||||||||||||||||  ListAllUsers  ||||||||||||||||||||||");
 			userFacade.ListAllUsers().ForEach(u=>Console.WriteLine(u.FullName));
 			
-			Console.WriteLine("||||||||||||||||||| Edit User(default)||||||||||||||||||||||");
-			Console.WriteLine(userDto3Jozko);
+			Console.WriteLine("||||||||||||||||||| Edit Account(default)||||||||||||||||||||||");
+			Console.WriteLine(_accountDto3Jozko);
 			Console.WriteLine("||||||||||||||||||| UPDATED USER||||||||||||||||||||||");
-			userDto3Jozko.Name = "Majka";
-			userDto3Jozko.Gender=Gender.Female;
-			userDto3Jozko.Surname = "Mrkvickova";
-			userDto3Jozko.Email = "Maja@gmail.com";
-			userFacade.UpdateUserInfo(userDto3Jozko);
-			userDto3Jozko = userFacade.GetUserByEmail("Maja@gmail.com");
-			Console.WriteLine(userDto3Jozko);
+			_accountDto3Jozko.Name = "Majka";
+			_accountDto3Jozko.Gender=Gender.Female;
+			_accountDto3Jozko.Surname = "Mrkvickova";
+			_accountDto3Jozko.Email = "Maja@gmail.com";
+			userFacade.UpdateUserInfo(_accountDto3Jozko);
+			_accountDto3Jozko = userFacade.GetUserByEmail("Maja@gmail.com");
+			Console.WriteLine(_accountDto3Jozko);
 			Console.WriteLine("||||||||||||||||||| ADDING FRIENDS(No friends)||||||||||||||||||||||");
-			userFacade.ListFriendsOf(userDto3Jozko).ForEach(Console.WriteLine);
-			userFacade.AddUsersToFriends(userDto3Jozko,userDto2David);
-			userFacade.AddUsersToFriends(userDto3Jozko,userDtoBoris);
+			userFacade.ListFriendsOf(_accountDto3Jozko).ForEach(Console.WriteLine);
+			userFacade.AddUsersToFriends(_accountDto3Jozko,_accountDto2David);
+			userFacade.AddUsersToFriends(_accountDto3Jozko,_accountDtoBoris);
 			Console.WriteLine("||||||||||||||||||| JozkosFriends FRIENDS||||||||||||||||||||||");
-			userFacade.ListFriendsOf(userDto3Jozko).ForEach(u => Console.WriteLine(u.FullName));
+			userFacade.ListFriendsOf(_accountDto3Jozko).ForEach(u => Console.WriteLine(u.FullName));
 			Console.WriteLine("||||||||||||||||||| REMOVING FRIENDS FROM JOZKO||||||||||||||||||||||");
-			userFacade.RemoveUsersFromFriends(userDto3Jozko,userDto2David);
-			userFacade.ListFriendsOf(userDto3Jozko).ForEach(u => Console.WriteLine(u.FullName));
+			userFacade.RemoveUsersFromFriends(_accountDto3Jozko.ID,_accountDto2David.ID);
+			userFacade.ListFriendsOf(_accountDto3Jozko).ForEach(u => Console.WriteLine(u.FullName));
 			Console.WriteLine("||||||||||||||||||| Search FOR USER With email gmail.com||||||||||||||||||||||");
 			userFacade.GetUsersWithName("Boris").ForEach(Console.WriteLine);
 			Console.WriteLine("|||||||||||||||||||DELETE MARTIN||||||||||||||||||||||");
-			userFacade.RemoveUser(userDto3Martin);
+			userFacade.RemoveUser(_accountDto3Martin);
 			userFacade.ListAllUsers().ForEach(u => Console.WriteLine(u.FullName));
 			Console.WriteLine("|||||||||||||||||||  Check borises groups  ||||||||||||||||||||||");
 
-			userFacade.ListGroupsWithUser(userDtoBoris).ForEach(Console.WriteLine);
+			userFacade.ListGroupsWithUser(_accountDtoBoris).ForEach(Console.WriteLine);
 
 
 			Console.WriteLine("|||||||||||||||||||USERFACADE COMPLETE||||||||||||||||||||||");
@@ -284,48 +286,52 @@ namespace SocialNetwork
 
 		private static void Init()
 		{
-			var userid1= userFacade.CreateNewUser(new UserDTO
+			var userid1= userFacade.CreateNewUser(new AccountDTO
 			{
 				Name = "David",
 				DateOfBirth = new DateTime(1996, 2, 13),
 				Surname = "Bielik",
 				Information = "NaM SHUTTHEFUCKUPWEEBS NaM",
 				Email = "dvdblk@q.cz",
-				Login = "dvdblk"
+				UserName = "dvdblk",
+				Password = "asdasdasda123"
 			});
-			var userid2=userFacade.CreateNewUser(new UserDTO
+			var userid2=userFacade.CreateNewUser(new AccountDTO
 			{
 				Name = "Boris",
 				DateOfBirth = new DateTime(1999, 5, 7),
 				Surname = "Petrenko",
 				Information = "Random info string Boris",
 				Email = "boris@gmail.com",
-				Login = "borenko"
+				UserName = "borenko",
+				Password = "asdfghjkl3123"
 			});
 
-			var userid3 = userFacade.CreateNewUser(new UserDTO
+			var userid3 = userFacade.CreateNewUser(new AccountDTO
 			{
 				Name = "Martin",
 				DateOfBirth = new DateTime(1996, 9, 6),
 				Surname = "Macak",
 				Information = "Random info string Martin",
-				Email = "qq@gmail.com",
-				Login = "Kappa123"
+				Email = "martinM@gmail.com",
+				UserName = "Kappa123",
+				Password = "qwertyuiop3123"
 			});
-			var userid4 = userFacade.CreateNewUser(new UserDTO
+			var userid4 = userFacade.CreateNewUser(new AccountDTO
 			{
 				Name = "Jozko",
 				DateOfBirth = new DateTime(2000, 1, 1),
 				Surname = "Mrkvicka",
 				Information = "Random info string Jozko",
 				Email = "12@123.sk",
-				Login = "EleGiggle13"
+				UserName = "EleGiggle13",
+				Password = "zxcvbnm123123"
 			});
 
-			userDto3Martin = userFacade.GetUserById(userid3);
-			userDto3Jozko = userFacade.GetUserById(userid4);
-			userDtoBoris = userFacade.GetUserById(userid2);
-			userDto2David = userFacade.GetUserById(userid1);
+			_accountDto3Martin = userFacade.GetUserById(userid3);
+			_accountDto3Jozko = userFacade.GetUserById(userid4);
+			_accountDtoBoris = userFacade.GetUserById(userid2);
+			_accountDto2David = userFacade.GetUserById(userid1);
 
 
 			var groupId = groupFacade.CreateNewGroup(new GroupDTO
@@ -347,50 +353,50 @@ namespace SocialNetwork
 			groupMuni = groupFacade.GetGroupById(groupId);
 			groupTwitch = groupFacade.GetGroupById(groupId2);
 
-			groupFacade.AddUserToGroup(testGroup,userDtoBoris);
+			groupFacade.AddUserToGroup(testGroup,_accountDtoBoris);
 
 
 			var post1Id = postFacade.SendPost(new PostDTO
 			{
 				Message = "Hello world"
 				
-			},userDtoBoris);
+			},_accountDtoBoris);
 
 			var post2Id = postFacade.SendPost(new PostDTO
 			{
 				Message = "MEGALUL TRUMP 1337"
 
-			}, userDto2David,testGroup);
+			}, _accountDto2David,testGroup);
 
 			post2 = postFacade.GetPostById(post2Id);
 			post1 = postFacade.GetPostById(post1Id);
 
 			var reaction1Id = postFacade.ReactOnPost(post1, 
-				new ReactionDTO {UserReaction = ReactionEnum.LUL}, userDto2David);
+				new ReactionDTO {UserReaction = ReactionEnum.LUL}, _accountDto2David);
 			var reaction2Id = postFacade.ReactOnPost(post1, 
-				new ReactionDTO {UserReaction = ReactionEnum.FeelsBadMan},userDto3Jozko);
+				new ReactionDTO {UserReaction = ReactionEnum.FeelsBadMan},_accountDto3Jozko);
 
 			reaction1 = postFacade.GetReactionById(reaction1Id);
 			reaction2 = postFacade.GetReactionById(reaction2Id);
 
-			var comment1Id = postFacade.CommentPost(post1, new CommentDTO {CommentMessage = "ALOHA"}, userDto2David);
-			var comment2Id = postFacade.CommentPost(post1, new CommentDTO { CommentMessage = "How are you man?" }, userDtoBoris);
+			var comment1Id = postFacade.CommentPost(post1, new CommentDTO {CommentMessage = "ALOHA"}, _accountDto2David);
+			var comment2Id = postFacade.CommentPost(post1, new CommentDTO { CommentMessage = "How are you man?" }, _accountDtoBoris);
 
 			comment1 = postFacade.GetCommentById(comment1Id);
 			comment2 = postFacade.GetCommentById(comment2Id);
 
-			var chat1iD= chatFacade.CreateChat(userDto2David, userDtoBoris);
+			var chat1iD= chatFacade.CreateChat(_accountDto2David, _accountDtoBoris);
 
-			var chat2Id = chatFacade.CreateGroupChat(new List<UserDTO> { userDto2David, userDtoBoris, userDto3Jozko});
+			var chat2Id = chatFacade.CreateGroupChat(new List<AccountDTO> { _accountDto2David, _accountDtoBoris, _accountDto3Jozko});
 
 			chatDavadBorisJozko = chatFacade.GetChatById(chat2Id);
 			chatDavadBoris = chatFacade.GetChatById(chat1iD);
 
-			var chatMsg1 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, userDto2David,
+			var chatMsg1 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, _accountDto2David,
 				new ChatMessageDTO {Message = "jak sa dari v skole?"});
-			var chatMsg2 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, userDtoBoris,
+			var chatMsg2 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, _accountDtoBoris,
 				new ChatMessageDTO { Message = "Vidime sa v skole" });
-			var chatMsg3 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, userDto3Jozko,
+			var chatMsg3 = chatFacade.SendChatMessageToChat(chatDavadBorisJozko, _accountDto3Jozko,
 				new ChatMessageDTO { Message = "Kedy?" });
 			chatMessage1 = chatFacade.GetChatMessageById(chatMsg1);
 
@@ -420,16 +426,16 @@ namespace SocialNetwork
 //			var postId =postService.CreatePost(new PostDTO
 //			{
 //				Message = "Hey buddy, I think you've got the wrong door, the leather club's two blocks down.",
-//				Sender = userDtoBoris
+//				Sender = _accountDtoBoris
 //			});
 //			var postEnt = postService.GetPostById(postId);
-//			Console.WriteLine("<<<<<ListAllPostsfrom user boris>>>>>");
-//			postService.GetPostsFromUser(userDtoBoris).ResultPosts.ForEach(Console.WriteLine);
+//			Console.WriteLine("<<<<<ListAllPostsfrom account boris>>>>>");
+//			postService.GetPostsFromUser(_accountDtoBoris).ResultPosts.ForEach(Console.WriteLine);
 //			Console.WriteLine("<<<<<ListAllCommentsOnPost with is {postDd}(should be 0>>>>>");
 //			commentService.GetCommentsForPost(postEnt).ResultPosts.ForEach(Console.WriteLine);
 //
 //			Console.WriteLine("<<<<<CreateCommentForPostWithId{postId}>>>>>");
-//			var commentId=commentService.CreateComment(userDto2David,new CommentDTO{CommentMessage = "Halo"}, postEnt);
+//			var commentId=commentService.CreateComment(_accountDto2David,new CommentDTO{CommentMessage = "Halo"}, postEnt);
 //			Console.WriteLine("<<<<<ListAllCommentsOnPost with is {postDd}(should be 1)>>>>>");
 //			commentService.GetCommentsForPost(postEnt).ResultPosts.ForEach(Console.WriteLine);
 //
@@ -462,10 +468,10 @@ namespace SocialNetwork
 //				Name = "chat medzi davadom a patrenkom"
 //			};
 //			chat.ChatUsers.Add(user1);
-//			chat.ChatUsers.Add(userDtoBoris);
+//			chat.ChatUsers.Add(_accountDtoBoris);
 //			var id = chatService.CreateChat(chat);
 //			chat = chatService.GetChatById(id);
-//			chatService.AddUserToChat(chat,userDto2David);
+//			chatService.AddUserToChat(chat,_accountDto2David);
 //			Console.WriteLine("<<<<<ListAllChats>>>>>");
 //			chatService.ListAllChats().ForEach(Console.WriteLine);
 //
@@ -474,7 +480,7 @@ namespace SocialNetwork
 //			chatService.GetChatMessagesFromChat(chat).ResultMessages.ForEach(Console.WriteLine);
 //
 //			Console.WriteLine("<<<<<AddNewMsg>>>>>");
-//			chatMessageService.PostMessageToChat(chat,userDto2David,new ChatMessageDTO
+//			chatMessageService.PostMessageToChat(chat,_accountDto2David,new ChatMessageDTO
 //			{
 //				Message = "ahoj ako sa mas?"
 //			});
@@ -495,7 +501,7 @@ namespace SocialNetwork
 
 //			#region creatingUsers
 //
-//			userService.CreateUser(new UserDTO
+//			userService.Register(new AccountDTO
 //			{
 //				Name = "David",
 //				DateOfBirth = new DateTime(1996, 2, 13),
@@ -505,7 +511,7 @@ namespace SocialNetwork
 //				Login = "dvdblk"
 //			});
 //
-//			userService.CreateUser(new UserDTO
+//			userService.Register(new AccountDTO
 //			{
 //				Name = "Boris",
 //				DateOfBirth = new DateTime(1996, 2, 13),
@@ -517,29 +523,29 @@ namespace SocialNetwork
 //			#endregion
 //
 //			var userListDto = userService.ListUsers(new UserFilter { Name = "Boris" }).ResultUsers.FirstOrDefault();
-//			userDtoBoris = userService.GetUserById(userListDto.ID);
-//			userDtoBoris.Information = "THANK YOU SIR, MAY I HAVE ANOTHER?";
-//			userService.EditUser(userDtoBoris);
+//			_accountDtoBoris = userService.GetUserById(userListDto.ID);
+//			_accountDtoBoris.Information = "THANK YOU SIR, MAY I HAVE ANOTHER?";
+//			userService.EditUser(_accountDtoBoris);
 //
 //
 //
 //			var userListDto2 = userService.ListUsers(new UserFilter { Name = "David" }).ResultUsers.FirstOrDefault();
-//			userDto2David = userService.GetUserById(userListDto2.ID);
+//			_accountDto2David = userService.GetUserById(userListDto2.ID);
 //
 //			var userListDto3 = userService.ListUsers(new UserFilter { Email = "PogChamp@Kappa.cz" }).ResultUsers.FirstOrDefault();
 //			userDto3Alojz = userService.GetUserById(userListDto3.ID);
 //
-//			userService.AddUsersToFriends(userDto2David, userDtoBoris);
-//			userService.AddUsersToFriends(userDto2David.ID, userDto3Alojz.ID);
+//			userService.AddUsersToFriends(_accountDto2David, _accountDtoBoris);
+//			userService.AddUsersToFriends(_accountDto2David.ID, userDto3Alojz.ID);
 //
 //
 //
 //
-//			Console.WriteLine(userDto2David);
-//			Console.WriteLine(userDtoBoris);
+//			Console.WriteLine(_accountDto2David);
+//			Console.WriteLine(_accountDtoBoris);
 //
-//			Console.WriteLine("////////////Friends of " + userDto2David.FullName);
-//			userService.ListFriends(userDto2David).ForEach(Console.WriteLine);
+//			Console.WriteLine("////////////Friends of " + _accountDto2David.FullName);
+//			userService.ListFriends(_accountDto2David).ForEach(Console.WriteLine);
 		}
 
 

@@ -7,6 +7,7 @@ using AutoMapper;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Riganti.Utils.Infrastructure.Core;
@@ -39,12 +40,12 @@ namespace BL.Services.Comment
 
 		#region CreateDelete
 
-		public int CreateComment(UserDTO user, CommentDTO comment, PostDTO post)
+		public int CreateComment(AccountDTO account, CommentDTO comment, PostDTO post)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var commentEnt = Mapper.Map<DAL.Entities.Comment>(comment);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 				var postEnt = postRepository.GetById(post.ID);
 
 

@@ -58,6 +58,14 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -81,34 +89,46 @@
     <Compile Include="DTO\Filters\ChatFilter.cs" />
     <Compile Include="DTO\Filters\ChatMessageFilter.cs" />
     <Compile Include="DTO\Filters\CommentFilter.cs" />
+    <Compile Include="DTO\Filters\FriendshipFilter.cs" />
     <Compile Include="DTO\Filters\PostFilter.cs" />
     <Compile Include="DTO\Filters\ReactionFilter.cs" />
+    <Compile Include="DTO\Filters\RequestFilter.cs" />
     <Compile Include="DTO\GroupDTOs\GroupListQueryResultDTO.cs" />
     <Compile Include="DTO\PostDTOs\CommentDTO.cs" />
     <Compile Include="DTO\Filters\GroupFilter.cs" />
     <Compile Include="DTO\Filters\UserFilter.cs" />
-    <Compile Include="DTO\GameDTOs\GameAccountDTO.cs" />
     <Compile Include="DTO\GroupDTOs\GroupDTO.cs" />
     <Compile Include="DTO\PostDTOs\CommentListQueryResultDTO.cs" />
     <Compile Include="DTO\PostDTOs\PostDTO.cs" />
     <Compile Include="DTO\PostDTOs\PostListQueryResultDTO.cs" />
     <Compile Include="DTO\PostDTOs\ReactionDTO.cs" />
     <Compile Include="DTO\PostDTOs\ReactionListQueryResultDTO.cs" />
-    <Compile Include="DTO\UserDTOs\FriendshipDTO.cs" />
+    <Compile Include="DTO\Request\RequestDTO.cs" />
+    <Compile Include="DTO\Request\RequestListQueryResultDTO.cs" />
+    <Compile Include="DTO\UserDTOs\FriendListQueryResultDTO.cs" />
     <Compile Include="DTO\UserDTOs\UserDTO.cs" />
+    <Compile Include="DTO\UserDTOs\FriendshipDTO.cs" />
+    <Compile Include="DTO\UserDTOs\AccountDTO.cs" />
     <Compile Include="DTO\UserDTOs\UserListQueryResultDTO.cs" />
     <Compile Include="Facades\ChatFacade.cs" />
     <Compile Include="Facades\GroupFacade.cs" />
     <Compile Include="Facades\PostFacade.cs" />
+    <Compile Include="Facades\RequestFacade.cs" />
     <Compile Include="Facades\UserFacade.cs" />
+    <Compile Include="Identity\AppRoleManager.cs" />
+    <Compile Include="Identity\AppRoleStore.cs" />
+    <Compile Include="Identity\AppUserManager.cs" />
+    <Compile Include="Identity\AppUserStore.cs" />
     <Compile Include="InitMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ChatListQuery.cs" />
     <Compile Include="Queries\ChatMessageListQuery.cs" />
     <Compile Include="Queries\CommentListQuery.cs" />
+    <Compile Include="Queries\FriendListQuery.cs" />
     <Compile Include="Queries\GroupListQuery.cs" />
     <Compile Include="Queries\PostListQuery.cs" />
     <Compile Include="Queries\ReactionListQuery.cs" />
+    <Compile Include="Queries\RequestListQuery.cs" />
     <Compile Include="Queries\UserListQuery.cs" />
     <Compile Include="Repositories\ChatMessageRepository.cs" />
     <Compile Include="Repositories\ChatRepository.cs" />
@@ -117,6 +137,7 @@
     <Compile Include="Repositories\GroupRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\ReactionRepository.cs" />
+    <Compile Include="Repositories\RequestRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\AppService.cs" />
     <Compile Include="Services\ChatMessage\ChatMessageService.cs" />
@@ -125,6 +146,8 @@
     <Compile Include="Services\Chat\IChatService.cs" />
     <Compile Include="Services\Comment\CommentService.cs" />
     <Compile Include="Services\Comment\ICommentService.cs" />
+    <Compile Include="Services\Request\RequestService.cs" />
+    <Compile Include="Services\Request\IRequestService.cs" />
     <Compile Include="Services\Group\GroupService.cs" />
     <Compile Include="Services\Group\IGroupService.cs" />
     <Compile Include="Services\Post\IPostService.cs" />

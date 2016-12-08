@@ -1,0 +1,59 @@
+﻿@using Utils.Enums
+@model PL.Models.DefaultPageModel
+@{
+	ViewBag.Title = Model.Account.FullName + "Profile";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>@Model.Account.FullName Profile</h2>
+
+<div class="row">
+	<div class="col-md-2" style="border: black solid 1px; margin-top: 113px">
+		<div>
+			FriendList
+			
+			@if (Model.Account.FriendListVisibility == FriendListVisibilityLevel.Public ||
+			(Model.IsYourFriend && Model.Account.FriendListVisibility == FriendListVisibilityLevel.OnlyFriends))
+			{
+				Html.RenderPartial("AccountList", Model.Accounts);
+			}
+			else
+			{
+				<span> FriendList is private</span>
+			}
+
+		</div>
+
+	</div>
+	<div class="col-md-10">
+		@using (Html.BeginForm("Create", "Chat", FormMethod.Post))
+		{
+			<input value="@Model.Account.ID" name="id" type="hidden" />
+			<input type="submit" name="Send" value="Send a Message" />
+
+		}
+
+
+		@if (Model.IsYourFriend)
+		{
+
+			using (Html.BeginForm("RemoveFromFriends", "Request", FormMethod.Post))
+			{
+				<input value="@Model.Account.ID" name="id" type="hidden" />
+				<input type="submit" name="Send" value="Remove from friendlist" />
+			}
+		}
+		else
+		{
+			using (Html.BeginForm("SendRequest", "Request", FormMethod.Post))
+			{
+				<input value="@Model.Account.ID" name="id" type="hidden" />
+				<input type="submit" name="Send" value="Send a friend request" disabled=@Model.PendingFriendRequest />
+			}
+
+		}
+
+		@{
+			Html.RenderPartial("PostList",Model);
+		}
+	</div>
+</div>

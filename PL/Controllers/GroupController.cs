@@ -1,44 +1,18 @@
 ﻿using System.Web.Mvc;
 using BL.Facades;
+using Microsoft.AspNet.Identity;
 using PL.Models;
 using Utils.Enums;
 
 namespace PL.Controllers
 {
+	[Authorize]
 	public class GroupController : Controller
 	{
-		//TODO CHANGE GROUPID IN PostDto to GROUPDTO
 
 		public GroupFacade GroupFacade { get; set; }
 		public PostFacade PostFacade { get; set; }
 		public UserFacade UserFacade { get; set; }
-
-
-		public ActionResult GroupPage(int id)
-		{
-
-			var group = GroupFacade.GetGroupById(id);
-			var posts = PostFacade.GetPostsFromGroup(group);
-
-			return View(new GroupPageModel {Group = group,Posts = posts});
-		}
-
-		[HttpPost]
-		public ActionResult GroupPage(GroupPageModel model)
-		{
-
-			var group = GroupFacade.GetGroupById(model.Group.ID);
-
-			var user = UserFacade.GetUserByEmail(User.Identity.Name);
-			model.NewPost.PrivacyLevel=PostPrivacyLevel.Group;
-			if (user == null) user = UserFacade.GetUserById(1);
-			PostFacade.SendPost(model.NewPost, user, group);
-
-
-			return RedirectToAction("GroupPage",new {id=model.Group.ID});
-		}
-
-
 
 
 		public ActionResult Details(int id)

@@ -6,6 +6,7 @@ using AutoMapper.QueryableExtensions;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
+using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Riganti.Utils.Infrastructure.Core;
@@ -24,11 +25,14 @@ namespace BL.Services.Group
 
 		private readonly UserRepository userRepository;
 
-		public GroupService(GroupListQuery groupListQuery, GroupRepository groupRepository, UserRepository userRepository)
+		private readonly PostRepository postRepository;
+
+		public GroupService(GroupListQuery groupListQuery, GroupRepository groupRepository, UserRepository userRepository, PostRepository postRepository)
 		{
 			this.groupListQuery = groupListQuery;
 			this.groupRepository = groupRepository;
 			this.userRepository = userRepository;
+			this.postRepository = postRepository;
 		}
 
 		#endregion
@@ -79,24 +83,24 @@ namespace BL.Services.Group
 			}
 		}
 
-		public void AddUserToGroup(GroupDTO group, UserDTO user)
+		public void AddUserToGroup(GroupDTO group, AccountDTO account)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var groupEnt = groupRepository.GetById(group.ID);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 				groupEnt.Accounts.Add(userEnt);
 				groupRepository.Update(groupEnt);
 				uow.Commit();
 			}
 		}
 
-		public void RemoveUserFromGroup(GroupDTO group, UserDTO user)
+		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var groupEnt = groupRepository.GetById(group.ID);
-				var userEnt = userRepository.GetById(user.ID);
+				var userEnt = userRepository.GetById(account.ID);
 				groupEnt.Accounts.Remove(userEnt);
 				groupRepository.Update(groupEnt);
 				uow.Commit();
@@ -135,18 +139,18 @@ namespace BL.Services.Group
 					RequestedPage = page,
 					ResultCount = query.GetTotalRowCount(),
 					ResultGroups = query.Execute(),
-					Filter = new GroupFilter()
+					Filter = filter
 				};
 
 			}
 		}
 
-		public List<UserDTO> ListUsersInGroup(GroupDTO group)
+		public List<AccountDTO> ListUsersInGroup(GroupDTO group)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
 				var groupEnt = groupRepository.GetById(group.ID, g => g.Accounts);
-				return Mapper.Map<List<UserDTO>>(groupEnt.Accounts);
+				return Mapper.Map<List<AccountDTO>>(groupEnt.Accounts);
 			}
 		}
 

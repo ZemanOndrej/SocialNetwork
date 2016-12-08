@@ -1,9 +1,11 @@
 ﻿using System.Data.Entity;
 using DAL.Entities;
+using DAL.Entities.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace DAL
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext<User, AppRole, int, AppUserLogin, AppUserRole, AppUserClaim>
 	{
 		public AppDbContext() : base("SocialNetworkDBContext")
 		{
@@ -22,26 +24,25 @@ namespace DAL
 		public DbSet<Group> Groups { get; set; }
 		public DbSet<Post> Posts { get; set; }
 		public DbSet<Reaction> Reactions { get; set; }
-		public DbSet<User> Users { get; set; }
+		public DbSet<Account> Accounts { get; set; }
 		public DbSet<Friendship> Friendships { get; set; }
+		public DbSet<Request> Requests { get; set; }
 
-
-//		public DbSet<GameAccount> GameAccounts { get; set; }
 
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
-			//						modelBuilder.ConfigureMembershipRebootUserAccounts<UserAccount>();
+
 
 			modelBuilder.Entity<Comment>()
 					   .HasRequired(c => c.Sender)
 					   .WithMany()
 					   .WillCascadeOnDelete(false);
-			
+
 			modelBuilder.Entity<Reaction>()
-					   .HasRequired(r =>r.User )
+					   .HasRequired(r => r.Account)
 					   .WithMany()
 					   .WillCascadeOnDelete(false);
 
@@ -49,27 +50,35 @@ namespace DAL
 					   .HasRequired(r => r.User1)
 					   .WithMany()
 					   .WillCascadeOnDelete(false);
+
 			modelBuilder.Entity<Friendship>()
 					   .HasRequired(r => r.User2)
 					   .WithMany()
 					   .WillCascadeOnDelete(false);
 
-			//			modelBuilder.Entity<User>()
-			//				.HasMany(m => m.FriendList)
-			//				.WithMany(m => m.FriendList)
-			//				.Map(w => w.ToTable("User_Friend").MapLeftKey("User1Id").MapRightKey("User2Id"));
-			//			
-			//			modelBuilder.Entity<Player>()
-			//				.HasRequired<Team>(p => p.Club)
-			//				.WithMany()
-			//				.WillCascadeOnDelete(false);
+
+			modelBuilder.Entity<Request>()
+						.HasRequired(r=>r.Sender)
+						.WithMany()
+						.WillCascadeOnDelete(false);
+
+			modelBuilder.Entity<Request>()
+						.HasRequired(r => r.Receiver)
+						.WithMany()
+						.WillCascadeOnDelete(false);
+
+
+			modelBuilder.Entity<Account>()
+						.HasOptional(u => u.User)
+						.WithRequired(u => u.Account);
+//						.WillCascadeOnDelete(true);
+
+
 		}
 
-		//
 		private void InitializeDbContext()
 		{
 			Database.SetInitializer(new AppDbInitializer());
-//			this.RegisterUserAccountChildTablesForDelete<UserAccount>();
 		}
 	}
 }

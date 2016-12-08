@@ -2,7 +2,7 @@
 @using Utils.Enums
 @model PL.Models.OpenPostModel
 @{
-	ViewBag.Title = "Reactins";
+	ViewBag.Title = "Reactions";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -15,9 +15,10 @@
 	@using (Html.BeginForm("CreateComment", "Post", FormMethod.Post))
 	{
 
-		 @Html.HiddenFor(m => m.PostId) 
-
+		@Html.HiddenFor(m => m.PostId) 
+		@Html.HiddenFor(m=>m.BackView)
 @*		@Html.TextArea("Comment", new { rows = 10, columns = 40 })*@
+
 		@Html.TextAreaFor(m=>m.NewComment.CommentMessage);
 		<input type="submit" name="SendComment" value="Send" />
 
@@ -54,7 +55,9 @@
 		{
 			<div>
 				<div>
-					@comment.Sender.FullName
+					@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new { userId = comment.Sender.ID }, null)
+
+
 					at @comment.Time
 				</div>
 				<p>
@@ -62,8 +65,19 @@
 				</p>
 			</div>
 		}
-
-
+		
+		@switch (Model.BackView)
+		{
+			case "GroupPage":
+				@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
+				break;
+			case "UserPage":
+				@Html.ActionLink("Back", Model.BackView, "Page",new {userId =Model.Post.Sender.ID}, null)
+				break;
+			default:
+				@Html.ActionLink("Back", Model.BackView, "Page")
+				break;
+		}
 
 	</div>
 </div>

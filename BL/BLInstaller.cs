@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using BL.AppRigantiInfrastructure;
+using BL.Identity;
 using BL.Queries;
 using BL.Services;
 using BL.Services.User;
@@ -56,6 +57,15 @@ namespace BL
 					.LifestyleTransient()
 
 
+
+					, Component.For<Func<AppUserManager>>()
+					.Instance(() => new AppUserManager(new AppUserStore(new AppDbContext())))
+					.LifestyleTransient()
+
+					, Component.For<Func<AppRoleManager>>()
+					.Instance(() => new AppRoleManager(new AppRoleStore(new AppDbContext())))
+					.LifestyleTransient()
+					
 
 
 			);

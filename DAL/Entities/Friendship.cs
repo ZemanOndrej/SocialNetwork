@@ -14,10 +14,13 @@ namespace DAL.Entities
 		public int ID { get; set; }
 
 		[Required]
-		public virtual User User1 { get; set; }
+		public virtual Account User1 { get; set; }
 
 		[Required]
-		public virtual User User2 { get; set; }
+		public virtual Account User2 { get; set; }
+
+
+		#region Methods
 
 		protected bool Equals(Friendship other)
 		{
@@ -44,7 +47,7 @@ namespace DAL.Entities
 		}
 
 
-		public Friendship(User user1, User user2)
+		public Friendship(Account user1, Account user2)
 		{
 			if (user1 == null || user2 == null)return;
 			if (user1.Equals(user2)) return;
@@ -54,5 +57,7 @@ namespace DAL.Entities
 		}
 
 		public Friendship(){}
+		#endregion
+		
 	}
 }
