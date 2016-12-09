@@ -40,7 +40,6 @@ namespace BL.Services.Request
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 
-//				var req = Mapper.Map<DAL.Entities.Request>(request);
 				var req = new DAL.Entities.Request
 				{
 					Time = DateTime.Now,

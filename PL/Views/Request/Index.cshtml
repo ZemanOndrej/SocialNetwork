@@ -9,11 +9,20 @@
 <div>
 	@foreach (var req in Model.Requests)
 	{
-		<div>
+		<div style="border: black solid 1px; padding: 15px 25px 15px 25px; display: block">
 			@if (req.Group == null)
 			{
+				@Html.ActionLink(req.Sender.FullName, "UserPage", "Page", new {userId = req.Sender.ID}, null)
+				<span> added you to friendlist</span>
+			}
+			else
+			{
 				@Html.ActionLink(req.Sender.FullName, "UserPage", "Page", new { userId = req.Sender.ID }, null)
-				<p> added you to friendlist</p>
+				<span> invited you to </span>
+				@Html.ActionLink(req.Group.Name, "GroupPage", "Page", new { groupId = req.Group.ID }, null)
+
+				<span>Group</span>
+			}
 				<div class="row">
 					<div class="col-md-1">
 						@Html.ActionLink("Accept", "Accept", "Request", new { id = req.ID}, null)
@@ -24,7 +33,7 @@
 
 					</div>
 				</div>
-			}
+			
 		</div>
 	}
 </div>

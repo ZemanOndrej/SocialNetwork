@@ -11,6 +11,7 @@ using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Riganti.Utils.Infrastructure.Core;
+using Utils.Enums;
 
 namespace BL.Services.Reaction
 {
@@ -35,11 +36,20 @@ namespace BL.Services.Reaction
 
 		#region CreateDelete
 
-		public int CreateReaction( PostDTO post, ReactionDTO reaction,AccountDTO account)
+		public int CreateReaction( PostDTO post, ReactionEnum reaction,AccountDTO account)
 		{
+			var reactCheck = ListReactions(new ReactionFilter {Post = post, Account = account}).ResultReactions.ToList();
+			if (reactCheck.Any())
+			{
+				if (reactCheck[0].UserReaction.Equals(reaction)) return 0;
+				reactCheck[0].UserReaction = reaction;
+				EditReaction(reactCheck.FirstOrDefault());
+
+				return 0;
+			}
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var reactionEnt = Mapper.Map<DAL.Entities.Reaction>(reaction);
+				var reactionEnt = new DAL.Entities.Reaction {UserReaction = reaction};
 				var userEnt = userRepository.GetById(account.ID);
 				var postEnt = postRepository.GetById(post.ID);
 

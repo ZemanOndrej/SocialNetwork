@@ -21,7 +21,7 @@ namespace DAL.Entities
 //		public virtual List<Friendship> FriendList { get; set; }
 		public virtual List<Reaction> LikedList { get; set; }
 		public virtual List<Chat> Chats { get; set; }
-		public virtual List<Request> Requests { get; set; }
+//		public virtual List<Request> Requests { get; set; }
 		[Required]
 		public virtual User User { get; set; }
 
@@ -64,7 +64,7 @@ namespace DAL.Entities
 //			FriendList = new List<Friendship>();
 			LikedList = new List<Reaction>();
 			Chats = new List<Chat>();
-			Requests= new List<Request>();
+//			Requests= new List<Request>();
 		}
 
 		private bool Equals(Account other)

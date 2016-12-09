@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Riganti.Utils.Infrastructure.Core;
+using Utils.Enums;
 
 namespace DAL.Entities
 {
@@ -20,8 +21,12 @@ namespace DAL.Entities
 		[Required]
 		public string Name { get; set; }
 
+		public string Description { get; set; }
+
 		[Column(TypeName = "datetime2")]
 		public DateTime DateCreated { get; set; }
+
+		public GroupPrivacyLevel GroupPrivacyLevel { get; set; }
 
 		public virtual List<Account> Accounts { get; set; }
 		public virtual List<Post> GroupPosts { get; set; }

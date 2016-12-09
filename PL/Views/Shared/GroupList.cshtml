@@ -1,0 +1,10 @@
+﻿@model List<BL.DTO.GroupDTOs.GroupDTO>
+<div>
+	Group List
+	@foreach (var group in Model)
+	{
+		<div style="margin: 10px;">
+			@Html.ActionLink(group.Name, "GroupPage", "Page", new { groupId = group.ID }, null)
+		</div>
+	}
+</div>

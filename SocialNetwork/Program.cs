@@ -234,7 +234,7 @@ namespace SocialNetwork
 			Console.WriteLine("|||||||||||||||||||  EDIT GroupName  ||||||||||||||||||||||");
 			
 			groupMuni.Name = "Masaryk University";
-			groupFacade.EditGroupName(groupMuni);
+			groupFacade.EditGroup(groupMuni);
 			groupFacade.ListAllGroups().ForEach(Console.WriteLine);
 			Console.WriteLine("|||||||||||||||||||  DELETE GROUP  ||||||||||||||||||||||");
 			groupFacade.DeleteGroup(testGroup);
@@ -337,16 +337,16 @@ namespace SocialNetwork
 			var groupId = groupFacade.CreateNewGroup(new GroupDTO
 			{
 				Name = "MUNI"
-			});
+			},userid2);
 
 			var groupId2 = groupFacade.CreateNewGroup(new GroupDTO
 			{
 				Name = "Twtich"
-			});
+			},userid3);
 			var groupTest = groupFacade.CreateNewGroup(new GroupDTO
 			{
 				Name = "test"
-			});
+			},userid1);
 
 			
 			testGroup = groupFacade.GetGroupById(groupTest);
@@ -371,10 +371,8 @@ namespace SocialNetwork
 			post2 = postFacade.GetPostById(post2Id);
 			post1 = postFacade.GetPostById(post1Id);
 
-			var reaction1Id = postFacade.ReactOnPost(post1, 
-				new ReactionDTO {UserReaction = ReactionEnum.LUL}, _accountDto2David);
-			var reaction2Id = postFacade.ReactOnPost(post1, 
-				new ReactionDTO {UserReaction = ReactionEnum.FeelsBadMan},_accountDto3Jozko);
+			var reaction1Id = postFacade.ReactOnPost(post1, ReactionEnum.LUL, _accountDto2David);
+			var reaction2Id = postFacade.ReactOnPost(post1, ReactionEnum.FeelsBadMan,_accountDto3Jozko);
 
 			reaction1 = postFacade.GetReactionById(reaction1Id);
 			reaction2 = postFacade.GetReactionById(reaction2Id);

@@ -100,7 +100,8 @@ namespace DAL.Entities
 			var group1 = new Group
 			{
 				DateCreated = DateTime.Now,
-				Name = "MUNI"
+				Name = "MUNI",
+				Description = "This is Muni School Group"
 			};
 
 			group1.Accounts.Add(user1);
@@ -111,21 +112,33 @@ namespace DAL.Entities
 
 			#region ChatInit
 
-			var chatu1u2 = new Chat
+			var chatu1u4 = new Chat
 			{
-				Name = "groupchat user1 user2"
+				Name = "groupchat user1 user4"
 			};
-			chatu1u2.ChatUsers.AddRange(new List<Account> { user1, user2 });
+			chatu1u4.ChatUsers.AddRange(new List<Account> { user1, user4 });
 
+
+			
 			var chatMsgU1U2 = new ChatMessage
 			{
 				Message = "Ahoj",
-				Chat = chatu1u2,
+				Chat = chatu1u4,
 				Time = new DateTime(2001, 9, 11, 12, 32, 25),
 				Sender = user1
 
 			};
-			chatu1u2.Messages.Add(chatMsgU1U2);
+			chatu1u4.Messages.Add(chatMsgU1U2);
+			for (int i = 0; i < 50; i++)
+			{
+				var msgTmp = new ChatMessage
+				{
+					Message = string.Concat(Enumerable.Repeat(i.ToString(), i + 1)),
+					Sender = user1,
+					Time = DateTime.Now
+				};
+				chatu1u4.Messages.Add(msgTmp);
+			}
 
 
 			#endregion
@@ -138,6 +151,7 @@ namespace DAL.Entities
 				Sender = user2,
 				Time = new DateTime(2001, 9, 11, 9, 11, 25)
 			};
+
 
 
 			var reacU1 = new Reaction
@@ -164,18 +178,28 @@ namespace DAL.Entities
 				Group = group1
 			};
 			context.Reactions.Add(reacU1);
-			context.ChatSet.Add(chatu1u2);
+			context.ChatSet.Add(chatu1u4);
 			context.ChatMessages.Add(chatMsgU1U2);
 			context.Comments.Add(commentU1);
 			context.Posts.AddRange(new List<Post> { postU1, postU2 });
+			for (int i = 0; i < 50; i++)
+			{
+				var postTmp = new Post
+				{
+					Message = string.Concat(Enumerable.Repeat(i.ToString(), i+1)),
+					Sender = user1,
+					Time = DateTime.Now
+				};
+				context.Posts.Add(postTmp);
+			}
 
 			#endregion
 
 			#region Requests
 
-			context.Requests.Add(new Request {Group = group1,Receiver = user1,Sender = user2 ,Time = DateTime.Now});
+			context.Requests.Add(new Request {Group = group1,Receiver = user2,Sender = user1 ,Time = DateTime.Now});
 			context.Requests.Add(new Request {Receiver = user4,Sender = user1, Time = DateTime.Now });
-			context.Requests.Add(new Request { Group = group1, Receiver = user4, Sender = user2, Time = DateTime.Now });
+			context.Requests.Add(new Request { Group = group1, Receiver = user4, Sender = user1, Time = DateTime.Now });
 
 			#endregion
 			

@@ -39,8 +39,9 @@ namespace BL.Services.Group
 
 
 		#region CreateDelete
-		public int CreateGroup(GroupDTO group)
+		public int CreateGroup(GroupDTO group, int accountId)
 		{
+			int nuGrpId;
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var groupEnt = Mapper.Map<DAL.Entities.Group>(group);
@@ -49,8 +50,11 @@ namespace BL.Services.Group
 
 				groupRepository.Insert(groupEnt);
 				uow.Commit();
-				return groupEnt.ID;
+
+				nuGrpId = groupEnt.ID;
 			}
+			AddUserToGroup(nuGrpId,accountId);
+			return nuGrpId;
 		}
 
 		public void DeleteGroup(int id)
@@ -72,12 +76,14 @@ namespace BL.Services.Group
 
 		#region Update
 
-		public void EditGroupName(GroupDTO group)
+		public void EditGroup(GroupDTO group)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var groupEnt = groupRepository.GetById(group.ID,g=>g.Accounts,g=>g.GroupPosts);
 				groupEnt.Name = group.Name;
+				groupEnt.Description = group.Description;
+				groupEnt.GroupPrivacyLevel = group.GroupPrivacyLevel;
 				groupRepository.Update(groupEnt);
 				uow.Commit();
 			}
@@ -85,29 +91,40 @@ namespace BL.Services.Group
 
 		public void AddUserToGroup(GroupDTO group, AccountDTO account)
 		{
+			AddUserToGroup(group.ID,account.ID);
+		}
+
+		public void AddUserToGroup(int groupId, int accountId)
+		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var groupEnt = groupRepository.GetById(group.ID);
-				var userEnt = userRepository.GetById(account.ID);
+				var groupEnt = groupRepository.GetById(groupId);
+				var userEnt = userRepository.GetById(accountId);
 				groupEnt.Accounts.Add(userEnt);
 				groupRepository.Update(groupEnt);
 				uow.Commit();
 			}
+
 		}
+
 
 		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
+			RemoveUserFromGroup(group.ID,account.ID);
+		}
+		public void RemoveUserFromGroup(int groupId, int accountId)
+		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var groupEnt = groupRepository.GetById(group.ID);
-				var userEnt = userRepository.GetById(account.ID);
+				var groupEnt = groupRepository.GetById(groupId);
+				var userEnt = userRepository.GetById(accountId);
 				groupEnt.Accounts.Remove(userEnt);
 				groupRepository.Update(groupEnt);
 				uow.Commit();
 			}
 		}
 
-		
+
 
 		#endregion
 

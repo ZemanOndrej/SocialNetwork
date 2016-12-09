@@ -1,0 +1,17 @@
+﻿@model PL.Models.PageModel
+
+<div style="display: inline-block">
+	@if (Model.Page > 1)
+			{
+		<div style="display: inline-block">
+			<a href=@Url.Action(Model.PageName, "Page",new {page=Model.Page-1, groupId = Model.GroupId, userId = Model.UserId } )>
+				<button type="button" class="btn btn-info">Previus Page</button>
+			</a>
+		</div>
+			}
+	<div style="display: inline-block">
+		<a href=@Url.Action(Model.PageName, "Page",new {page=Model.Page+1 ,groupId=Model.GroupId , userId=Model.UserId} )>
+			<button type="button" class="btn btn-info">Next Page</button>
+		</a>
+	</div>
+</div>

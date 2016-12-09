@@ -4,32 +4,47 @@
 	ViewBag.Title = Model.Chat.Name;
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>@Model.Chat.Name</h2>
 <div style="border: black solid 1px">
 	@foreach (var msg in Model.ChatMessages)
 	{
-		<div> @msg.Sender.FullName :@msg.Message</div>
+		<div style="border-top: black 1px solid; border-bottom: black 1px solid">
+			<div> @msg.Sender.FullName : <span>@msg.Message</span></div>
+
+			<div>
+				@if (msg.Sender.ID == int.Parse(User.Identity.GetUserId()))
+				{
+
+					@Html.ActionLink("Delete", "DeleteMessage", "Chat", new { id = msg.ID }, null)
+					@Html.ActionLink("Edit", "EditMessage", "Chat", new { id = msg.ID }, null)
+				}
+				<span>Send at </span><span>@msg.Time</span>
+			</div>
+		</div>
 
 
-		if (msg.Sender.ID==int.Parse(User.Identity.GetUserId()))
-		 {
-			 <div>
-		  		@Html.ActionLink("Delete", "DeleteMessage", "Chat", new { id = msg.ID }, null)
-		  		@Html.ActionLink("Edit", "EditMessage", "Chat", new { id = msg.ID }, null)
-			 </div>
-		 }
 	}
 </div>
 <div>
 	@using (Html.BeginForm("OpenChat", "Chat", FormMethod.Post))
 	{
 		@Html.HiddenFor(m => m.ChatId)
-		@Html.TextAreaFor(m => m.NewChatMessage.Message)
-		<input type="submit" name="SendMessage" value="Send" />
-
-
+		@Html.TextAreaFor(m => m.NewChatMessage.Message, new { @class = "form-control", style = "display: inline-block"})
+		<input type="submit" name="SendMessage" value="Send" style="display: inline-block; margin-top: -28px"class="btn btn-primary"/>
 	}
+	<div style="display: inline-block">
+		@if (Model.Page > 1)
+			{
+			<div style="display: inline-block">
+				<a href=@Url.Action("OpenChat", "Chat",new {id=Model.ChatId,page=Model.Page-1} )>
+					<button type="button" class="btn btn-info">Previus Page</button>
+				</a>
+			</div>
+			}
+		<div style="display: inline-block">
+			<a href=@Url.Action("OpenChat", "Chat",new {id=Model.ChatId,page=Model.Page+1} )>
+				<button type="button" class="btn btn-info">Next Page</button>
+			</a>
+		</div>
+	</div>
 </div>
-
-

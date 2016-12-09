@@ -100,6 +100,13 @@ namespace BL.Facades
 			commentService.EditCommentMessage(comment);
 		}
 
+		public ReactionDTO GetReactionOfUserOnPost(PostDTO post, AccountDTO account)
+		{
+			return reactionService.ListReactions(new ReactionFilter {Account = account, Post = post})
+				.ResultReactions
+				.FirstOrDefault();
+		}
+
 		public void UpdateReaction(ReactionDTO reaction)
 		{
 			reactionService.EditReaction(reaction);
@@ -108,6 +115,21 @@ namespace BL.Facades
 		public void DeleteReaction(ReactionDTO reaction)
 		{
 			reactionService.DeleteReaction(reaction.ID);
+		}
+
+		public void DeleteReactionFromUserOnPost(AccountDTO account, PostDTO post)
+		{
+			var reaction =
+				reactionService.ListReactions(new ReactionFilter
+					{
+						Account = account,
+						Post = post
+					}).ResultReactions.FirstOrDefault();
+
+			if (reaction != null)
+			{
+				reactionService.DeleteReaction(reaction.ID);
+			}
 		}
 
 		public void DeleteComment(CommentDTO comment)
@@ -122,11 +144,12 @@ namespace BL.Facades
 			return commentService.CreateComment(comment);
 		}
 
-		public int ReactOnPost(PostDTO post, ReactionDTO reaction, AccountDTO account)
+		public int ReactOnPost(PostDTO post, ReactionEnum reaction, AccountDTO account)
 		{
 
 			return reactionService.CreateReaction(post,reaction,account);
 		}
+
 
 		public List<ReactionDTO> GetReactionsOnPost(PostDTO post)
 		{

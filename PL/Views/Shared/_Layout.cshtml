@@ -19,8 +19,6 @@
 					<span class="icon-bar"></span>
 				</button>
 				@Html.ActionLink("Social Network", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-
-	
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
@@ -33,19 +31,13 @@
 						<li>
 							@using (Html.BeginForm("Search", "Search"))
 							{
-								<p style="padding-top: 13px">
+								<p style="margin: 13px 15px 7px 15px">
 									@Html.TextBox("SearchString")
-									<input type="submit" value="Search" />
+									<input type="submit" value="Search" class="btn btn-default btn-sm" />
 								</p>
 							}
 						</li>
-
 					}
-					
-
-					
-
-
 				</ul>
 				@Html.Partial("_LoginPartial")
 			</div>

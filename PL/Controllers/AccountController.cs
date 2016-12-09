@@ -2,22 +2,21 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using BL.DTO;
 using BL.DTO.UserDTOs;
+using BL.Facades;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using BL.Facades;
-using PL;
 using PL.Models;
 
-namespace Web.Controllers
+namespace PL.Controllers
 {
 	[Authorize]
 	public class AccountController : Controller
 	{
 		#region init
 		private readonly UserFacade userFacade;
+
 
 		private ApplicationSignInManager _signInManager;
 		private ApplicationUserManager _userManager;
@@ -61,8 +60,7 @@ namespace Web.Controllers
 		#endregion
 
 
-		//
-		// GET: /Account/Login
+
 		[AllowAnonymous]
 		public ActionResult Login(string returnUrl)
 		{
@@ -75,8 +73,6 @@ namespace Web.Controllers
 			return View();
 		}
 
-		//
-		// POST: /Account/Login
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
@@ -102,20 +98,11 @@ namespace Web.Controllers
 			}
 		}
 
-
-
-
 		[AllowAnonymous]
 		public ActionResult Register()
 		{
 			return View();
 		}
-
-//		[AllowAnonymous]
-//		public ActionResult RegisterErr( RegisterViewModel model)
-//		{
-//			return View(model);
-//		}
 
 		[HttpPost]
 		[AllowAnonymous]
@@ -146,6 +133,29 @@ namespace Web.Controllers
 			return View(model);
 		}
 
+		public ActionResult EditAccount()
+		{
+			return View(userFacade.GetUserById(int.Parse(User.Identity.GetUserId())));
+		}
+
+		[HttpPost]
+		public ActionResult EditAccount(AccountDTO account)
+		{
+			userFacade.UpdateUserInfo(account);
+			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			return RedirectToAction("FrontPage", "Page");
+		}
+
+
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult LogOff()
+		{
+			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+			return RedirectToAction("Index", "Home");
+		}
+		#region NotWorking
 
 
 
@@ -292,7 +302,7 @@ namespace Web.Controllers
 			return View();
 		}
 
-
+		#endregion
 		#region BS
 
 		//
@@ -409,18 +419,6 @@ namespace Web.Controllers
 			return View(model);
 		}
 
-		//
-		// POST: /Account/LogOff
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public ActionResult LogOff()
-		{
-			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-			return RedirectToAction("Index", "Home");
-		}
-
-		//
-		// GET: /Account/ExternalLoginFailure
 		[AllowAnonymous]
 		public ActionResult ExternalLoginFailure()
 		{
@@ -508,5 +506,7 @@ namespace Web.Controllers
 			}
 		}
 		#endregion
+
+		
 	}
 }

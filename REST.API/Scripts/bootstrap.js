@@ -279,7 +279,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
 
   $(document).on('click.bs.button.data-api', '[data-toggle^=button]', function (e) {
     var $btn = $(e.target)
-    if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+    if (!$btn.hasClass('btn-danger')) $btn = $btn.closest('.btn-danger')
     $btn.button('toggle')
     e.preventDefault()
   })

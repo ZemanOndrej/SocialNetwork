@@ -72,6 +72,7 @@ namespace BL.Services.Post
 			{
 				var postEnt = postRepository.GetById(post.ID,p=>p.Comments,p=>p.Group,p=>p.Reactions,p=>p.Sender);
 				postEnt.Message = post.Message;
+				postEnt.PrivacyLevel = post.PrivacyLevel;
 				postRepository.Update(postEnt);
 				uow.Commit();
 			}
@@ -127,8 +128,6 @@ namespace BL.Services.Post
 			}
 		}
 		#endregion
-
-
 
 		#region additional
 

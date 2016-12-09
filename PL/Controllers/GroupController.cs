@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
+using BL.DTO.GroupDTOs;
 using BL.Facades;
 using Microsoft.AspNet.Identity;
 using PL.Models;
@@ -9,67 +11,53 @@ namespace PL.Controllers
 	[Authorize]
 	public class GroupController : Controller
 	{
+		#region Dependency
+		private readonly GroupFacade groupFacade;
+		private readonly PostFacade postFacade;
+		private readonly UserFacade userFacade;
 
-		public GroupFacade GroupFacade { get; set; }
-		public PostFacade PostFacade { get; set; }
-		public UserFacade UserFacade { get; set; }
-
-
-		public ActionResult Details(int id)
+		public GroupController(GroupFacade groupFacade, PostFacade postFacade, UserFacade userFacade)
 		{
-			return View();
+			this.groupFacade = groupFacade;
+			this.postFacade = postFacade;
+			this.userFacade = userFacade;
 		}
+		#endregion
 
-		// GET: Group/Create
 		public ActionResult Create()
 		{
-			return View();
+			return View(new GroupDTO());
 		}
 
-		// POST: Group/Create
 		[HttpPost]
-		public ActionResult Create(FormCollection collection)
+		public ActionResult Create(GroupDTO group)
 		{
-			try
-			{
-				// TODO: Add insert logic here
-
-				return RedirectToAction("GroupPage");
-			}
-			catch
-			{
-				return View();
-			}
+			var grpId =groupFacade.CreateNewGroup(group,int.Parse(User.Identity.GetUserId()));
+			return RedirectToAction("GroupPage","Page",new {groupId=grpId});
 		}
 
-		// GET: Group/Edit/5
 		public ActionResult Edit(int id)
 		{
-			return View();
+			return View(groupFacade.GetGroupById(id));
 		}
 
-		// POST: Group/Edit/5
 		[HttpPost]
-		public ActionResult Edit(int id, FormCollection collection)
+		public ActionResult Edit(GroupDTO group)
 		{
-			try
-			{
-				// TODO: Add update logic here
-
-				return RedirectToAction("Index");
-			}
-			catch
-			{
-				return View();
-			}
+			groupFacade.EditGroup(group);
+			return RedirectToAction("GroupPage","Page",new{groupId=group.ID});
 		}
 
-		// GET: Group/Delete/5
 		public ActionResult Delete(int id)
 		{
 			return View();
 		}
 
-	   
+		[HttpPost]
+		public ActionResult LeaveGroup(DefaultPageModel model)
+		{
+			groupFacade.RemoveUserFromGroup(model.Group.ID, int.Parse(User.Identity.GetUserId()));
+			return RedirectToAction("FrontPage", "Page");
+		}
 	}
 }

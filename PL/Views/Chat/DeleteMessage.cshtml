@@ -28,7 +28,7 @@
 	    <div class="form-actions no-color">
 		    @Html.HiddenFor(m=>m.ChatId)
 			@Html.HiddenFor(m=>m.ChatMessage.ID)
-		    <input type="submit" value="Delete" class="btn btn-default"/> |
+		    <input type="submit" value="Delete" class="btn-danger btn-default"/> |
 		    @Html.ActionLink("Back ", "OpenChat", new {id = Model.ChatId})
 	    </div>
     }

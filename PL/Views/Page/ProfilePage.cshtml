@@ -8,25 +8,49 @@
 		<div>
 			FriendList
 			@{
-				Html.RenderPartial("AccountList",Model.Accounts);
+				Html.RenderPartial("AccountList", Model.Accounts);
 			}
 		</div>
-		
+
 	</div>
 	<div class="col-md-10">
 		<h2>Hi @Model.Account.FullName</h2>
 		<div>
-			@using (Html.BeginForm("ProfilePage", "Page", FormMethod.Post))
+			@using (Html.BeginForm("Create", "Post", FormMethod.Post))
 			{
-				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control" })
-				@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel, "Select Privacy", new { @class = "form-control" })
-				<input type="submit" name="SendPost" value="Send"/>
+				Model.BackPage = "ProfilePage";
+				@Html.HiddenFor(m => m.BackPage)
 
+				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control", style = "display: inline-block" })
+				<input type="submit" name="SendPost" value="Send" style="display: inline-block; margin-top: -28px" class="btn btn-primary" />
+
+				@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel, "Select Privacy",
+					new {
+						@class = "form-control",
+						style = "width: 150px"
+					})
 
 			}
 		</div>
+
 		@{
 			Html.RenderPartial("PostList", Model);
 		}
+
+		<div style="display: inline-block">
+			@if (Model.Page > 1)
+			{
+				<div style="display: inline-block">
+					<a href=@Url.Action("ProfilePage", "Page",new {page=Model.Page-1} )>
+						<button type="button" class="btn btn-info">Previus Page</button>
+					</a>
+				</div>
+			}
+			<div style="display: inline-block">
+				<a href=@Url.Action("ProfilePage", "Page",new {page=Model.Page+1} )>
+					<button type="button" class="btn btn-info">Next Page</button>
+				</a>
+			</div>
+		</div>
 	</div>
 </div>

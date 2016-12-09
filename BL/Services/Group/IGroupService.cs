@@ -13,18 +13,20 @@ namespace BL.Services.Group
 {
 	public interface IGroupService
 	{
-		int CreateGroup(GroupDTO group);
+		int CreateGroup(GroupDTO group, int accountId);
 
 		void DeleteGroup(int id);
 
 		void DeleteGroup(GroupDTO group);
 
 
-		void EditGroupName(GroupDTO group);
+		void EditGroup(GroupDTO group);
 
 		void AddUserToGroup( GroupDTO group,AccountDTO account);
+		void AddUserToGroup(int groupId, int accountId);
 
 		void RemoveUserFromGroup( GroupDTO group,AccountDTO account);
+		void RemoveUserFromGroup(int groupId, int accountId);
 		List<AccountDTO> ListUsersInGroup(GroupDTO group);
 
 

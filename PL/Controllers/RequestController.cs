@@ -7,8 +7,8 @@ namespace PL.Controllers
 {
     public class RequestController : Controller
     {
-
-	    private readonly RequestFacade requestFacade;
+		#region Dependency
+		private readonly RequestFacade requestFacade;
 	    private readonly UserFacade userFacade;
 
 	    public RequestController(RequestFacade requestFacade, UserFacade userFacade)
@@ -16,8 +16,9 @@ namespace PL.Controllers
 		    this.requestFacade = requestFacade;
 		    this.userFacade = userFacade;
 	    }
+		#endregion
 
-	    public ActionResult Index()
+		public ActionResult Index()
 	    {
 
 		    var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));

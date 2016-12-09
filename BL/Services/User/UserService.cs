@@ -130,7 +130,6 @@ namespace BL.Services.User
 				var userManager = userManagerFactory.Invoke();
 				var acc = userRepository.GetById(userId);
 				var user = userManager.FindById(userId);
-				//TODO it works but dunno why (i changed modelbuilder in context)
 				userRepository.Delete(acc);
 				userManager.Delete(user);
 				uow.Commit();
@@ -170,7 +169,7 @@ namespace BL.Services.User
 					}
 					if (account.Password != null)
 					{
-						user.PasswordHash = account.Password;
+						user.PasswordHash =  userManager.PasswordHasher.HashPassword(account.Password);
 					}
 
 					userManager.Update(user);

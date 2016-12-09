@@ -6,57 +6,56 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <h2>@Model.Post.ToString()</h2>
 
+<div class="row">
+	<div class="col-md-4">
+		@using (Html.BeginForm("CreateComment", "Post", FormMethod.Post))
+		{
+			@Html.HiddenFor(m => m.PostId)
+			@Html.HiddenFor(m => m.BackView)
+			@Html.TextAreaFor(m => m.NewComment.CommentMessage);
+			<input type="submit" name="SendComment" value="Send" />
+		}
 
 
-<div>
-	@using (Html.BeginForm("CreateComment", "Post", FormMethod.Post))
-	{
-
-		@Html.HiddenFor(m => m.PostId) 
-		@Html.HiddenFor(m=>m.BackView)
-@*		@Html.TextArea("Comment", new { rows = 10, columns = 40 })*@
-
-		@Html.TextAreaFor(m=>m.NewComment.CommentMessage);
-		<input type="submit" name="SendComment" value="Send" />
-
-
-@*		@Html.ActionLink("Comment", "CreateComment", "Post", new { postId = Model.Post.ID, commentMsg = })*@
-
-	}
-	
-
-
+	</div>
+	<div class="col-md-3">
+		@using (Html.BeginForm("CreateReaction", "Post", FormMethod.Post))
+		{
+			@Html.HiddenFor(m => m.PostId)
+			@Html.HiddenFor(m => m.BackView)
+			@Html.EnumDropDownListFor(x => x.UserReaction,"No Reaction", new { @class = "form-control small", style = "width: 150px" })
+			<input type="submit" name="ReactOnPost" value="React" />
+		}
+	</div>
 </div>
 <div>
-	
-	
-	
-	
+
+
+
 
 	<div style="border: black solid 1px;">
+
 		@foreach (var i in Enum.GetValues(typeof(ReactionEnum)))
 		{
-			var reactCout = Model.Reactions.Count(r => r.UserReaction.Equals(i));
-			if (reactCout >= 0)
+			var reactCount = Model.Reactions.Count(r => r.UserReaction.Equals(i));
+			if (reactCount >= 0)
 			{
 				<div style="float: left">
-					@i.ToString() : @reactCout
+					@i.ToString() : @reactCount
 				</div>
 			}
 
 		}
-	</div>
 
+	</div>
 	<div style="border: black 1px solid; clear: both">
 		@foreach (var comment in Model.Comments)
 		{
 			<div>
 				<div>
 					@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new { userId = comment.Sender.ID }, null)
-
 
 					at @comment.Time
 				</div>
@@ -65,19 +64,22 @@
 				</p>
 			</div>
 		}
-		
-		@switch (Model.BackView)
-		{
-			case "GroupPage":
-				@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
-				break;
-			case "UserPage":
-				@Html.ActionLink("Back", Model.BackView, "Page",new {userId =Model.Post.Sender.ID}, null)
-				break;
-			default:
-				@Html.ActionLink("Back", Model.BackView, "Page")
-				break;
-		}
+
 
 	</div>
+
+</div>
+<div>
+	@switch (Model.BackView)
+	{
+		case "GroupPage":
+			@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
+			break;
+		case "UserPage":
+			@Html.ActionLink("Back", Model.BackView, "Page", new { userId = Model.Post.Sender.ID }, null)
+			break;
+		default:
+			@Html.ActionLink("Back", Model.BackView, "Page")
+			break;
+	}
 </div>

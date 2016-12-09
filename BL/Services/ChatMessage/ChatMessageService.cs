@@ -13,7 +13,7 @@ namespace BL.Services.ChatMessage
 	public class ChatMessageService : AppService, IChatMessageService
 	{
 
-		public int ChatMessagePageSize => 30;
+		public int ChatMessagePageSize => 15;
 		#region Dependency
 
 		private readonly ChatMessageRepository chatMessageRepository;

@@ -29,6 +29,10 @@ namespace BL.Queries
 			{
 				query = query.Where(c => c.Post.ID == Filter.Post.ID);
 			}
+			if (Filter.Account!=null)
+			{
+				query = query.Where(r => r.Account.ID.Equals(Filter.Account.ID));
+			}
 			return query.ProjectTo<ReactionDTO>();
 		}
 	}

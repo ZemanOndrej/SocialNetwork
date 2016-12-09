@@ -19,7 +19,6 @@ namespace PL.Controllers
 
 		public ActionResult Index()
 		{
-			//neprihlaseny
 			var usersChats = ChatFacade.ListAllUsersChats(int.Parse(User.Identity.GetUserId()));
 			
 			return View(new ChatListModel {Chats = usersChats});
@@ -58,10 +57,15 @@ namespace PL.Controllers
 
 		}
 
-		public ActionResult OpenChat(int id )
+		public ActionResult OpenChat(int id , int page =1 )
 		{
 			var chat = ChatFacade.GetChatById(id);
-			return View(new OpenChatModel { Chat = chat , ChatMessages = ChatFacade.GetChatMessagesFromChat(chat),ChatId = chat.ID});
+			var list = ChatFacade.GetChatMessagesFromChat(chat, page);
+			list.Reverse();
+			return View(new OpenChatModel
+			{
+				Chat = chat , ChatMessages =list ,ChatId = chat.ID, Page = page
+			});
 		}
 
 		[HttpPost]

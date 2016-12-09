@@ -15,6 +15,8 @@ namespace PL.Models
 		public ChatMessageDTO NewChatMessage { get; set; }
 
 		public int ChatId { get; set; }
+
+		public int Page { get; set; }
 	}
 
 	public class ChatListModel

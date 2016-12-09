@@ -3,22 +3,56 @@
 	ViewBag.Title = "FrontPage";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row" style="margin-top: 15px">
 
-<h2>FrontPage</h2>
+	<div class="col-md-2">
+		<div style="border: solid black 1px">
+			@{
+				Html.RenderPartial("GroupList", Model.Groups);
+			}
+		</div>
+		<div>
+			
+			<a href=@Url.Action("Create", "Group" )>
+				<button type="button" class="btn btn-primary">Create Group</button>
+			</a>
 
 
-<div>
-	@using (Html.BeginForm("FrontPage", "Page", FormMethod.Post))
-	{
-
-		@Html.TextAreaFor(m => m.NewPost.Message,new {@class ="form-control"})
-		@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel,"Select Privacy",new { @class = "form-control" })
-		<input type="submit" name="SendPost" value="Send" />
+		</div>
+	</div>
 
 
-	}
+	<div class="col-md-8">
+		<div>
+			@using (Html.BeginForm("Create", "Post", FormMethod.Post))
+			{
+				Model.BackPage = "FrontPage";
+				@Html.HiddenFor(m => m.BackPage)
+				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control" ,style="display: inline-block"})
+				<input type="submit" name="SendPost" value="Send" style="display: inline-block; margin-top: -28px"class="btn btn-primary" />
+
+				@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel, "Select Privacy", new { @class = "form-control",style="width: 150px"})
+			}
+		</div>
+
+		@{
+			Html.RenderPartial("PostList", Model);
+		}
+
+		<div style="display: inline-block">
+			@if (Model.Page > 1)
+			{
+				<div style="display: inline-block">
+					<a href=@Url.Action("FrontPage", "Page",new {page=Model.Page-1} )>
+						<button type="button" class="btn btn-info">Previus Page</button>
+					</a>
+				</div>
+			}
+			<div style="display: inline-block">
+				<a href=@Url.Action("FrontPage", "Page",new {page=Model.Page+1} )>
+					<button type="button" class="btn btn-info">Next Page</button>
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
-
-@{
-	Html.RenderPartial("PostList", Model);
-}

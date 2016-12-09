@@ -16,7 +16,7 @@
 	{
 		<div>
 			<h3>
-				@Html.ActionLink(user.FullName, "UserPage", "Page", new {id = user.ID}, null)
+				@Html.ActionLink(user.FullName, "UserPage", "Page", new {userId = user.ID}, null)
 
 			</h3>
 		</div>
@@ -31,7 +31,7 @@
 	{
 		<div>
 			<h3>
-				@Html.ActionLink(group.Name, "GroupPage", "Group", new { id = group.ID }, null)
+				@Html.ActionLink(group.Name, "GroupPage", "Page", new { groupId = group.ID }, null)
 
 			</h3>
 		</div>

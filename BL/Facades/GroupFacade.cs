@@ -22,9 +22,9 @@ namespace BL.Facades
 		}
 		#endregion
 
-		public int CreateNewGroup(GroupDTO group)
+		public int CreateNewGroup(GroupDTO group,int accountId)
 		{
-			return groupService.CreateGroup(group);
+			return groupService.CreateGroup(group,accountId);
 		}
 
 		public void DeleteGroup(GroupDTO group)
@@ -32,9 +32,9 @@ namespace BL.Facades
 			groupService.DeleteGroup(group);
 		}
 
-		public void EditGroupName(GroupDTO group)
+		public void EditGroup(GroupDTO group)
 		{
-			groupService.EditGroupName(group);
+			groupService.EditGroup(group);
 		}
 
 		public GroupDTO GetGroupById(int id)
@@ -50,6 +50,12 @@ namespace BL.Facades
 		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
 			groupService.RemoveUserFromGroup(group,account);
+		}
+
+		public void RemoveUserFromGroup(int groupId, int accountId)
+		{
+			groupService.RemoveUserFromGroup(groupId, accountId);
+
 		}
 
 		public List<GroupDTO> ListGroupsWithName(string name , int page=0)

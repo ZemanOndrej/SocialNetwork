@@ -2,13 +2,14 @@
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
 using BL.DTO.UserDTOs;
+using Utils.Enums;
 
 namespace BL.Services.Reaction
 {
 	public interface IReactionService
 	{
 
-		int CreateReaction(PostDTO post, ReactionDTO reaction, AccountDTO account);
+		int CreateReaction(PostDTO post, ReactionEnum reaction, AccountDTO account);
 
 		void EditReaction(ReactionDTO reaction);
 
