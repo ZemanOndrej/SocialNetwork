@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using BL.DTO;
+using BL.DTO.UserDTOs;
 
 namespace PL.Models
 {
@@ -17,6 +18,8 @@ namespace PL.Models
 		public int ChatId { get; set; }
 
 		public int Page { get; set; }
+
+		public List<AccountDTO> Accounts { get; set; }
 	}
 
 	public class ChatListModel

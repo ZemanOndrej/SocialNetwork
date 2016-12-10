@@ -112,7 +112,7 @@ namespace BL.Services.Comment
 				query.Skip = (page > 0 ? page - 1 : 0) * CommentPageSize;
 				query.Take = CommentPageSize;
 
-				query.AddSortCriteria(dto => dto.Time);
+				query.AddSortCriteria(dto => dto.Time,SortDirection.Descending);
 
 				return new CommentListQueryResultDTO
 				{

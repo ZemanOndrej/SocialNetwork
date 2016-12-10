@@ -228,8 +228,13 @@ namespace BL.Services.User
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				var user = userRepository.GetById(userId);
-				return user != null ? Mapper.Map<AccountDTO>(user) : null;
+				var user = userRepository.GetById(userId,u=>u.User);
+				if (user == null) return null;
+				var accountDto = Mapper.Map<AccountDTO>(user);
+				accountDto.UserName = user.User.UserName;
+				accountDto.Email = user.User.Email;
+
+				return accountDto;
 			}
 		}
 

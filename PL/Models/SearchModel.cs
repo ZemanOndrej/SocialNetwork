@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BL.DTO;
+﻿using System.Collections.Generic;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
 
@@ -15,4 +10,11 @@ namespace PL.Models
 		public List<AccountDTO> FoundAccounts { get; set; }
 		public string Keyword { get; set; }
 	}
+
+	public class SearchForInviteModel
+	{
+		public int? GroupId { get; set; }
+		public int? ChatId { get; set; }
+	}
+
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AutoMapper;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
@@ -9,6 +10,7 @@ using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
 using Castle.Components.DictionaryAdapter;
+using Castle.Core.Internal;
 using Riganti.Utils.Infrastructure.Core;
 
 namespace BL.Services.Chat
@@ -54,8 +56,12 @@ namespace BL.Services.Chat
 					.Select(chatUser => userRepository.GetById(chatUser.ID))
 					.ToList();
 
-
-
+				var chatName = new StringBuilder();
+				if (chatDto.Name.IsNullOrEmpty())
+				{
+					list.ForEach(u => chatName.Append(u.Name + ", "));
+					chatDto.Name = chatName.ToString();
+				}
 				var chatEnt = new DAL.Entities.Chat
 				{
 					Name = chatDto.Name
@@ -104,14 +110,16 @@ namespace BL.Services.Chat
 			{
 				var chatEnt = chatRepository.GetById(chat.ID);
 				var userEnt = userRepository.GetById(account.ID);
-
 				chatEnt.ChatUsers.Add(userEnt);
-
 				chatRepository.Update(chatEnt);
 				uow.Commit();
 
 			}
+		}
 
+		public void AddUsersToChat(ChatDTO chat, List<AccountDTO> accounts)
+		{
+			accounts.ForEach(a=>AddUserToChat(chat,a));
 		}
 
 		public void EditChatName(ChatDTO chatDto)

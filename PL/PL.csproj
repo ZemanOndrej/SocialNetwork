@@ -307,9 +307,12 @@
     <Content Include="Views\Page\AccessDenied.cshtml" />
     <Content Include="Views\Shared\GroupList.cshtml" />
     <Content Include="Views\Group\Create.cshtml" />
-    <Content Include="Views\Account\EditAccount.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Group\Edit.cshtml" />
     <Content Include="Views\Shared\Paging.cshtml" />
+    <Content Include="Views\Account\Delete.cshtml" />
+    <Content Include="Views\Request\Invite.cshtml" />
+    <Content Include="Views\Chat\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.UserDTOs;
@@ -39,11 +36,8 @@ namespace BL.Facades
 
 		public int CreateGroupChat(List<AccountDTO> users , string name=null)
 		{
-			if (name != null) return chatService.CreateChat(new ChatDTO {ChatUsers = users, Name = name});
-			var strB = new StringBuilder();
-			users.ForEach(u=>strB.Append(u.Name+", "));
-			name = strB.ToString();
-			return chatService.CreateChat(new ChatDTO { ChatUsers = users, Name = name});
+			return chatService.CreateChat(name != null ?
+				new ChatDTO {ChatUsers = users, Name = name} : new ChatDTO { ChatUsers = users});
 		}
 
 		public void DeleteChat(ChatDTO chat)
@@ -56,9 +50,38 @@ namespace BL.Facades
 			chatMessageService.DeleteChatMessage(chatMessage);
 		}
 
-		public void AddUserToChat(ChatDTO chat, AccountDTO account)
+		public int AddUserToChat(ChatDTO chat, AccountDTO account)
 		{
+			var chatUsers = chatService.GetUsersInChat(chat);
+
+			if (chatUsers.Count <= 2)
+			{
+				chat.ID = 0;
+				chat.ChatUsers.Add(account);
+				return chatService.CreateChat(chat);
+			}
 			chatService.AddUserToChat(chat,account);
+			return 0;
+		}
+
+		public int AddUsersToChat(ChatDTO chat, List<AccountDTO> accounts)
+		{
+			var chatUsers = chatService.GetUsersInChat(chat);
+
+			if (chatUsers.Count <= 2)
+			{
+				chat.ID = 0;
+				chat.Name = null;
+				chat.ChatUsers.AddRange(accounts);
+				return chatService.CreateChat(chat);
+			}
+
+			foreach (var account in accounts)
+			{
+				chatService.AddUserToChat(chat, account);
+				
+			}
+			return 0;
 		}
 
 		public void RemoveUserFromChat(ChatDTO chat, AccountDTO account)

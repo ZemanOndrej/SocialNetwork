@@ -170,6 +170,7 @@ namespace DAL.Entities
 				Post = postU2
 			};
 			postU2.Comments.Add(commentU1);
+
 			var postU1 = new Post
 			{
 				Message = "Jet Fuel Can't Melt Steel Beams",
@@ -182,6 +183,19 @@ namespace DAL.Entities
 			context.ChatMessages.Add(chatMsgU1U2);
 			context.Comments.Add(commentU1);
 			context.Posts.AddRange(new List<Post> { postU1, postU2 });
+
+			for (int i = 0; i < 50; i++)
+			{
+				var comment = new Comment()
+				{
+					CommentMessage = string.Concat(Enumerable.Repeat(i.ToString(), i + 1)),
+					Sender = user4,
+					Time = DateTime.Now,Post = postU1
+				};
+				context.Comments.Add(comment);
+			}
+
+
 			for (int i = 0; i < 50; i++)
 			{
 				var postTmp = new Post

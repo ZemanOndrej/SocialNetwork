@@ -15,12 +15,12 @@
 		@Html.HiddenFor(model => model.Post.ID)
 		@Html.HiddenFor(m => m.Post.Group.ID);
 		@Html.HiddenFor(m => m.BackView)
-		@Html.HiddenFor(m=>m.Post.Sender.ID)
+		@Html.HiddenFor(m => m.Post.Sender.ID)
 
 		<div class="form-group">
 			@Html.LabelFor(model => model.Post.Message, new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.Post.Message,  new { @class = "form-control" } )
+				@Html.EditorFor(model => model.Post.Message, new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.Post.Message, "", new { @class = "text-danger" })
 			</div>
 		</div>
@@ -36,23 +36,27 @@
 
 		<div class="form-group">
 			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Save" class="btn btn-default" />
+				<input type="submit" value="Save" class="btn btn-primary" style="display: inline-block" />
+				<div style="display: inline-block">
+					@switch (Model.BackView)
+					{
+						case "GroupPage":
+							@Html.ActionLink("Back", Model.BackView, "Page",
+						   new { groupId = Model.Post.Group.ID }, new { @class = "btn btn-default" })
+						break;
+					case "UserPage":
+							@Html.ActionLink("Back", Model.BackView, "Page",
+						   new { userId = Model.Post.Sender.ID }, new { @class = "btn btn-default" })
+						break;
+					default:
+							@Html.ActionLink("Back", Model.BackView, "Page", null, new { @class = "btn btn-default" })
+							break;
+					}
+
+				</div>
 			</div>
+
 		</div>
 	</div>
 }
-<div>
-	@switch (Model.BackView)
-	{
-		case "GroupPage":
-			@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
-			break;
-		case "UserPage":
-			@Html.ActionLink("Back", Model.BackView, "Page", new { userId = Model.Post.Sender.ID }, null)
-			break;
-		default:
-			@Html.ActionLink("Back", Model.BackView, "Page")
-			break;
-	}
 
-</div>

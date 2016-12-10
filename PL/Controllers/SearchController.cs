@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using BL.DTO;
-using BL.DTO.GroupDTOs;
+﻿using System.Web.Mvc;
 using BL.Facades;
 using PL.Models;
 
@@ -24,11 +21,13 @@ namespace PL.Controllers
 		
 
 		[HttpPost]
-	    public ActionResult Search(FormCollection fc, string searchString)
+	    public ActionResult Index(FormCollection fc, string searchString)
 	    {
 		    var groups = groupFacade.ListGroupsWithName(searchString);
 		    var accounts = userFacade.GetUsersWithName(searchString);
 			return View("Results",new SearchModel { FoundAccounts = accounts, FoundGroups = groups, Keyword =searchString});
 		}
-	}
+
+	    
+    }
 }

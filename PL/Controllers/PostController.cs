@@ -84,10 +84,10 @@ namespace PL.Controllers
 			}
 
 
-		public ActionResult Reactions(int id, string viewName = "FrontPage")
+		public ActionResult Reactions(int id, string viewName = "FrontPage", int page=1)
 		{
 			var post = postFacade.GetPostById(id);
-			var comments = postFacade.GetCommentsOnPost(post);
+			var comments = postFacade.GetCommentsOnPost(post,page);
 			var reactions = postFacade.GetReactionsOnPost(post);
 			var userReaction =postFacade
 					.GetReactionOfUserOnPost(post, userFacade.GetUserById(int.Parse(User.Identity.GetUserId())))?
@@ -98,7 +98,8 @@ namespace PL.Controllers
 				Post = post, Comments = comments,
 				Reactions = reactions,PostId = post.ID,
 				BackView = viewName
-				,UserReaction = userReaction});
+				,UserReaction = userReaction
+				,Page = page});
 		}
 
 		[HttpPost]

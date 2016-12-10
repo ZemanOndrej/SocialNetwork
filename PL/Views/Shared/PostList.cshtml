@@ -27,15 +27,15 @@
 
 				<div class="row">
 					<div class="col-md-1">
-						@Html.ActionLink("Reactions", "Reactions", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+						@Html.ActionLink("Reactions", "Reactions", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
 					</div>
 					@if (postDto.Sender.ID == int.Parse(User.Identity.GetUserId()))
 					{
 						<div class="col-md-1">
-							@Html.ActionLink("Delete", "Delete", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+							@Html.ActionLink("Delete", "Delete", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
 						</div>
 						<div class="col-md-1">
-							@Html.ActionLink("Edit", "Edit", "Post", new { id = postDto.ID, viewName = "FrontPage" }, null)
+							@Html.ActionLink("Edit", "Edit", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
 						</div>
 					}
 					<div class="col-md-2">

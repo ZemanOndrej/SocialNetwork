@@ -42,6 +42,7 @@ namespace PL.Models
 		public string BackView { get; set; }
 		public ReactionEnum? UserReaction { get; set; } = null;
 		public int PostId { get; set; }
+		public int Page { get; set; }
 	}
 
 	public class PostModel

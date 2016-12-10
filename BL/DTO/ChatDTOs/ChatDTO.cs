@@ -22,5 +22,23 @@ namespace BL.DTO
 		{
 			return $"{nameof(ID)}: {ID}, {nameof(Name)}: {Name}, {nameof(ChatUsers)}Count: {ChatUsers.Count} ";
 		}
+
+		protected bool Equals(ChatDTO other)
+		{
+			return ID == other.ID;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((ChatDTO) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return ID;
+		}
 	}
 }

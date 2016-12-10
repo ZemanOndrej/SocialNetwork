@@ -69,6 +69,7 @@ namespace PL.Controllers
 			return View(new DefaultPageModel
 			{
 				Posts = postFacade.GetPostsFromUser(account,page), Account = account ,Accounts = friends,
+				Groups = userFacade.ListGroupsWithUser(account),
 				Page = page,
 				NewPost = new PostDTO { PrivacyLevel = account.DefaultPostPrivacy }
 			});

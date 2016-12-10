@@ -32,16 +32,47 @@ namespace BL.Facades
 		{
 			var sender = userService.GetUserById(senderId);
 			var receiver = userService.GetUserById(receiverId);
-			var potReq = requestService.ListRequests(new RequestFilter {Receiver = sender, Sender = receiver}).ResultRequests.ToList();
-			if (!potReq.Any())
-				return requestService.SendRequest(
-					new RequestDTO
+
+			if (groupId > 0)
+			{
+				var group = groupService.GetGroupById(groupId);
+				var potReq = requestService.ListRequests(new RequestFilter
 					{
-						Sender = sender,
-						Receiver = receiver,
-						Group = groupService.GetGroupById(groupId)
-					});
-			AcceptRequest(potReq.First().ID,senderId);
+						Receiver = sender,
+						Group = group
+					}).ResultRequests.ToList();
+				var receiversGroups = userService.ListUsersGroups(receiver);
+
+				if (!potReq.Any() && !receiversGroups.Contains(group))
+				{
+					return requestService.SendRequest(
+						new RequestDTO
+						{
+							Sender = sender,
+							Receiver = receiver,
+							Group = group
+						});
+				}
+			}
+			else
+			{
+				var potReq = requestService.ListRequests(new RequestFilter
+					{
+						Receiver = sender,
+						Sender = sender
+					}).ResultRequests.ToList();
+				if (!potReq.Any())
+				{
+					return requestService.SendRequest(
+						new RequestDTO
+						{
+							Sender = sender,
+							Receiver = receiver
+						});
+				}
+				AcceptRequest(potReq.First().ID,senderId);
+			}
+
 			return 0;
 		}
 
@@ -69,9 +100,6 @@ namespace BL.Facades
 			requestService.DeleteRequest(reqDb);
 		}
 
-
-
-		
 
 		public List<RequestDTO> ListRequestsForUserReceiver(AccountDTO account,int page=0)
 		{

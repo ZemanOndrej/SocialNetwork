@@ -29,7 +29,7 @@
 						<li>@Html.ActionLink("Requests", "Index", "Request")</li>
 
 						<li>
-							@using (Html.BeginForm("Search", "Search"))
+							@using (Html.BeginForm("Index", "Search"))
 							{
 								<p style="margin: 13px 15px 7px 15px">
 									@Html.TextBox("SearchString")

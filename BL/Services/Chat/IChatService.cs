@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
@@ -23,7 +18,7 @@ namespace BL.Services.Chat
 		void RemoveUserFromChat(ChatDTO chat, AccountDTO account);
 
 		void AddUserToChat(ChatDTO chat ,AccountDTO account);
-
+		void AddUsersToChat(ChatDTO chat, List<AccountDTO> accounts);
 
 		ChatDTO GetChatById(int id);
 

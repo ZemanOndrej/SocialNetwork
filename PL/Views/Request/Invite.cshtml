@@ -1,0 +1,54 @@
+﻿@model PL.Models.InvitePeopleModel
+@{
+	ViewBag.Title = "Invite";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Recommended</h2>
+<div>
+	@using (Html.BeginForm("Search", "Request"))
+	{
+		@Html.HiddenFor(m => m.ChatId)
+		@Html.HiddenFor(m => m.GroupId)
+
+		<p style="margin: 13px 15px 7px 15px">
+			@Html.TextBox("SearchString")
+			<input type="submit" value="Search" class="btn btn-default btn-sm" />
+		</p>
+	}
+</div>
+<div>
+	@using (Html.BeginForm("Invite", "Request"))
+	{
+		@Html.HiddenFor(m => m.ChatId)
+		@Html.HiddenFor(m => m.GroupId)
+
+		for (int i = 0; i < Model.Invites.Count; i++)
+		{
+			@Html.HiddenFor(m=>m.Invites[i].Account.ID)
+			var user = Model.Invites[i];
+			<div style="margin: 10px;">
+				@Html.ActionLink(user.Account.FullName, "UserPage", "Page", new {userId = user.Account.ID}, null)
+				@Html.EditorFor(u => u.Invites[i].Invited)
+			</div>
+		}
+		<input type="submit" value="Invite" class="btn btn-primary" />
+
+	}
+</div>
+<div>
+	@if (Model.GroupId!=null)
+	{
+		@Html.ActionLink("Back", "GroupPage", "Page", new { groupId = Model.GroupId }, new { @class = "btn btn-default" })
+	}
+	else if (Model.ChatId != null)
+	{
+		@Html.ActionLink("Back", "OpenChat", "Chat", new { id = Model.ChatId }, new { @class = "btn btn-default" })
+	}
+	else
+	{
+		@Html.ActionLink("Back", "Index", "Chat",null, new { @class = "btn btn-default" })
+
+	}
+</div>
+

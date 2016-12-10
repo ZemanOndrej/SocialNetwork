@@ -59,5 +59,6 @@ namespace PL.Controllers
 			groupFacade.RemoveUserFromGroup(model.Group.ID, int.Parse(User.Identity.GetUserId()));
 			return RedirectToAction("FrontPage", "Page");
 		}
+
 	}
 }

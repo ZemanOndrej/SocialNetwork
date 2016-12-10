@@ -1,12 +1,9 @@
 ﻿@model PL.Models.PostEditModel
-
 @{
 	ViewBag.Title = "Delete";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <h2>Delete</h2>
-
 <h3>Are you sure you want to delete this?</h3>
 <div>
 	<h4>PostDTO</h4>
@@ -15,57 +12,54 @@
 		<dt>
 			@Html.DisplayNameFor(model => model.Post.Message)
 		</dt>
-
 		<dd>
 			@Html.DisplayFor(model => model.Post.Message)
 		</dd>
-
 		<dt>
 			@Html.DisplayNameFor(model => model.Post.Time)
 		</dt>
-
 		<dd>
 			@Html.DisplayFor(model => model.Post.Time)
 		</dd>
-
 		<dt>
 			@Html.DisplayNameFor(model => model.Post.Group.Name)
 		</dt>
-
 		<dd>
 			@Html.DisplayFor(model => model.Post.Group.Name)
 		</dd>
-
 	</dl>
-
-	@using (Html.BeginForm()) {
+	@using (Html.BeginForm())
+	{
 		@Html.AntiForgeryToken()
-		@Html.HiddenFor(m=>m.Post.Group.ID)
-		@Html.HiddenFor(m=>m.Post.ID)
-		@Html.HiddenFor(m=>m.BackView)
+		@Html.HiddenFor(m => m.Post.Group.ID)
+		@Html.HiddenFor(m => m.Post.ID)
+		@Html.HiddenFor(m => m.BackView)
+
+
 
 		<div class="form-actions no-color">
-			<input type="submit" value="Delete" class="btn-danger btn-default" /> |
-			
+			<input type="submit" value="Delete" class="btn btn-danger" /> 
+
 
 			@switch (Model.BackView)
 				{
 					case "GroupPage":
-					@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, null)
+					@Html.ActionLink("Back", Model.BackView, "Page",
+						new { groupId = Model.Post.Group.ID }, new { @class = "btn btn-default" })
 					break;
 				case "UserPage":
-					@Html.ActionLink("Back", Model.BackView, "Page", new { userId = Model.Post.Sender.ID }, null)
+					@Html.ActionLink("Back", Model.BackView, "Page",
+						new { userId = Model.Post.Sender.ID }, new { @class = "btn btn-default" })
 					break;
 				default:
-					@Html.ActionLink("Back", Model.BackView, "Page")
+					@Html.ActionLink("Back", Model.BackView, "Page" ,null, new { @class = "btn btn-default" })
 					break;
 			}
-				
+
 		</div>
 	}
-	
-	
-	
-	
+
+
+
 
 </div>

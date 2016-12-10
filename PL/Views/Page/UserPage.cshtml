@@ -7,12 +7,39 @@
 <h2>@Model.Account.FullName Profile</h2>
 
 <div class="row">
-	<div class="col-md-2" style="border: black solid 1px; margin-top: 113px">
+	<div class="col-md-2" style="margin-top: 113px">
 		<div>
+			@using (Html.BeginForm("Create", "Chat", FormMethod.Post))
+			{
+				<input value="@Model.Account.ID" name="id" type="hidden" />
+				<input type="submit" name="Send" value="Send a Message" class="btn btn-primary" />
+
+				}
+
+			@if (Model.InRelationship)
+			{
+
+				using (Html.BeginForm("RemoveFromFriends", "Request", FormMethod.Post))
+				{
+					<input value="@Model.Account.ID" name="id" type="hidden" />
+					<input type="submit" name="Send" value="Remove from friendlist" class="btn btn-warning" />
+				}
+			}
+			else
+			{
+				using (Html.BeginForm("SendRequest", "Request", FormMethod.Post))
+				{
+					<input value="@Model.Account.ID" name="id" type="hidden" />
+					<input type="submit" name="Send" value="Send a friend request" disabled=@Model.PendingFriendRequest />
+				}
+
+			}
+		</div>
+		<div style="border: black solid 1px; ">
 			FriendList
-			
+
 			@if (Model.Account.FriendListVisibility == FriendListVisibilityLevel.Public ||
-			(Model.InRelationship && Model.Account.FriendListVisibility == FriendListVisibilityLevel.OnlyFriends))
+				(Model.InRelationship && Model.Account.FriendListVisibility == FriendListVisibilityLevel.OnlyFriends))
 			{
 				Html.RenderPartial("AccountList", Model.Accounts);
 			}
@@ -25,33 +52,6 @@
 
 	</div>
 	<div class="col-md-10">
-		@using (Html.BeginForm("Create", "Chat", FormMethod.Post))
-		{
-			<input value="@Model.Account.ID" name="id" type="hidden" />
-			<input type="submit" name="Send" value="Send a Message" />
-
-		}
-
-
-		@if (Model.InRelationship)
-		{
-
-			using (Html.BeginForm("RemoveFromFriends", "Request", FormMethod.Post))
-			{
-				<input value="@Model.Account.ID" name="id" type="hidden" />
-				<input type="submit" name="Send" value="Remove from friendlist" />
-			}
-		}
-		else
-		{
-			using (Html.BeginForm("SendRequest", "Request", FormMethod.Post))
-			{
-				<input value="@Model.Account.ID" name="id" type="hidden" />
-				<input type="submit" name="Send" value="Send a friend request" disabled=@Model.PendingFriendRequest />
-			}
-
-		}
-
 		@{
 			Html.RenderPartial("PostList",Model);
 		}
@@ -59,15 +59,14 @@
 			@if (Model.Page > 1)
 			{
 				<div style="display: inline-block">
-					<a href=@Url.Action("UserPage", "Page",new {userId=Model.Account.ID,page=Model.Page-1} )>
-						<button type="button" class="btn btn-info">Previus Page</button>
-					</a>
+					@Html.ActionLink("Previous Page", "UserPage", "Page",
+						new { userId = Model.Account.ID, page = Model.Page - 1 }, new { @class = "btn btn-info" })
 				</div>
 			}
 			<div style="display: inline-block">
-				<a href=@Url.Action("UserPage", "Page",new { userId = Model.Account.ID, page =Model.Page+1} )>
-					<button type="button" class="btn btn-info">Next Page</button>
-				</a>
+
+				@Html.ActionLink("Next Page", "UserPage", "Page",
+						new { userId = Model.Account.ID, page = Model.Page + 1 }, new { @class = "btn btn-info" })
 			</div>
 		</div>
 	</div>

@@ -23,6 +23,26 @@ namespace BL.DTO.GroupDTOs
 			return $"{nameof(DateCreated)}: {DateCreated}, {nameof(Description)}: {Description}, {nameof(Name)}: {Name}";
 		}
 
+
 		public int ID { get; set; }
+
+
+		protected bool Equals(GroupDTO other)
+		{
+			return ID == other.ID;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((GroupDTO) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return ID;
+		}
 	}
 }

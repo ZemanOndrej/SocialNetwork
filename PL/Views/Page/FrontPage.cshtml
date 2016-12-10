@@ -29,7 +29,7 @@
 				Model.BackPage = "FrontPage";
 				@Html.HiddenFor(m => m.BackPage)
 				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control" ,style="display: inline-block"})
-				<input type="submit" name="SendPost" value="Send" style="display: inline-block; margin-top: -28px"class="btn btn-primary" />
+				<input type="submit" name="SendPost" value="Send" style="display: inline-block; margin-top: -66px"class="btn btn-primary" />
 
 				@Html.EnumDropDownListFor(x => x.NewPost.PrivacyLevel, "Select Privacy", new { @class = "form-control",style="width: 150px"})
 			}
@@ -38,21 +38,22 @@
 		@{
 			Html.RenderPartial("PostList", Model);
 		}
-
+		
+		
 		<div style="display: inline-block">
 			@if (Model.Page > 1)
 			{
 				<div style="display: inline-block">
-					<a href=@Url.Action("FrontPage", "Page",new {page=Model.Page-1} )>
-						<button type="button" class="btn btn-info">Previus Page</button>
-					</a>
+					@Html.ActionLink("Previous Page", "FrontPage", "Page",
+						new { page = Model.Page - 1 }, new { @class = "btn btn-info" })
 				</div>
 			}
 			<div style="display: inline-block">
-				<a href=@Url.Action("FrontPage", "Page",new {page=Model.Page+1} )>
-					<button type="button" class="btn btn-info">Next Page</button>
-				</a>
+
+				@Html.ActionLink("Next Page", "FrontPage", "Page",
+						new { page = Model.Page + 1 }, new { @class = "btn btn-info" })
 			</div>
 		</div>
+		
 	</div>
 </div>

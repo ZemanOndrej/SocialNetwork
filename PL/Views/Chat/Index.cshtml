@@ -5,20 +5,23 @@
 }
 
 <h2>Your Chats</h2>
-@foreach (var chat in Model.Chats)
-{
-	<div style="border: black solid 1px; margin: 10px">
-		<div style="margin: 10px">
-			
-			@Html.ActionLink(chat.Name, "OpenChat", "Chat", new { id = chat.ID }, null)
+@Html.ActionLink("Create Chat","Invite","Request",null,new {@class="btn btn-primary"})
+<div>
+	@foreach (var chat in Model.Chats)
+	{
+		<div style="border: black solid 1px; margin: 10px">
+			<div style="margin: 10px">
 
+				@Html.ActionLink(chat.Name, "OpenChat", "Chat", new { id = chat.ID }, null)
+			</div>
+
+			<div style="display: inline-block">
+				@Html.ActionLink("Delete", "Delete", "Chat", new { id = chat.ID }, null)
+			</div>
+			<div style="display: inline-block">
+				@Html.ActionLink("Edit", "Edit", "Chat", new { id = chat.ID }, null)
+			</div>
 		</div>
-		
-		<div>
-			@Html.ActionLink("Delete", "Delete", "Chat", new { id = chat.ID }, null)
-
-		</div>
-	</div>
-}
-
+	}
+</div>
 

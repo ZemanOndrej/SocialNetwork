@@ -59,7 +59,19 @@ namespace PL.Controllers
 
 		#endregion
 
+		public ActionResult Delete()
+		{
+			return View(userFacade.GetUserById(int.Parse(User.Identity.GetUserId())));
+		}
 
+		[HttpPost]
+		public ActionResult Delete(AccountDTO account)
+		{
+			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+			userFacade.RemoveUser(account);
+			return RedirectToAction("Index", "Home");
+		}
 
 		[AllowAnonymous]
 		public ActionResult Login(string returnUrl)
@@ -133,13 +145,13 @@ namespace PL.Controllers
 			return View(model);
 		}
 
-		public ActionResult EditAccount()
+		public ActionResult Edit()
 		{
 			return View(userFacade.GetUserById(int.Parse(User.Identity.GetUserId())));
 		}
 
 		[HttpPost]
-		public ActionResult EditAccount(AccountDTO account)
+		public ActionResult Edit(AccountDTO account)
 		{
 			userFacade.UpdateUserInfo(account);
 			AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
