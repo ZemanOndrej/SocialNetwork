@@ -7,6 +7,7 @@ using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
 using BL.Services.Group;
+using BL.Services.Request;
 using BL.Services.User;
 
 namespace BL.Facades
@@ -16,18 +17,16 @@ namespace BL.Facades
 		#region Dependency
 		private readonly IUserService userService;
 		private readonly IGroupService groupService;
+		private readonly IRequestService requestService;
 
-		public UserFacade(IUserService userService, IGroupService groupService)
+		public UserFacade(IUserService userService, IGroupService groupService, IRequestService requestService)
 		{
 			this.userService = userService;
 			this.groupService = groupService;
+			this.requestService = requestService;
 		}
 		#endregion
 
-//		public int CreateNewUser(UserDTO user)
-//		{
-//			return userService.Register(user);
-//		}
 		public ClaimsIdentity Login(string email, string password)
 		{
 			return userService.Login(email, password);
@@ -76,7 +75,7 @@ namespace BL.Facades
 			return userService.ListFriendsOfUser(account);
 
 		}
-		//page fix
+
 		public List<GroupDTO> ListGroupsWithUser(AccountDTO account)
 		{
 			return userService.ListUsersGroups(account);
@@ -91,6 +90,26 @@ namespace BL.Facades
 		public void AddUsersToFriends(AccountDTO account, AccountDTO account2)
 		{
 			userService.AddUsersToFriends(account,account2);
+		}
+
+		public bool AreUsersFriends(int user1Id, int user2Id)
+		{
+			var user1 = GetUserById(user1Id);
+			var user2 = GetUserById(user2Id);
+			var friends = ListFriendsOf(user1);
+			return friends.Contains(user2);
+		}
+
+		public bool UserHasPendingFriendRequestFromUser(AccountDTO receiver, AccountDTO sender,int page=1)
+		{
+			var reqsForAcc = requestService.ListRequests(new RequestFilter { Receiver = receiver }, page)
+				.ResultRequests
+				.Where(r=>r.Group==null)
+				.ToList();
+			return reqsForAcc
+				.Select(u => u.Sender.ID)
+				.Contains(sender.ID);
+
 		}
 	}
 }

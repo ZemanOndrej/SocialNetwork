@@ -30,7 +30,7 @@
 				using (Html.BeginForm("SendRequest", "Request", FormMethod.Post))
 				{
 					<input value="@Model.Account.ID" name="id" type="hidden" />
-					<input type="submit" name="Send" value="Send a friend request" disabled=@Model.PendingFriendRequest />
+					<input type="submit" name="Send" value="Send a friend request" class="btn btn-primary" disabled=@Model.PendingFriendRequest />
 				}
 
 			}

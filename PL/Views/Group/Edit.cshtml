@@ -44,12 +44,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-primary" />
+	            <input type="submit" value="Save" class="btn btn-primary"  style=" display: inline-block"/>
+				<div style=" display: inline-block">
+					@Html.ActionLink("Back", "GroupPage", "Page", new { groupId = Model.ID }, new {@class="btn btn-default"})
+				</div>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back", "GroupPage","Page", new { groupId = Model.ID }, null)
-</div>
+

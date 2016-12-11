@@ -2,6 +2,6 @@
 {
 	public enum PostPrivacyLevel
 	{
-		OnlyYou,OnlyFriends,Group,Public
+		OnlyYou,OnlyFriends,Public
 	}
 }

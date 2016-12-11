@@ -25,6 +25,7 @@ namespace PL.Controllers
 	    {
 		    var groups = groupFacade.ListGroupsWithName(searchString);
 		    var accounts = userFacade.GetUsersWithName(searchString);
+			
 			return View("Results",new SearchModel { FoundAccounts = accounts, FoundGroups = groups, Keyword =searchString});
 		}
 

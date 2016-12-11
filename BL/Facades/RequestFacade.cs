@@ -59,8 +59,8 @@ namespace BL.Facades
 				var potReq = requestService.ListRequests(new RequestFilter
 					{
 						Receiver = sender,
-						Sender = sender
-					}).ResultRequests.ToList();
+						Sender = receiver
+					}).ResultRequests.Where(r=>r.Group==null).ToList();
 				if (!potReq.Any())
 				{
 					return requestService.SendRequest(
@@ -79,6 +79,11 @@ namespace BL.Facades
 		public void DeleteRequest(int id)
 		{
 			requestService.DeleteRequest(requestService.GetRequestById(id));
+		}
+
+		public RequestDTO GetRequestById(int id)
+		{
+			return requestService.GetRequestById(id);
 		}
 
 		public void AcceptRequest(int requestId, int currAccountId)

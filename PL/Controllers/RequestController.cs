@@ -37,12 +37,25 @@ namespace PL.Controllers
 
 	    public ActionResult Accept(int id)
 	    {
-			requestFacade.AcceptRequest(id,int.Parse(User.Identity.GetUserId()));
+		    var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+
+			if (requestFacade.GetRequestById(id).Receiver.ID!=user.ID)
+			{
+				return RedirectToAction("AccessDenied", "Page");
+			}
+			requestFacade.AcceptRequest(id,user.ID);
 		    return RedirectToAction("Index");
 	    }
 
 	    public ActionResult Delete(int id)
 	    {
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+
+			if (requestFacade.GetRequestById(id).Receiver.ID != user.ID ||
+				requestFacade.GetRequestById(id).Sender.ID != user.ID)
+			{
+				return RedirectToAction("AccessDenied", "Page");
+			}
 			requestFacade.DeleteRequest(id);
 		    return RedirectToAction("Index");
 
@@ -65,6 +78,16 @@ namespace PL.Controllers
 
 		public ActionResult Invite(int? chatId, int? groupId)
 		{
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+
+			if (groupId != null)
+			{
+				if (userFacade.ListGroupsWithUser(user).All(g => g.ID != groupId))
+				{
+					return RedirectToAction("AccessDenied", "Page");
+				}
+			}
+			
 			var list = AccHelper(null,groupId,chatId);
 
 			return View(new InvitePeopleModel { Invites = list, ChatId = chatId,GroupId = groupId});

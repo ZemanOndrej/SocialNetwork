@@ -32,23 +32,23 @@
 				@Html.EditorFor(u => u.Invites[i].Invited)
 			</div>
 		}
-		<input type="submit" value="Invite" class="btn btn-primary" />
+		<input type="submit" value="Invite" class="btn btn-primary" style="display: inline-block"/>
+		<div style="display: inline-block">
+			@if (Model.GroupId != null)
+			{
+				@Html.ActionLink("Back", "GroupPage", "Page", new { groupId = Model.GroupId }, new { @class = "btn btn-default" })
+			}
+			else if (Model.ChatId != null)
+			{
+				@Html.ActionLink("Back", "OpenChat", "Chat", new { id = Model.ChatId }, new { @class = "btn btn-default" })
+			}
+			else
+			{
+				@Html.ActionLink("Back", "Index", "Chat", null, new { @class = "btn btn-default" })
 
+			}
+		</div>
 	}
 </div>
-<div>
-	@if (Model.GroupId!=null)
-	{
-		@Html.ActionLink("Back", "GroupPage", "Page", new { groupId = Model.GroupId }, new { @class = "btn btn-default" })
-	}
-	else if (Model.ChatId != null)
-	{
-		@Html.ActionLink("Back", "OpenChat", "Chat", new { id = Model.ChatId }, new { @class = "btn btn-default" })
-	}
-	else
-	{
-		@Html.ActionLink("Back", "Index", "Chat",null, new { @class = "btn btn-default" })
 
-	}
-</div>
 

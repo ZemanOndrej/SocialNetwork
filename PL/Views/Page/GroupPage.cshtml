@@ -1,4 +1,5 @@
 ﻿@using PL.Models
+@using Utils.Enums
 @model DefaultPageModel
 @{
 	ViewBag.Title = Model.Group.Name;
@@ -12,67 +13,84 @@
 			Description
 			<p>@Model.Group.Description </p>
 		</div>
-		<div>
-			@if (Model.InRelationship)
-			{
+		@if (Model.InRelationship)
+		{
+			<div>
+
 				<div>
 					@using (Html.BeginForm("LeaveGroup", "Group", FormMethod.Post))
 					{
 						@Html.HiddenFor(m => m.Group.ID)
-						<input type="submit" name="LeaveGroup" value="Leave Group" class="btn btn-warning" />
+						<input type="submit" name="LeaveGroup" value="Leave Group" class="btn btn-warning"/>
 					}
 				</div>
 
 				<div>
-					@Html.ActionLink("Edit Group", "Edit", "Group",
-							new SearchForInviteModel { GroupId = Model.Group.ID }, new { @class = "btn btn-default" })
+					@Html.ActionLink("Edit Group", "Edit", "Group", new {id = Model.Group.ID}, new {@class = "btn btn-default"})
 				</div>
 				<div>
-					@Html.ActionLink("Invite People", "Invite", "Request", new { groupId = Model.Group.ID }, new { @class = "btn btn-default" })
+					@Html.ActionLink("Invite People", "Invite", "Request", new {groupId = Model.Group.ID}, new {@class = "btn btn-default"})
 				</div>
-			}
 
-		</div>
 
-		<div style="border: black solid 1px;">
-			Group Members
-
-			@{
-				Html.RenderPartial("AccountList", Model.Accounts);
-			}
-
-		</div>
-
-	</div>
-	<div class="col-md-10">
-		<div>
-			@using (Html.BeginForm("Create", "Post", FormMethod.Post))
-			{
-				Model.BackPage = "GroupPage";
-				@Html.HiddenFor(m => m.BackPage)
-				@Html.HiddenFor(m => m.Group.ID)
-				@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control", style = "display: inline-block" })
-				<input type="submit" name="SendPost" value="Send"
-					   style="display: inline-block; margin-top: -66px" class="btn btn-primary">
-			}
-		</div>
-		@{
-			Html.RenderPartial("PostList", Model);
-		}
-		<div style="display: inline-block">
-			@if (Model.Page > 1)
-			{
-				<div style="display: inline-block">
-					@Html.ActionLink("Previous Page", "GroupPage", "Page",
-						new { groupId = Model.Group.ID, page = Model.Page - 1 }, new { @class = "btn btn-info" })
-				</div>
-			}
-			<div style="display: inline-block">
-
-				@Html.ActionLink("Next Page", "GroupPage", "Page",
-						new { groupId = Model.Group.ID, page = Model.Page + 1 }, new { @class = "btn btn-info" })
 			</div>
-		</div>
+		}
+		@if (Model.InRelationship || Model.Group.GroupPrivacyLevel == GroupPrivacyLevel.Public)
+		{
+			
+		
+			<div style="border: black solid 1px;">
+				
+					<span>Group Members</span>
+				@{
+					Html.RenderPartial("AccountList", Model.Accounts);
+				}
+			</div>
+		}
+		else
+		{
+			<span> Group is Private</span>
+		}
 
+		</div>
+		@if (Model.InRelationship || Model.Group.GroupPrivacyLevel == GroupPrivacyLevel.Public)
+		{
+			<div class="col-md-10">
+
+				<div>
+
+					@using (Html.BeginForm("Create", "Post", FormMethod.Post))
+					{
+						Model.BackPage = "GroupPage";
+						@Html.HiddenFor(m => m.BackPage)
+						@Html.HiddenFor(m => m.Group.ID)
+						@Html.TextAreaFor(m => m.NewPost.Message, new { @class = "form-control", style = "display: inline-block" })
+						<input type="submit" name="SendPost" value="Send"
+							   style="display: inline-block; margin-top: -66px" class="btn btn-primary">
+					}
+
+
+				</div>
+
+				@{
+					Html.RenderPartial("PostList", Model);
+				}
+
+				<div style="display: inline-block">
+					@if (Model.Page > 1)
+					{
+						<div style="display: inline-block">
+							@Html.ActionLink("Previous Page", "GroupPage", "Page",
+							new { groupId = Model.Group.ID, page = Model.Page - 1 }, new { @class = "btn btn-info" })
+						</div>
+					}
+					<div style="display: inline-block">
+
+						@Html.ActionLink("Next Page", "GroupPage", "Page",
+						new { groupId = Model.Group.ID, page = Model.Page + 1 }, new { @class = "btn btn-info" })
+					</div>
+				</div>
+
+			</div>
+		}
 	</div>
-</div>

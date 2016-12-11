@@ -313,6 +313,7 @@
     <Content Include="Views\Account\Delete.cshtml" />
     <Content Include="Views\Request\Invite.cshtml" />
     <Content Include="Views\Chat\Edit.cshtml" />
+    <Content Include="Views\Group\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

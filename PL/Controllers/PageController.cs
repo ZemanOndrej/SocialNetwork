@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using BL.DTO;
+using BL.DTO.UserDTOs;
 using BL.Facades;
 using Microsoft.AspNet.Identity;
 using PL.Models;
@@ -28,31 +30,37 @@ namespace PL.Controllers
 
 		public ActionResult UserPage(int userId,int page=1)
 		{
-			
+			var currUser = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
 
-			if (  int.Parse(User.Identity.GetUserId()) == userId)
+			if (   currUser.ID== userId)
 			{
 				return RedirectToAction("ProfilePage");
 			}
 
 
 			var user = userFacade.GetUserById(userId);
-			var friends = userFacade.ListFriendsOf(user);
 			var model = new DefaultPageModel
 			{
-				Posts = postFacade.GetPostsFromUser(user,page), Account = user, Accounts = friends,Page = page
+				Account = user,
+				Page = page,
+				InRelationship = userFacade.AreUsersFriends(currUser.ID, user.ID),
+				PendingFriendRequest = userFacade.UserHasPendingFriendRequestFromUser(user, currUser),
+				Accounts = new List<AccountDTO>(),
+				Posts = postFacade.GetPostsFromUserForUser(user, currUser)
 			};
 
-			if (friends.Select(u => u.ID).Contains(int.Parse(User.Identity.GetUserId())))
+
+			switch (user.FriendListVisibility)
 			{
-				model.InRelationship = true;
-			}
-			var reqsForAcc = requestFacade.ListRequestsForUserReceiver(userFacade.GetUserById(userId));
-			if (reqsForAcc
-				.Select(u => u.Sender.ID)
-				.Contains(int.Parse(User.Identity.GetUserId())))
-			{
-				model.PendingFriendRequest = true;
+				case FriendListVisibilityLevel.OnlyFriends:
+					if (model.InRelationship)
+					{
+						model.Accounts = userFacade.ListFriendsOf(user);
+					}
+					break;
+				case FriendListVisibilityLevel.Public:
+					model.Accounts=userFacade.ListFriendsOf(user);
+					break;
 			}
 
 
@@ -98,12 +106,18 @@ namespace PL.Controllers
 		{
 
 			var group = groupFacade.GetGroupById(groupId);
-			var posts = postFacade.GetPostsFromGroup(group,page);
+			var model = new DefaultPageModel {Group = group , Page = page};
 			var accounts = groupFacade.ListUsersInGroup(group);
-			var model = new DefaultPageModel {Group = group, Posts = posts, Accounts = accounts, Page = page};
+
 			if (accounts.Select(u => u.ID).Contains(int.Parse(User.Identity.GetUserId())))
 			{
 				model.InRelationship = true;
+			}
+			if (model.InRelationship || group.GroupPrivacyLevel == GroupPrivacyLevel.Public)
+			{
+				model.Accounts = accounts;
+				model.Posts=postFacade.GetPostsFromGroup(group,page);
+
 			}
 
 			return View(model);

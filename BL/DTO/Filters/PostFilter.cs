@@ -17,7 +17,9 @@ namespace BL.DTO.Filters
 
 		public FrontPageFilter FrontPageFilter { get; set; }
 
-//		public DateTime? Time { get; set; }
+		public bool AreFriends { get; set; }
+
+		public bool CurrentUser { get; set; }
 
 		public PostPrivacyLevel? PrivacyLevel { get; set; }
 

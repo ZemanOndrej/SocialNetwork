@@ -9,6 +9,7 @@ using BL.Services.Group;
 using BL.Services.Post;
 using BL.Services.Reaction;
 using BL.Services.User;
+using Castle.Core.Internal;
 using Utils.Enums;
 
 namespace BL.Facades
@@ -20,13 +21,15 @@ namespace BL.Facades
 		private readonly IReactionService reactionService;
 		private readonly ICommentService commentService;
 		private readonly IUserService userService;
+		private readonly UserFacade userFacade;
 
-		public PostFacade(IPostService postService, IReactionService reactionService, ICommentService commentService, IUserService userService)
+		public PostFacade(IPostService postService, IReactionService reactionService, ICommentService commentService, IUserService userService, UserFacade userFacade)
 		{
 			this.postService = postService;
 			this.reactionService = reactionService;
 			this.commentService = commentService;
 			this.userService = userService;
+			this.userFacade = userFacade;
 		}
 	
 		#endregion
@@ -61,13 +64,21 @@ namespace BL.Facades
 
 		public List<PostDTO> GetPostsFromUser(AccountDTO account, int page = 0)
 		{
-			return postService.ListPosts(new PostFilter { Sender = account}, page).ResultPosts.ToList();
+			return postService.ListPosts(new PostFilter { Sender = account, CurrentUser = true}, page).ResultPosts.ToList();
 
+		}
+
+		public List<PostDTO> GetPostsFromUserForUser(AccountDTO account, AccountDTO account2, int page = 0)
+		{
+			var list =postService.ListPosts(new PostFilter
+			{
+				Sender = account,AreFriends =userFacade.AreUsersFriends(account.ID,account2.ID)
+			}, page).ResultPosts.ToList();
+			return list.IsNullOrEmpty() ? new List<PostDTO>() : list;
 		}
 
 		public List<PostDTO> GetPostsForUserFrontPage(int accountId, int page = 0)
 		{
-			//TODO visible posts from friends and groups
 
 			var account = userService.GetUserById(accountId);
 			return GetPostsForUserFrontPage(account, page);

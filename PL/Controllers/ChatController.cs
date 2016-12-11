@@ -31,12 +31,6 @@ namespace PL.Controllers
 			return View(new ChatListModel {Chats = usersChats});
 		}
 
-
-		public ActionResult Create()
-		{
-			return View();
-		}
-
 		[HttpPost]
 		public ActionResult Create(int id)
 		{
@@ -46,10 +40,12 @@ namespace PL.Controllers
 			return RedirectToAction("OpenChat", new {id = chatId});
 		}
 
-
 		public ActionResult Delete(int id)
 		{
 			var chat = chatFacade.GetChatById(id);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			if (!chatFacade.ListAllUsersInChat(chat).Contains(user)) return RedirectToAction("AccessDenied", "Page");
+
 			return View(chat);
 
 
@@ -59,6 +55,7 @@ namespace PL.Controllers
 		public ActionResult Delete(ChatDTO chat)
 		{
 			chatFacade.DeleteChat(chat);
+
 			return RedirectToAction("Index");
 
 
@@ -67,9 +64,15 @@ namespace PL.Controllers
 		public ActionResult OpenChat(int id , int page =1 )
 		{
 			var chat = chatFacade.GetChatById(id);
+			var userList = chatFacade.ListAllUsersInChat(chat);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			if (!userList.Contains(user))
+			{
+				return RedirectToAction("AccessDenied", "Page");
+			}
+
 			var list = chatFacade.GetChatMessagesFromChat(chat, page);
 			list.Reverse();
-			var userList = chatFacade.ListAllUsersInChat(chat);
 			return View(new OpenChatModel
 			{
 				Chat = chat , ChatMessages =list ,ChatId = chat.ID, Page = page, Accounts = userList
@@ -85,10 +88,11 @@ namespace PL.Controllers
 			return RedirectToAction("OpenChat",new {id=chat.ID});
 		}
 
-
 		public ActionResult DeleteMessage(int id)
 		{
 			var msg = chatFacade.GetChatMessageById(id);
+			if (msg.Sender.ID != int.Parse(User.Identity.GetUserId())) return RedirectToAction("AccessDenied", "Page");
+
 			return View(new ChatMessageModel {ChatMessage = msg,ChatId = msg.Chat.ID});
 		}
 
@@ -102,9 +106,12 @@ namespace PL.Controllers
 		public ActionResult EditMessage(int id)
 		{
 			var msg = chatFacade.GetChatMessageById(id);
+			if (msg.Sender.ID != int.Parse(User.Identity.GetUserId())) return RedirectToAction("AccessDenied", "Page");
+
 			return View(new ChatMessageModel { ChatMessage = msg, ChatId = msg.Chat.ID });
 
 		}
+
 		[HttpPost]
 		public ActionResult EditMessage(ChatMessageModel model)
 		{
@@ -115,7 +122,12 @@ namespace PL.Controllers
 
 		public ActionResult Edit(int id)
 		{
-			return View(chatFacade.GetChatById(id));
+			var chat = chatFacade.GetChatById(id);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			
+			if (!chatFacade.ListAllUsersInChat(chat).Contains(user)) return RedirectToAction("AccessDenied", "Page");
+
+			return View(chat);
 		}
 	}
 }

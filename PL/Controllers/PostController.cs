@@ -35,7 +35,7 @@ namespace PL.Controllers
 			if (model.Group != null)
 			{
 				var group = groupFacade.GetGroupById(model.Group.ID);
-				model.NewPost.PrivacyLevel = PostPrivacyLevel.Group;
+				model.NewPost.PrivacyLevel = account.DefaultPostPrivacy;
 				postFacade.SendPost(model.NewPost, account, group);
 
 				return RedirectToAction(model.BackPage, "Page", new {groupId =model.Group.ID });
@@ -75,7 +75,7 @@ namespace PL.Controllers
 			return View(new PostEditModel {Post = post,BackView = viewName});
 		}
 
-			[HttpPost]
+		[HttpPost]
 		public ActionResult Delete(PostEditModel model)
 			{
 				postFacade.DeletePost(model.Post.ID);
@@ -87,6 +87,20 @@ namespace PL.Controllers
 		public ActionResult Reactions(int id, string viewName = "FrontPage", int page=1)
 		{
 			var post = postFacade.GetPostById(id);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+
+			if (post.Sender.ID != user.ID)
+			{
+
+				if (post.PrivacyLevel==PostPrivacyLevel.OnlyYou ||
+					(post.PrivacyLevel==PostPrivacyLevel.OnlyFriends && !userFacade.AreUsersFriends(user.ID,post.Sender.ID))
+					||(post.Group!=null && !userFacade.ListGroupsWithUser(user).Contains(post.Group))
+					||(post.Group!=null && post.Group.GroupPrivacyLevel!=GroupPrivacyLevel.Public))
+				{
+					return RedirectToAction("AccessDenied", "Page");
+				}
+			}
+			
 			var comments = postFacade.GetCommentsOnPost(post,page);
 			var reactions = postFacade.GetReactionsOnPost(post);
 			var userReaction =postFacade

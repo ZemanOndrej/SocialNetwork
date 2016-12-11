@@ -38,6 +38,10 @@ namespace PL.Controllers
 
 		public ActionResult Edit(int id)
 		{
+			if (CheckIfUserIsInGroup(id))
+			{
+				return RedirectToAction("AccessDenied", "Page");
+			}
 			return View(groupFacade.GetGroupById(id));
 		}
 
@@ -50,6 +54,10 @@ namespace PL.Controllers
 
 		public ActionResult Delete(int id)
 		{
+			if (CheckIfUserIsInGroup(id))
+			{
+				return RedirectToAction("AccessDenied", "Page");
+			}
 			return View();
 		}
 
@@ -58,6 +66,13 @@ namespace PL.Controllers
 		{
 			groupFacade.RemoveUserFromGroup(model.Group.ID, int.Parse(User.Identity.GetUserId()));
 			return RedirectToAction("FrontPage", "Page");
+		}
+
+		private bool CheckIfUserIsInGroup(int id)
+		{
+			return !groupFacade.ListUsersInGroup(groupFacade.GetGroupById(id))
+				.Contains(userFacade.GetUserById(int.Parse(User.Identity.GetUserId())));
+
 		}
 
 	}

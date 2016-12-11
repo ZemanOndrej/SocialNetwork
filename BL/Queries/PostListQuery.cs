@@ -36,7 +36,25 @@ namespace BL.Queries
 			}
 			if (Filter.Sender != null)
 			{
-				query = query.Where(u => u.Sender.ID == Filter.Sender.ID);
+				if (Filter.CurrentUser)
+				{
+					query = query.Where(u => u.Sender.ID == Filter.Sender.ID);
+				}
+				else
+				{
+					if (Filter.AreFriends)
+					{
+						query = query.Where(u => u.Sender.ID == Filter.Sender.ID )
+
+							.Where(u=>(u.PrivacyLevel==PostPrivacyLevel.Public) ||
+							u.PrivacyLevel==PostPrivacyLevel.OnlyFriends );
+					}
+					else
+					{
+						query = query.Where(u => u.Sender.ID == Filter.Sender.ID && u.PrivacyLevel==PostPrivacyLevel.Public);
+					}
+				}
+				
 
 			}
 			if (Filter.PrivacyLevel != null)
