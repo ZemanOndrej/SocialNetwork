@@ -1,7 +1,7 @@
 ﻿using System;
 using BL.DTO.UserDTOs;
 
-namespace BL.DTO
+namespace BL.DTO.ChatDTOs
 {
 	public class ChatMessageDTO
 	{
@@ -23,14 +23,14 @@ namespace BL.DTO
 
 		protected bool Equals(ChatMessageDTO other)
 		{
-			return Time.Equals(other.Time) && ID == other.ID;
+			return Time.Equals(other.Time) && (ID == other.ID);
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			return obj.GetType() == GetType() && Equals((ChatMessageDTO) obj);
+			return (obj.GetType() == GetType()) && Equals((ChatMessageDTO) obj);
 		}
 
 		public override int GetHashCode()

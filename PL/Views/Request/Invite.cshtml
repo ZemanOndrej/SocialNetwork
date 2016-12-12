@@ -13,7 +13,7 @@
 
 		<p style="margin: 13px 15px 7px 15px">
 			@Html.TextBox("SearchString")
-			<input type="submit" value="Search" class="btn btn-default btn-sm" />
+			<input type="submit" value="Search" class="btn btn-default btn-sm"/>
 		</p>
 	}
 </div>
@@ -23,9 +23,9 @@
 		@Html.HiddenFor(m => m.ChatId)
 		@Html.HiddenFor(m => m.GroupId)
 
-		for (int i = 0; i < Model.Invites.Count; i++)
+		for (var i = 0; i < Model.Invites.Count; i++)
 		{
-			@Html.HiddenFor(m=>m.Invites[i].Account.ID)
+			@Html.HiddenFor(m => m.Invites[i].Account.ID)
 			var user = Model.Invites[i];
 			<div style="margin: 10px;">
 				@Html.ActionLink(user.Account.FullName, "UserPage", "Page", new {userId = user.Account.ID}, null)
@@ -36,19 +36,16 @@
 		<div style="display: inline-block">
 			@if (Model.GroupId != null)
 			{
-				@Html.ActionLink("Back", "GroupPage", "Page", new { groupId = Model.GroupId }, new { @class = "btn btn-default" })
+				@Html.ActionLink("Back", "GroupPage", "Page", new {groupId = Model.GroupId}, new {@class = "btn btn-default"})
 			}
 			else if (Model.ChatId != null)
 			{
-				@Html.ActionLink("Back", "OpenChat", "Chat", new { id = Model.ChatId }, new { @class = "btn btn-default" })
+				@Html.ActionLink("Back", "OpenChat", "Chat", new {id = Model.ChatId}, new {@class = "btn btn-default"})
 			}
 			else
 			{
-				@Html.ActionLink("Back", "Index", "Chat", null, new { @class = "btn btn-default" })
-
+				@Html.ActionLink("Back", "Index", "Chat", null, new {@class = "btn btn-default"})
 			}
 		</div>
 	}
 </div>
-
-

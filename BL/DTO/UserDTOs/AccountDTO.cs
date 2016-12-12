@@ -5,10 +5,7 @@ namespace BL.DTO.UserDTOs
 {
 	public class AccountDTO
 	{
-		
-
 		public int ID { get; set; }
-
 
 		#region userInfo
 
@@ -22,15 +19,12 @@ namespace BL.DTO.UserDTOs
 
 		public string Information { get; set; }
 		public DateTime DateOfBirth { get; set; }
-	
+
 		public byte[] ProfilePicture { get; set; }
 
 		public Gender Gender { get; set; }
 		public PostPrivacyLevel DefaultPostPrivacy { get; set; } = PostPrivacyLevel.OnlyFriends;
 		public FriendListVisibilityLevel FriendListVisibility { get; set; } = FriendListVisibilityLevel.Public;
-
-
-		
 
 		#endregion
 
@@ -38,19 +32,20 @@ namespace BL.DTO.UserDTOs
 
 		public override string ToString()
 		{
-			return $" {nameof(FullName)}: {FullName}, {nameof(Gender)}: {Gender},\n {nameof(Information)}: {Information},\n {nameof(DateOfBirth)}: {DateOfBirth} ";
+			return
+				$" {nameof(FullName)}: {FullName}, {nameof(Gender)}: {Gender},\n {nameof(Information)}: {Information},\n {nameof(DateOfBirth)}: {DateOfBirth} ";
 		}
 
 		protected bool Equals(AccountDTO other)
 		{
-			return ID==other.ID;
+			return ID == other.ID;
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			return obj.GetType() == GetType() && Equals((AccountDTO) obj);
+			return (obj.GetType() == GetType()) && Equals((AccountDTO) obj);
 		}
 
 		public override int GetHashCode()
@@ -58,10 +53,6 @@ namespace BL.DTO.UserDTOs
 			return Email?.GetHashCode() ?? 0;
 		}
 
-
 		#endregion
-
 	}
-
-	
 }

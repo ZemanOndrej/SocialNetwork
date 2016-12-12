@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using BL.DTO;
 using BL.DTO.GroupDTOs;
+using BL.DTO.PostDTOs;
 using BL.DTO.UserDTOs;
 using Utils.Enums;
 
 namespace PL.Models
 {
-	
-
 	public class DefaultPageModel
 	{
 		public bool PendingFriendRequest { get; set; } = false;
@@ -20,8 +18,6 @@ namespace PL.Models
 		public List<GroupDTO> Groups { get; set; }
 		public int Page { get; set; }
 		public string BackPage { get; set; }
-
-
 	}
 
 	public class PageModel
@@ -50,6 +46,7 @@ namespace PL.Models
 		public PostDTO Post { get; set; }
 		public GroupDTO Group { get; set; }
 	}
+
 	public class PostEditModel
 	{
 		public string BackView { get; set; }

@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using BL.DTO.UserDTOs;
 
-namespace BL.DTO
+namespace BL.DTO.PostDTOs
 {
 	public class CommentDTO
 	{
-		public CommentDTO()
-		{
-//			Reactions = new List<ReactionDTO>();
-		}
 		public string CommentMessage { get; set; }
 
 		public DateTime Time { get; set; }

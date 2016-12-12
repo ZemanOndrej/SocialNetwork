@@ -1,7 +1,7 @@
 ﻿using BL.DTO.UserDTOs;
 using Utils.Enums;
 
-namespace BL.DTO
+namespace BL.DTO.PostDTOs
 {
 	public class ReactionDTO
 	{

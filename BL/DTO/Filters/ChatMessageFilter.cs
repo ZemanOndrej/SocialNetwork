@@ -1,4 +1,4 @@
-﻿using System;
+﻿using BL.DTO.ChatDTOs;
 using BL.DTO.UserDTOs;
 
 namespace BL.DTO.Filters
@@ -12,6 +12,5 @@ namespace BL.DTO.Filters
 		public AccountDTO Sender { get; set; }
 
 		//		public DateTime Time { get; set; }
-
 	}
 }

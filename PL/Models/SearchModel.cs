@@ -16,5 +16,4 @@ namespace PL.Models
 		public int? GroupId { get; set; }
 		public int? ChatId { get; set; }
 	}
-
 }

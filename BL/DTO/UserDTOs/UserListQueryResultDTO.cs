@@ -12,7 +12,5 @@ namespace BL.DTO.UserDTOs
 		public IEnumerable<AccountDTO> ResultUsers { get; set; }
 
 		public int RequestedPage { get; set; }
-
-
 	}
 }

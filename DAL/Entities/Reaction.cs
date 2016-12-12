@@ -11,7 +11,7 @@ namespace DAL.Entities
 
 		[Required]
 		public virtual Account Account { get; set; }
-		
+
 		[Required]
 		public ReactionEnum UserReaction { get; set; }
 

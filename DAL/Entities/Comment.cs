@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Riganti.Utils.Infrastructure.Core;
@@ -8,11 +7,6 @@ namespace DAL.Entities
 {
 	public class Comment : IEntity<int>
 	{
-		public Comment()
-		{
-//			Reactions = new List<Reaction>();
-		}
-
 		[Required]
 		public string CommentMessage { get; set; }
 
@@ -29,7 +23,5 @@ namespace DAL.Entities
 
 
 		public int ID { get; set; }
-
-		
 	}
 }

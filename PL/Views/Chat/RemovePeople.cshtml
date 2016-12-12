@@ -1,0 +1,27 @@
+﻿@model PL.Models.RemovePeopleModel
+@{
+	ViewBag.Title = "RemovePeopleFromChat";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Remove People</h2>
+<div>
+	@using (Html.BeginForm("RemovePeople", "Chat"))
+	{
+		@Html.HiddenFor(m => m.Chat.ID)
+
+		for (var i = 0; i < Model.Accounts.Count; i++)
+		{
+			@Html.HiddenFor(m => m.Accounts[i].Account.ID)
+			var user = Model.Accounts[i];
+			<div style="margin: 10px;">
+				@Html.ActionLink(user.Account.FullName, "UserPage", "Page", new {userId = user.Account.ID}, null)
+				@Html.EditorFor(u => u.Accounts[i].Invited)
+			</div>
+		}
+		<input type="submit" value="Remove People" class="btn btn-danger" style="display: inline-block"/>
+		<div style="display: inline-block">
+			@Html.ActionLink("Back", "OpenChat", "Chat", new {id = Model.Chat.ID}, new {@class = "btn btn-default"})
+		</div>
+	}
+</div>

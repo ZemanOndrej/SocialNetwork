@@ -3,8 +3,10 @@
 	public enum FriendListVisibilityLevel
 	{
 		OnlyYou
-			,OnlyFriends
+		,
+		OnlyFriends
 //			,FriendsOfFriends
-			,Public
+		,
+		Public
 	}
 }

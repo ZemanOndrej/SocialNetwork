@@ -10,46 +10,46 @@
 
 	<div class="form-horizontal">
 		<h4>PostDTO</h4>
-		<hr />
-		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<hr/>
+		@Html.ValidationSummary(true, "", new {@class = "text-danger"})
 		@Html.HiddenFor(model => model.Post.ID)
 		@Html.HiddenFor(m => m.Post.Group.ID);
 		@Html.HiddenFor(m => m.BackView)
 		@Html.HiddenFor(m => m.Post.Sender.ID)
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Post.Message, new { @class = "control-label col-md-2" })
+			@Html.LabelFor(model => model.Post.Message, new {@class = "control-label col-md-2"})
 			<div class="col-md-10">
-				@Html.EditorFor(model => model.Post.Message, new { @class = "form-control" })
-				@Html.ValidationMessageFor(model => model.Post.Message, "", new { @class = "text-danger" })
+				@Html.TextAreaFor(model => model.Post.Message, new {@class = "form-control"})
+				@Html.ValidationMessageFor(model => model.Post.Message, "", new {@class = "text-danger"})
 			</div>
 		</div>
 
 		<div class="form-group">
-			@Html.LabelFor(model => model.Post.PrivacyLevel, new { @class = "control-label col-md-2" })
+			@Html.LabelFor(model => model.Post.PrivacyLevel, new {@class = "control-label col-md-2"})
 			<div class="col-md-10">
-				@Html.EnumDropDownListFor(x => x.Post.PrivacyLevel, "Select Privacy", new { @class = "form-control", style = "width: 150px" })
-				@Html.ValidationMessageFor(model => model.Post.PrivacyLevel, "", new { @class = "text-danger" })
+				@Html.EnumDropDownListFor(x => x.Post.PrivacyLevel, "Select Privacy", new {@class = "form-control", style = "width:150px"})
+				@Html.ValidationMessageFor(model => model.Post.PrivacyLevel, "", new {@class = "text-danger"})
 			</div>
 		</div>
 
 
 		<div class="form-group">
 			<div class="col-md-offset-2 col-md-10">
-				<input type="submit" value="Save" class="btn btn-primary" style="display: inline-block" />
+				<input type="submit" value="Save" class="btn btn-primary" style="display: inline-block"/>
 				<div style="display: inline-block">
 					@switch (Model.BackView)
 					{
 						case "GroupPage":
 							@Html.ActionLink("Back", Model.BackView, "Page",
-						   new { groupId = Model.Post.Group.ID }, new { @class = "btn btn-default" })
-						break;
-					case "UserPage":
+								new {groupId = Model.Post.Group.ID}, new {@class = "btn btn-default"})
+							break;
+						case "UserPage":
 							@Html.ActionLink("Back", Model.BackView, "Page",
-						   new { userId = Model.Post.Sender.ID }, new { @class = "btn btn-default" })
-						break;
-					default:
-							@Html.ActionLink("Back", Model.BackView, "Page", null, new { @class = "btn btn-default" })
+								new {userId = Model.Post.Sender.ID}, new {@class = "btn btn-default"})
+							break;
+						default:
+							@Html.ActionLink("Back", Model.BackView, "Page", null, new {@class = "btn btn-default"})
 							break;
 					}
 
@@ -59,4 +59,3 @@
 		</div>
 	</div>
 }
-

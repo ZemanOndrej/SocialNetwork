@@ -7,7 +7,7 @@
 <h3>Are you sure you want to delete this?</h3>
 <div>
 	<h4>PostDTO</h4>
-	<hr />
+	<hr/>
 	<dl class="dl-horizontal">
 		<dt>
 			@Html.DisplayNameFor(model => model.Post.Message)
@@ -36,23 +36,22 @@
 		@Html.HiddenFor(m => m.BackView)
 
 
-
 		<div class="form-actions no-color">
-			<input type="submit" value="Delete" class="btn btn-danger" /> 
+			<input type="submit" value="Delete" class="btn btn-danger"/>
 
 
 			@switch (Model.BackView)
-				{
-					case "GroupPage":
+			{
+				case "GroupPage":
 					@Html.ActionLink("Back", Model.BackView, "Page",
-						new { groupId = Model.Post.Group.ID }, new { @class = "btn btn-default" })
+						new {groupId = Model.Post.Group.ID}, new {@class = "btn btn-default"})
 					break;
 				case "UserPage":
 					@Html.ActionLink("Back", Model.BackView, "Page",
-						new { userId = Model.Post.Sender.ID }, new { @class = "btn btn-default" })
+						new {userId = Model.Post.Sender.ID}, new {@class = "btn btn-default"})
 					break;
 				default:
-					@Html.ActionLink("Back", Model.BackView, "Page" ,null, new { @class = "btn btn-default" })
+					@Html.ActionLink("Back", Model.BackView, "Page", null, new {@class = "btn btn-default"})
 					break;
 			}
 

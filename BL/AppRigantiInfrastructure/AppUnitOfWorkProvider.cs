@@ -12,7 +12,8 @@ namespace BL.AppRigantiInfrastructure
 		{
 		}
 
-		protected override EntityFrameworkUnitOfWork CreateUnitOfWork(Func<DbContext> dbContextFactory, DbContextOptions options)
+		protected override EntityFrameworkUnitOfWork CreateUnitOfWork(Func<DbContext> dbContextFactory,
+			DbContextOptions options)
 		{
 			return new AppUnitOfWork(this, dbContextFactory, options);
 		}

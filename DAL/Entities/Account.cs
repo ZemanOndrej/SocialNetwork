@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DAL.Entities.Game;
 using DAL.Entities.Identity;
 using Riganti.Utils.Infrastructure.Core;
 using Utils.Enums;
@@ -12,8 +11,15 @@ namespace DAL.Entities
 {
 	public class Account : IEntity<int>
 	{
+		#region UserSettings
+
+		[DefaultValue(PostPrivacyLevel.OnlyFriends)]
+		public PostPrivacyLevel DefaultPostPrivacyLevel { get; set; }
+
+		#endregion
 
 		#region UserInfo		
+
 		public int ID { get; set; }
 
 		public virtual List<Group> Groups { get; set; }
@@ -46,15 +52,6 @@ namespace DAL.Entities
 
 		#endregion
 
-		#region UserSettings
-
-		[DefaultValue(PostPrivacyLevel.OnlyFriends)]
-		public PostPrivacyLevel DefaultPostPrivacyLevel { get; set; }
-
-
-
-		#endregion
-
 		#region Methods
 
 		public Account()
@@ -69,27 +66,21 @@ namespace DAL.Entities
 
 		private bool Equals(Account other)
 		{
-			return  other.User.Equals(User);
+			return other.User.Equals(User);
 		}
 
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			return obj.GetType() == GetType() && Equals((Account) obj);
+			return (obj.GetType() == GetType()) && Equals((Account) obj);
 		}
 
 		public override int GetHashCode()
 		{
-			unchecked
-			{
-				return User.GetHashCode();
-			}
+			return User.GetHashCode();
 		}
 
-		
-
 		#endregion
-		
 	}
 }

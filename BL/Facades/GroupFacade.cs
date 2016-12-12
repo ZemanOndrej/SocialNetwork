@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
@@ -13,18 +9,9 @@ namespace BL.Facades
 {
 	public class GroupFacade
 	{
-		#region Dependency
-		private readonly IGroupService groupService;
-
-		public GroupFacade(IGroupService groupService)
+		public int CreateNewGroup(GroupDTO group, int accountId)
 		{
-			this.groupService = groupService;
-		}
-		#endregion
-
-		public int CreateNewGroup(GroupDTO group,int accountId)
-		{
-			return groupService.CreateGroup(group,accountId);
+			return groupService.CreateGroup(group, accountId);
 		}
 
 		public void DeleteGroup(GroupDTO group)
@@ -44,38 +31,44 @@ namespace BL.Facades
 
 		public void AddUserToGroup(GroupDTO group, AccountDTO account)
 		{
-			groupService.AddUserToGroup(group,account);
+			groupService.AddUserToGroup(group, account);
 		}
 
 		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
-			groupService.RemoveUserFromGroup(group,account);
+			groupService.RemoveUserFromGroup(group, account);
 		}
 
 		public void RemoveUserFromGroup(int groupId, int accountId)
 		{
 			groupService.RemoveUserFromGroup(groupId, accountId);
-
 		}
 
-		public List<GroupDTO> ListGroupsWithName(string name , int page=0)
+		public List<GroupDTO> ListGroupsWithName(string name, int page = 0)
 		{
 			return groupService.ListGroups(new GroupFilter {Name = name}, page).ResultGroups.ToList();
 		}
 
-	
 
 		public List<AccountDTO> ListUsersInGroup(GroupDTO group, int page = 0)
 		{
 			return groupService.ListUsersInGroup(group);
-
 		}
 
 		public List<GroupDTO> ListAllGroups()
 		{
 			return groupService.ListGroups(new GroupFilter()).ResultGroups.ToList();
-
 		}
 
+		#region Dependency
+
+		private readonly IGroupService groupService;
+
+		public GroupFacade(IGroupService groupService)
+		{
+			this.groupService = groupService;
+		}
+
+		#endregion
 	}
 }

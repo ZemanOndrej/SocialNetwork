@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Web.Http;
-using BL.DTO;
 using BL.DTO.UserDTOs;
 using BL.Facades;
 using Newtonsoft.Json;
@@ -29,29 +28,27 @@ namespace REST.API.Controllers
 			var result = UserFacade.ListAllUsers();
 			return result == null
 				? NotFound()
-				: (IHttpActionResult) Content(HttpStatusCode.OK,result);
+				: (IHttpActionResult) Content(HttpStatusCode.OK, result);
 		}
 
-	    public IHttpActionResult Post([FromBody] AccountDTO account)
-	    {
-	        try
-	        {
-	            var tmp=UserFacade.CreateNewUser(account);
-	            account = UserFacade.GetUserById(tmp);
-	            return Content(HttpStatusCode.Created, account);
-	        }
-	        catch (JsonException)
-	        {
-	            Debug.WriteLine($"Failed to deserialize value to GroupDto: {account}");
-	            return StatusCode(HttpStatusCode.BadRequest);
-	        }
-	        catch (NullReferenceException ex)
-	        {
-	            Debug.WriteLine(ex.Message);
-	            return StatusCode(HttpStatusCode.NotFound);
-	        }
-	    }
-
-
+		public IHttpActionResult Post([FromBody] AccountDTO account)
+		{
+			try
+			{
+				var tmp = UserFacade.CreateNewUser(account);
+				account = UserFacade.GetUserById(tmp);
+				return Content(HttpStatusCode.Created, account);
+			}
+			catch (JsonException)
+			{
+				Debug.WriteLine($"Failed to deserialize value to GroupDto: {account}");
+				return StatusCode(HttpStatusCode.BadRequest);
+			}
+			catch (NullReferenceException ex)
+			{
+				Debug.WriteLine(ex.Message);
+				return StatusCode(HttpStatusCode.NotFound);
+			}
+		}
 	}
 }

@@ -9,6 +9,6 @@ namespace BL.DTO.Filters
 
 		public GroupDTO Group { get; set; }
 
-		public  AccountDTO Receiver { get; set; }
+		public AccountDTO Receiver { get; set; }
 	}
 }

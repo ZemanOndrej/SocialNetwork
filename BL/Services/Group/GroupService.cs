@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
@@ -13,12 +10,24 @@ using Riganti.Utils.Infrastructure.Core;
 
 namespace BL.Services.Group
 {
-	public class GroupService : AppService,IGroupService
+	public class GroupService : AppService, IGroupService
 	{
 		public int GroupPageSize => 20;
 
+		#region additional
+
+		private IQuery<GroupDTO> GetQuery(GroupFilter filter)
+		{
+			var query = groupListQuery;
+			query.ClearSortCriterias();
+			query.Filter = filter;
+			return query;
+		}
+
+		#endregion
 
 		#region Dependency
+
 		private readonly GroupRepository groupRepository;
 
 		private readonly GroupListQuery groupListQuery;
@@ -27,7 +36,8 @@ namespace BL.Services.Group
 
 		private readonly PostRepository postRepository;
 
-		public GroupService(GroupListQuery groupListQuery, GroupRepository groupRepository, UserRepository userRepository, PostRepository postRepository)
+		public GroupService(GroupListQuery groupListQuery, GroupRepository groupRepository, UserRepository userRepository,
+			PostRepository postRepository)
 		{
 			this.groupListQuery = groupListQuery;
 			this.groupRepository = groupRepository;
@@ -37,8 +47,8 @@ namespace BL.Services.Group
 
 		#endregion
 
-
 		#region CreateDelete
+
 		public int CreateGroup(GroupDTO group, int accountId)
 		{
 			int nuGrpId;
@@ -53,7 +63,7 @@ namespace BL.Services.Group
 
 				nuGrpId = groupEnt.ID;
 			}
-			AddUserToGroup(nuGrpId,accountId);
+			AddUserToGroup(nuGrpId, accountId);
 			return nuGrpId;
 		}
 
@@ -71,7 +81,6 @@ namespace BL.Services.Group
 			DeleteGroup(group.ID);
 		}
 
-
 		#endregion
 
 		#region Update
@@ -80,7 +89,7 @@ namespace BL.Services.Group
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var groupEnt = groupRepository.GetById(group.ID,g=>g.Accounts,g=>g.GroupPosts);
+				var groupEnt = groupRepository.GetById(group.ID, g => g.Accounts, g => g.GroupPosts);
 				groupEnt.Name = group.Name;
 				groupEnt.Description = group.Description;
 				groupEnt.GroupPrivacyLevel = group.GroupPrivacyLevel;
@@ -91,7 +100,7 @@ namespace BL.Services.Group
 
 		public void AddUserToGroup(GroupDTO group, AccountDTO account)
 		{
-			AddUserToGroup(group.ID,account.ID);
+			AddUserToGroup(group.ID, account.ID);
 		}
 
 		public void AddUserToGroup(int groupId, int accountId)
@@ -104,14 +113,14 @@ namespace BL.Services.Group
 				groupRepository.Update(groupEnt);
 				uow.Commit();
 			}
-
 		}
 
 
 		public void RemoveUserFromGroup(GroupDTO group, AccountDTO account)
 		{
-			RemoveUserFromGroup(group.ID,account.ID);
+			RemoveUserFromGroup(group.ID, account.ID);
 		}
+
 		public void RemoveUserFromGroup(int groupId, int accountId)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
@@ -124,18 +133,15 @@ namespace BL.Services.Group
 			}
 		}
 
-
-
 		#endregion
 
 		#region Get
-
 
 		public GroupDTO GetGroupById(int id)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				var group = groupRepository.GetById(id,g=>g.Accounts,g=>g.GroupPosts);
+				var group = groupRepository.GetById(id, g => g.Accounts, g => g.GroupPosts);
 				return group != null ? Mapper.Map<GroupDTO>(group) : null;
 			}
 		}
@@ -145,7 +151,7 @@ namespace BL.Services.Group
 			using (UnitOfWorkProvider.Create())
 			{
 				var query = GetQuery(filter);
-				query.Skip = (page > 0 ? page - 1 : 0) * GroupPageSize;
+				query.Skip = (page > 0 ? page - 1 : 0)*GroupPageSize;
 				query.Take = GroupPageSize;
 
 				query.AddSortCriteria(dto => dto.Name);
@@ -158,7 +164,6 @@ namespace BL.Services.Group
 					ResultGroups = query.Execute(),
 					Filter = filter
 				};
-
 			}
 		}
 
@@ -171,25 +176,6 @@ namespace BL.Services.Group
 			}
 		}
 
-
-
-
-
 		#endregion
-
-		#region additional
-
-		private IQuery<GroupDTO> GetQuery(GroupFilter filter)
-		{
-			var query = groupListQuery;
-			query.ClearSortCriterias();
-			query.Filter = filter;
-			return query;
-		}
-
-		#endregion
-
-
-
 	}
 }

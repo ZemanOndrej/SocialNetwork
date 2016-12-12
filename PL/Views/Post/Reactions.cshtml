@@ -1,4 +1,4 @@
-﻿@using System.Web.Mvc.Html
+﻿@using Castle.Core.Internal
 @using Utils.Enums
 @model PL.Models.OpenPostModel
 @{
@@ -6,7 +6,25 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>@Model.Post.ToString()</h2>
+<div style="border: black 1px solid">
+	<h3 style="margin: 10px">
+		@Html.ActionLink(Model.Post.Sender.FullName, "UserPage", "Page", new { userId = Model.Post.Sender.ID }, null)
+
+		@if (Model.Post.Group != null)
+		{
+			<span> sent to  </span>
+			@Html.ActionLink(Model.Post.Group.Name, "GroupPage", "Page", new { groupId = Model.Post.Group.ID }, null)
+		}
+	</h3>
+
+	<p style="margin: 10px; width:1100px; word-wrap:break-word; display:inline-block;"> @Model.Post.Message</p>
+	<div style="margin: 10px">
+
+		Sent at : @Model.Post.Time
+	</div>
+</div>
+
+
 
 <div class="row">
 	<div class="col-md-4">
@@ -14,8 +32,8 @@
 		{
 			@Html.HiddenFor(m => m.PostId)
 			@Html.HiddenFor(m => m.BackView)
-			@Html.TextAreaFor(m => m.NewComment.CommentMessage, new { @class = "form-control", style = "display: inline-block" })
-			<input type="submit" name="SendComment" value="Send" style="display: inline-block; margin-top: -66px"class="btn btn-primary"  />
+			@Html.TextAreaFor(m => m.NewComment.CommentMessage, new {@class = "form-control", style = "display:inline-block"})
+			<input type="submit" name="SendComment" value="Send" style="display: inline-block; margin-top: -66px"class="btn btn-primary"/>
 		}
 
 
@@ -26,12 +44,12 @@
 			@Html.HiddenFor(m => m.PostId)
 			@Html.HiddenFor(m => m.BackView)
 			<div style="display: inline-block">
-				@Html.EnumDropDownListFor(x => x.UserReaction,"No Reaction", new
+				@Html.EnumDropDownListFor(x => x.UserReaction, "No Reaction", new
 				{
-					@class = "form-control small", style = "width: 150px; display: inline-block"
+					@class = "form-control small", style = "width:150px;display:inline-block"
 				})
-				<input type="submit" name="ReactOnPost" 
-						value="React" style="display: inline-block;" class="btn btn-primary"  />
+				<input type="submit" name="ReactOnPost"
+						value="React" style="display: inline-block;" class="btn btn-primary"/>
 			</div>
 		}
 	</div>
@@ -39,21 +57,25 @@
 <div>
 
 
-
-
 	<div style="border: black solid 1px;">
-
-		@foreach (var i in Enum.GetValues(typeof(ReactionEnum)))
+		@if (Model.Reactions.IsNullOrEmpty())
 		{
-			var reactCount = Model.Reactions.Count(r => r.UserReaction.Equals(i));
-			if (reactCount >= 0)
-			{
-				<div style="float: left">
-					@i.ToString() : @reactCount
-				</div>
-			}
-
+			<p>Be the first to react!</p>
 		}
+		else
+		{
+			foreach (var i in Enum.GetValues(typeof(ReactionEnum)))
+			{
+				var reactCount = Model.Reactions.Count(r => r.UserReaction.Equals(i));
+				if (reactCount > 0)
+				{
+					<div style="border: 1px solid gray; float: left; padding: 5px">
+						@i.ToString() : @reactCount
+					</div>
+				}
+			}
+		}
+
 
 	</div>
 	<div style="border: black 1px solid; clear: both">
@@ -61,7 +83,7 @@
 		{
 			<div style="border: black 1px solid; clear: both">
 				<div>
-					@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new { userId = comment.Sender.ID }, null)
+					@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new {userId = comment.Sender.ID}, null)
 
 					at @comment.Time
 				</div>
@@ -78,30 +100,29 @@
 
 <div style="display: inline-block">
 	@if (Model.Page > 1)
-			{
+	{
 		<div style="display: inline-block">
 			@Html.ActionLink("Previous Page", "Reactions", "Post",
-				new {id = Model.PostId,backView = Model.BackView,page = Model.Page - 1}, new { @class = "btn btn-info" })
+				new {id = Model.PostId, backView = Model.BackView, page = Model.Page - 1}, new {@class = "btn btn-info"})
 		</div>
-			}
+	}
 	<div style="display: inline-block">
 
-		@Html.ActionLink("Next Page", "Reactions", "Post", 
-				new {id = Model.PostId, backView = Model.BackView, page = Model.Page + 1}, new {@class = "btn btn-info"})
+		@Html.ActionLink("Next Page", "Reactions", "Post",
+			new {id = Model.PostId, backView = Model.BackView, page = Model.Page + 1}, new {@class = "btn btn-info"})
 	</div>
 </div>
 <div>
 	@switch (Model.BackView)
 	{
 		case "GroupPage":
-			@Html.ActionLink("Back", Model.BackView, "Page", new { groupId = Model.Post.Group.ID }, new {@class= "btn btn-default" })
+			@Html.ActionLink("Back", Model.BackView, "Page", new {groupId = Model.Post.Group.ID}, new {@class = "btn btn-default"})
 			break;
 		case "UserPage":
-			@Html.ActionLink("Back", Model.BackView, "Page", new { userId = Model.Post.Sender.ID }, new { @class = "btn btn-default" })
+			@Html.ActionLink("Back", Model.BackView, "Page", new {userId = Model.Post.Sender.ID}, new {@class = "btn btn-default"})
 			break;
 		default:
-			@Html.ActionLink("Back", Model.BackView, "Page",null, new { @class = "btn btn-default" })
+			@Html.ActionLink("Back", Model.BackView, "Page", null, new {@class = "btn btn-default"})
 			break;
 	}
 </div>
-

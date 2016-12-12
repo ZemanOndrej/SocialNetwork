@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Riganti.Utils.Infrastructure.Core;
-
-namespace DAL.Entities.Game
+﻿namespace DAL.Entities.Game
 {
 //	public class GameAccount : IEntity<int>
 //	{

@@ -14,7 +14,5 @@ namespace BL.DTO.Filters
 		public string Login { get; set; }
 		public string Fullname { get; set; }
 		public GroupDTO Group { get; set; }
-
-
 	}
 }

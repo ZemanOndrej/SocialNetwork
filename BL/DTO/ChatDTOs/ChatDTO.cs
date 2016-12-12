@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BL.DTO.UserDTOs;
 
-namespace BL.DTO
+namespace BL.DTO.ChatDTOs
 {
 	public class ChatDTO
 	{
@@ -32,7 +32,7 @@ namespace BL.DTO
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			if (obj.GetType() != this.GetType()) return false;
+			if (obj.GetType() != GetType()) return false;
 			return Equals((ChatDTO) obj);
 		}
 

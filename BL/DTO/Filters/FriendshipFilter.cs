@@ -7,6 +7,5 @@ namespace BL.DTO.Filters
 		public AccountDTO Account { get; set; }
 
 		public AccountDTO Account2 { get; set; }
-
 	}
 }

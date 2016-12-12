@@ -1,47 +1,52 @@
-﻿@using Castle.Core.Internal
-@using Microsoft.AspNet.Identity
+﻿@using Microsoft.AspNet.Identity
 @model PL.Models.DefaultPageModel
 <div>
+
 	@{
 
 		foreach (var postDto in Model.Posts)
 		{
-
 			<div style="border: black solid 1px">
-				<h3>
+				<div>
+					<h3 style="margin: 15px">
+						@Html.ActionLink(postDto.Sender.FullName, "UserPage", "Page", new { userId = postDto.Sender.ID }, null)
 
 
-					@Html.ActionLink(postDto.Sender.FullName, "UserPage", "Page", new { userId = postDto.Sender.ID }, null)
+						@if (postDto.Group != null)
+						{
+							<span> sent to  </span>
 
-					@if (postDto.Group != null)
-					{
-						<span> sent to  </span>
+							@Html.ActionLink(postDto.Group.Name, "GroupPage", "Page", new { groupId = postDto.Group.ID }, null)
+						}
+					</h3>
 
-						@Html.ActionLink(postDto.Group.Name, "GroupPage", "Page", new { groupId = postDto.Group.ID }, null)
-
-					}
-				</h3>
-
-				<div style="margin: 10px"> @postDto.Message</div>
-
-
+					<p style="margin: 10px; width:730px; word-wrap:break-word; display:inline-block;"> @postDto.Message</p>
+				</div>
 				<div class="row">
-					<div class="col-md-1">
-						@Html.ActionLink("Reactions", "Reactions", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
+
+					<div class="col-md-2" style="margin-left:15px">
+
+						@Html.ActionLink("Reactions", "Reactions", "Post", new {id = postDto.ID, viewName = Model.BackPage}, null)
 					</div>
+
 					@if (postDto.Sender.ID == int.Parse(User.Identity.GetUserId()))
 					{
 						<div class="col-md-1">
-							@Html.ActionLink("Delete", "Delete", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
+
+							@Html.ActionLink("Delete", "Delete", "Post", new {id = postDto.ID, viewName = Model.BackPage}, null)
 						</div>
 						<div class="col-md-1">
-							@Html.ActionLink("Edit", "Edit", "Post", new { id = postDto.ID, viewName = Model.BackPage }, null)
+
+							@Html.ActionLink("Edit", "Edit", "Post", new {id = postDto.ID, viewName = Model.BackPage}, null)
 						</div>
 					}
-					<div class="col-md-2">
+					<div class="col-md-4">
+
 						Sent at : @postDto.Time
 					</div>
+
 				</div>
+
 			</div>
 		}
 	}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
 using BL.Queries;
@@ -10,39 +9,68 @@ using Riganti.Utils.Infrastructure.Core;
 
 namespace BL.Services.Post
 {
-	public class PostService :AppService,IPostService
+	public class PostService : AppService, IPostService
 	{
-
-
 		public int PostPageSize => 20;
 
+		#region Update
+
+		public void EditPostMessage(PostDTO post)
+		{
+			using (var uow = UnitOfWorkProvider.Create())
+			{
+				var postEnt = postRepository.GetById(post.ID, p => p.Comments, p => p.Group, p => p.Reactions, p => p.Sender);
+				postEnt.Message = post.Message;
+				postEnt.PrivacyLevel = post.PrivacyLevel;
+				postRepository.Update(postEnt);
+				uow.Commit();
+			}
+		}
+
+		#endregion
+
+		#region additional
+
+		private IQuery<PostDTO> GetQuery(PostFilter filter)
+		{
+			var query = postListQuery;
+			query.ClearSortCriterias();
+			query.Filter = filter;
+			return query;
+		}
+
+		#endregion
+
 		#region Dependency
+
 		private readonly PostRepository postRepository;
 		private readonly UserRepository userRepository;
 		private readonly PostListQuery postListQuery;
 		private readonly GroupRepository groupRepository;
 
 
-
-		public PostService(PostRepository postRepository, UserRepository userRepository, PostListQuery postListQuery, GroupRepository groupRepository)
+		public PostService(PostRepository postRepository, UserRepository userRepository, PostListQuery postListQuery,
+			GroupRepository groupRepository)
 		{
 			this.postRepository = postRepository;
 			this.userRepository = userRepository;
 			this.postListQuery = postListQuery;
 			this.groupRepository = groupRepository;
 		}
+
 		#endregion
 
 		#region CreateDelete
+
 		public int CreatePost(PostDTO post)
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				var postEnt = Mapper.Map<DAL.Entities.Post>(post);
 				postEnt.Sender = userRepository.GetById(post.Sender.ID);
-				if(post.Group!=null)
+				if (post.Group != null)
 					postEnt.Group = groupRepository.GetById(post.Group.ID);
-				postEnt.Time= DateTime.Now;
+				postEnt.Time = DateTime.Now;
 				postRepository.Insert(postEnt);
 				uow.Commit();
 				return postEnt.ID;
@@ -65,22 +93,6 @@ namespace BL.Services.Post
 
 		#endregion
 
-		#region Update
-		public void EditPostMessage(PostDTO post)
-		{
-			using (var uow = UnitOfWorkProvider.Create())
-			{
-				var postEnt = postRepository.GetById(post.ID,p=>p.Comments,p=>p.Group,p=>p.Reactions,p=>p.Sender);
-				postEnt.Message = post.Message;
-				postEnt.PrivacyLevel = post.PrivacyLevel;
-				postRepository.Update(postEnt);
-				uow.Commit();
-			}
-		}
-
-
-		#endregion
-
 		#region Get
 
 		public PostDTO GetPostById(int id)
@@ -92,18 +104,16 @@ namespace BL.Services.Post
 			}
 		}
 
-		public PostListQueryResultDTO ListPosts(PostFilter filter, int page=0)
+		public PostListQueryResultDTO ListPosts(PostFilter filter, int page = 0)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				
 				var query = GetQuery(filter);
-				query.Skip = (page > 0 ? page - 1 : 0) * PostPageSize;
+				query.Skip = (page > 0 ? page - 1 : 0)*PostPageSize;
 				query.Take = PostPageSize;
 
-				
 
-				query.AddSortCriteria(customer => customer.Time,SortDirection.Descending);
+				query.AddSortCriteria(customer => customer.Time, SortDirection.Descending);
 
 				return new PostListQueryResultDTO
 				{
@@ -112,7 +122,6 @@ namespace BL.Services.Post
 					ResultPosts = query.Execute(),
 					Filter = new PostFilter()
 				};
-
 			}
 		}
 
@@ -121,22 +130,10 @@ namespace BL.Services.Post
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				var postEnt = postRepository.GetById(post.ID, p=>p.Reactions);
+				var postEnt = postRepository.GetById(post.ID, p => p.Reactions);
 
 				return Mapper.Map<List<ReactionDTO>>(postEnt.Reactions);
-
 			}
-		}
-		#endregion
-
-		#region additional
-
-		private IQuery<PostDTO> GetQuery(PostFilter filter )
-		{
-			var query = postListQuery;
-			query.ClearSortCriterias();
-			query.Filter = filter;
-			return query;
 		}
 
 		#endregion

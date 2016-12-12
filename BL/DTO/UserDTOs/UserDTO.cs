@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BL.DTO.UserDTOs
+﻿namespace BL.DTO.UserDTOs
 {
 	public class UserDTO
 	{
@@ -13,6 +7,5 @@ namespace BL.DTO.UserDTOs
 		public string Email { get; set; }
 		public string UserName { get; set; }
 		public AccountDTO Account { get; set; }
-
 	}
 }

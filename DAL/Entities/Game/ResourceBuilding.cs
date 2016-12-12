@@ -1,8 +1,4 @@
-﻿using System;
-using Utils.Enums.Game;
-using Utils.Structs;
-
-namespace DAL.Entities.Game
+﻿namespace DAL.Entities.Game
 {
 //	public class ResourceBuilding
 //	{

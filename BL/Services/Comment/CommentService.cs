@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
 using BL.DTO.UserDTOs;
@@ -18,8 +13,36 @@ namespace BL.Services.Comment
 	{
 		public int CommentPageSize => 30;
 
+		#region Update
+
+		public void EditCommentMessage(CommentDTO comment)
+		{
+			using (var uow = UnitOfWorkProvider.Create())
+			{
+				var commentEnt = commentRepository.GetById(comment.ID, c => c.Post, c => c.Sender);
+
+				commentEnt.CommentMessage = comment.CommentMessage;
+				commentRepository.Update(commentEnt);
+				uow.Commit();
+			}
+		}
+
+		#endregion
+
+		#region additional
+
+		private IQuery<CommentDTO> GetQuery(CommentFilter filter)
+		{
+			var query = commentListQuery;
+			query.ClearSortCriterias();
+			query.Filter = filter;
+			return query;
+		}
+
+		#endregion
 
 		#region Dependency
+
 		private readonly CommentRepository commentRepository;
 
 		private readonly CommentListQuery commentListQuery;
@@ -28,7 +51,8 @@ namespace BL.Services.Comment
 
 		private readonly PostRepository postRepository;
 
-		public CommentService(CommentRepository commentRepository, CommentListQuery commentListQuery, UserRepository userRepository, PostRepository postRepository)
+		public CommentService(CommentRepository commentRepository, CommentListQuery commentListQuery,
+			UserRepository userRepository, PostRepository postRepository)
 		{
 			this.commentRepository = commentRepository;
 			this.commentListQuery = commentListQuery;
@@ -60,7 +84,7 @@ namespace BL.Services.Comment
 
 		public int CreateComment(CommentDTO comment)
 		{
-			return CreateComment(comment.Sender,comment,comment.Post);
+			return CreateComment(comment.Sender, comment, comment.Post);
 		}
 
 		public void DeleteComment(int id)
@@ -74,45 +98,27 @@ namespace BL.Services.Comment
 
 		#endregion
 
-		#region Update
-
-		public void EditCommentMessage(CommentDTO comment)
-		{
-			using (var uow = UnitOfWorkProvider.Create())
-			{
-				var commentEnt = commentRepository.GetById(comment.ID,c=> c.Post, c=> c.Sender);
-
-				commentEnt.CommentMessage = comment.CommentMessage;
-				commentRepository.Update(commentEnt);
-				uow.Commit();
-			}
-		}
-
-		#endregion
-
 		#region Get
 
 		public CommentDTO GetCommentById(int id)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				var comment = commentRepository.GetById(id,c=>c.Post,c=>c.Sender);
+				var comment = commentRepository.GetById(id, c => c.Post, c => c.Sender);
 				return comment != null ? Mapper.Map<CommentDTO>(comment) : null;
 			}
 		}
 
 
-		public CommentListQueryResultDTO ListComments(CommentFilter filter, int page=0)
+		public CommentListQueryResultDTO ListComments(CommentFilter filter, int page = 0)
 		{
-
 			using (UnitOfWorkProvider.Create())
 			{
-				
 				var query = GetQuery(filter);
-				query.Skip = (page > 0 ? page - 1 : 0) * CommentPageSize;
+				query.Skip = (page > 0 ? page - 1 : 0)*CommentPageSize;
 				query.Take = CommentPageSize;
 
-				query.AddSortCriteria(dto => dto.Time,SortDirection.Descending);
+				query.AddSortCriteria(dto => dto.Time, SortDirection.Descending);
 
 				return new CommentListQueryResultDTO
 				{
@@ -121,23 +127,9 @@ namespace BL.Services.Comment
 					ResultComments = query.Execute(),
 					Filter = filter
 				};
-
 			}
 		}
 
 		#endregion
-
-		#region additional
-
-		private IQuery<CommentDTO> GetQuery(CommentFilter filter)
-		{
-			var query = commentListQuery;
-			query.ClearSortCriterias();
-			query.Filter = filter;
-			return query;
-		}
-
-		#endregion
-
 	}
 }

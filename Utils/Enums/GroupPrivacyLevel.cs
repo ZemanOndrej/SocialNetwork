@@ -2,6 +2,7 @@
 {
 	public enum GroupPrivacyLevel
 	{
-		Private,Public
+		Private,
+		Public
 	}
 }

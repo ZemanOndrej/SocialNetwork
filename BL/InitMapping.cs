@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using BL.DTO;
+using BL.DTO.ChatDTOs;
 using BL.DTO.GroupDTOs;
+using BL.DTO.PostDTOs;
 using BL.DTO.Request;
 using BL.DTO.UserDTOs;
 using DAL.Entities;
@@ -33,7 +34,6 @@ namespace BL
 				c.CreateMap<ChatDTO, Chat>().ForMember(opt => opt.Messages, o => o.Ignore());
 
 
-
 				c.CreateMap<Comment, CommentDTO>().ReverseMap();
 
 				c.CreateMap<AccountDTO, Account>()
@@ -58,10 +58,7 @@ namespace BL
 				c.CreateMap<FriendshipDTO, Friendship>()
 					.ForMember(o => o.User1, ops => ops.Ignore())
 					.ForMember(o => o.User2, ops => ops.Ignore());
-
-
 			});
 		}
-
 	}
 }

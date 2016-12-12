@@ -1,6 +1,4 @@
-﻿using Utils.Enums.Game;
-
-namespace DAL.Entities.Game
+﻿namespace DAL.Entities.Game
 {
 //	public class Unit
 //	{

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BL.DTO;
+﻿using System.Collections.Generic;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
 
@@ -21,10 +16,7 @@ namespace BL.Services.Post
 
 		PostDTO GetPostById(int id);
 
-		PostListQueryResultDTO ListPosts(PostFilter filter, int page=0);
+		PostListQueryResultDTO ListPosts(PostFilter filter, int page = 0);
 		List<ReactionDTO> GetReactionsOnPost(PostDTO post);
-
-
-
 	}
 }

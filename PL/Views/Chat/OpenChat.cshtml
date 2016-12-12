@@ -6,63 +6,83 @@
 }
 <h2>@Model.Chat.Name</h2>
 <div class="row">
-	<div class="col-md-2" >
+	<div class="col-md-2">
 		<div style="border: black 1px solid">
 			Users
 			@{
-			Html.RenderPartial("AccountList", Model.Accounts);
+				Html.RenderPartial("AccountList", Model.Accounts);
 			}
 		</div>
 		<div>
-			@Html.ActionLink("Invite People", "Invite", "Request", new {chatId = Model.ChatId}, new {@class = "btn btn-primary"})
+			@Html.ActionLink("Invite People", "Invite", "Request", new { chatId = Model.ChatId }, new { @class = "btn btn-primary" })
 
+		</div>
+		<div>
+			@Html.ActionLink("Remove People", "RemovePeople", "Chat", new { id = Model.ChatId }, new { @class = "btn btn-primary" })
+
+		</div>
+		<div>
+			@using (Html.BeginForm("Leave", "Chat", new { id = Model.ChatId }, FormMethod.Post))
+			{
+				<input type="submit" value="LeaveChat" class="btn btn-danger" style="display: inline-block" />
+			}
 		</div>
 	</div>
 	<div class="col-md-10">
 		<div style="border: black solid 1px">
 			@foreach (var msg in Model.ChatMessages)
 			{
-				<div style="border-top: black 1px solid; border-bottom: black 1px solid">
-					<div> @msg.Sender.FullName : <span>@msg.Message</span></div>
-
-					<div>
-						@if (msg.Sender.ID == int.Parse(User.Identity.GetUserId()))
-						{
-
-							@Html.ActionLink("Delete", "DeleteMessage", "Chat", new {id = msg.ID}, null)
-							@Html.ActionLink("Edit", "EditMessage", "Chat", new {id = msg.ID}, null)
-						}
-						<span>Send at </span><span>@msg.Time</span>
+				<div style="border-bottom: black 1px solid; border-top: black 1px solid;">
+					<div class="row">
+						
+						<div class="col-md-8">
+							@Html.ActionLink(msg.Sender.FullName, "UserPage", "Page", new { userId = msg.Sender.ID }, null )
+						</div>
+						
+						<div class="col-md-3">
+							<span>Sent at </span><span>@msg.Time</span>
+							
+						</div>
+						<div class="col-md-1" style="margin-left: -20px">
+							@if (msg.Sender.ID == int.Parse(User.Identity.GetUserId()))
+							{
+								@Html.ActionLink("Delete", "DeleteMessage", "Chat", new { id = msg.ID }, null)
+								@Html.ActionLink("Edit", "EditMessage", "Chat", new { id = msg.ID }, null)
+							}
+						</div>
 					</div>
+					<span style="width: 920px; word-wrap: break-word; display: inline-block; margin: 0px 10px 0px 10px">
+						@msg.Message
+					</span>
+
+
 				</div>
-
-
 			}
 		</div>
 		<div>
 			@using (Html.BeginForm("OpenChat", "Chat", FormMethod.Post))
 			{
 				@Html.HiddenFor(m => m.ChatId)
-				@Html.TextAreaFor(m => m.NewChatMessage.Message, new {@class = "form-control", style = "display: inline-block"})
-				<input type="submit" name="SendMessage" value="Send" style="display: inline-block; margin-top: -66px" class="btn btn-primary"/>
+				@Html.TextAreaFor(m => m.NewChatMessage.Message, new { @class = "form-control", style = "display:inline-block" })
+				<input type="submit" name="SendMessage" value="Send" style="display: inline-block; margin-top: -66px" class="btn btn-primary" />
 			}
-			
-			
+
+
 			<div style="display: inline-block">
 				@if (Model.Page > 1)
-			{
+				{
 					<div style="display: inline-block">
 						@Html.ActionLink("Previous Page", "OpenChat", "Chat",
-						new { id = Model.ChatId, page = Model.Page - 1 }, new { @class = "btn btn-info" })
+							new { id = Model.ChatId, page = Model.Page - 1 }, new { @class = "btn btn-info" })
 					</div>
-			}
+				}
 				<div style="display: inline-block">
 
 					@Html.ActionLink("Next Page", "OpenChat", "Chat",
 						new { id = Model.ChatId, page = Model.Page + 1 }, new { @class = "btn btn-info" })
 				</div>
 			</div>
-			
+
 		</div>
 	</div>
 </div>

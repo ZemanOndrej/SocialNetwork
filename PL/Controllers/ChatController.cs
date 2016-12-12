@@ -1,40 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using BL.DTO;
+using BL.DTO.ChatDTOs;
 using BL.Facades;
 using Microsoft.AspNet.Identity;
 using PL.Models;
+using WebGrease.Css.Extensions;
 
 namespace PL.Controllers
 {
 	[Authorize]
 	public class ChatController : Controller
 	{
-		#region Dependency
-		private readonly ChatFacade chatFacade;
-		private readonly UserFacade userFacade;
-
-		public ChatController(UserFacade userFacade, ChatFacade chatFacade)
-		{
-			this.userFacade = userFacade;
-			this.chatFacade = chatFacade;
-		}
-		#endregion
-
 		public ActionResult Index()
 		{
 			var usersChats = chatFacade.ListAllUsersChats(int.Parse(User.Identity.GetUserId()));
-			
+
 			return View(new ChatListModel {Chats = usersChats});
 		}
 
 		[HttpPost]
 		public ActionResult Create(int id)
 		{
-			var chatId =chatFacade.CreateChat(
+			var chatId = chatFacade.CreateChat(
 				userFacade.GetUserById(int.Parse(User.Identity.GetUserId())),
 				userFacade.GetUserById(id));
 			return RedirectToAction("OpenChat", new {id = chatId});
@@ -47,8 +35,6 @@ namespace PL.Controllers
 			if (!chatFacade.ListAllUsersInChat(chat).Contains(user)) return RedirectToAction("AccessDenied", "Page");
 
 			return View(chat);
-
-
 		}
 
 		[HttpPost]
@@ -57,25 +43,25 @@ namespace PL.Controllers
 			chatFacade.DeleteChat(chat);
 
 			return RedirectToAction("Index");
-
-
 		}
 
-		public ActionResult OpenChat(int id , int page =1 )
+		public ActionResult OpenChat(int id, int page = 1)
 		{
 			var chat = chatFacade.GetChatById(id);
 			var userList = chatFacade.ListAllUsersInChat(chat);
 			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
 			if (!userList.Contains(user))
-			{
 				return RedirectToAction("AccessDenied", "Page");
-			}
 
 			var list = chatFacade.GetChatMessagesFromChat(chat, page);
 			list.Reverse();
 			return View(new OpenChatModel
 			{
-				Chat = chat , ChatMessages =list ,ChatId = chat.ID, Page = page, Accounts = userList
+				Chat = chat,
+				ChatMessages = list,
+				ChatId = chat.ID,
+				Page = page,
+				Accounts = userList
 			});
 		}
 
@@ -85,7 +71,7 @@ namespace PL.Controllers
 			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
 			var chat = chatFacade.GetChatById(model.ChatId);
 			chatFacade.SendChatMessageToChat(chat, user, model.NewChatMessage);
-			return RedirectToAction("OpenChat",new {id=chat.ID});
+			return RedirectToAction("OpenChat", new {id = chat.ID});
 		}
 
 		public ActionResult DeleteMessage(int id)
@@ -93,7 +79,7 @@ namespace PL.Controllers
 			var msg = chatFacade.GetChatMessageById(id);
 			if (msg.Sender.ID != int.Parse(User.Identity.GetUserId())) return RedirectToAction("AccessDenied", "Page");
 
-			return View(new ChatMessageModel {ChatMessage = msg,ChatId = msg.Chat.ID});
+			return View(new ChatMessageModel {ChatMessage = msg, ChatId = msg.Chat.ID});
 		}
 
 		[HttpPost]
@@ -108,26 +94,67 @@ namespace PL.Controllers
 			var msg = chatFacade.GetChatMessageById(id);
 			if (msg.Sender.ID != int.Parse(User.Identity.GetUserId())) return RedirectToAction("AccessDenied", "Page");
 
-			return View(new ChatMessageModel { ChatMessage = msg, ChatId = msg.Chat.ID });
-
+			return View(new ChatMessageModel {ChatMessage = msg, ChatId = msg.Chat.ID});
 		}
 
 		[HttpPost]
 		public ActionResult EditMessage(ChatMessageModel model)
 		{
-			chatFacade.EditChatMessage(model.ChatMessage,model.ChatMessage.Message);
-			return RedirectToAction("OpenChat", new { id = model.ChatId });
-
+			chatFacade.EditChatMessage(model.ChatMessage, model.ChatMessage.Message);
+			return RedirectToAction("OpenChat", new {id = model.ChatId});
 		}
 
 		public ActionResult Edit(int id)
 		{
 			var chat = chatFacade.GetChatById(id);
 			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
-			
+
 			if (!chatFacade.ListAllUsersInChat(chat).Contains(user)) return RedirectToAction("AccessDenied", "Page");
 
 			return View(chat);
 		}
+
+		public ActionResult RemovePeople(int id)
+		{
+			var chat = chatFacade.GetChatById(id);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			var userList = chatFacade.ListAllUsersInChat(chat);
+			if (!userList.Contains(user)) return RedirectToAction("AccessDenied", "Page");
+			userList.Remove(user);
+			var list = new List<SelectModel>();
+			userList.ForEach(f => list.Add(new SelectModel {Account = f}));
+			return View(new RemovePeopleModel {Accounts = list, Chat = chat});
+		}
+
+		[HttpPost]
+		public ActionResult RemovePeople(RemovePeopleModel model)
+		{
+			model.Accounts.Where(a => a.Invited).ForEach(a => chatFacade.RemoveUserFromChat(model.Chat, a.Account));
+
+			return RedirectToAction("OpenChat", "Chat", new {id = model.Chat.ID});
+		}
+
+		[HttpPost]
+		public ActionResult Leave(int id)
+		{
+			var chat = chatFacade.GetChatById(id);
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			chatFacade.RemoveUserFromChat(chat, user);
+
+			return RedirectToAction("Index");
+		}
+
+		#region Dependency
+
+		private readonly ChatFacade chatFacade;
+		private readonly UserFacade userFacade;
+
+		public ChatController(UserFacade userFacade, ChatFacade chatFacade)
+		{
+			this.userFacade = userFacade;
+			this.chatFacade = chatFacade;
+		}
+
+		#endregion
 	}
 }

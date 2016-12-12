@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
 using Utils.Enums;
 
-namespace BL.DTO
+namespace BL.DTO.PostDTOs
 {
 	public class PostDTO
 	{
@@ -16,15 +15,16 @@ namespace BL.DTO
 
 		public DateTime Time { get; set; }
 
-		public GroupDTO Group { get; set; }//todo change to groupdto
+		public GroupDTO Group { get; set; } //todo change to groupdto
 
-		public PostPrivacyLevel PrivacyLevel { get; set; }=PostPrivacyLevel.OnlyFriends;
+		public PostPrivacyLevel PrivacyLevel { get; set; } = PostPrivacyLevel.OnlyFriends;
 
 
 		public override string ToString()
 		{
-			return Group == null ? $"{Sender.FullName} at  {Time} updated status \n \" {Message}\"" 
-								   : $"{Sender.FullName} at  {Time} posted to {Group.Name} groupId\n \" {Message}\"";
+			return Group == null
+				? $"{Sender.FullName} at  {Time} updated status \n \" {Message}\""
+				: $"{Sender.FullName} at  {Time} posted to {Group.Name} groupId\n \" {Message}\"";
 		}
 
 		protected bool Equals(PostDTO other)
@@ -36,7 +36,7 @@ namespace BL.DTO
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			return obj.GetType() == GetType() && Equals((PostDTO) obj);
+			return (obj.GetType() == GetType()) && Equals((PostDTO) obj);
 		}
 
 		public override int GetHashCode()

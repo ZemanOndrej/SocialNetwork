@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using AutoMapper;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.PostDTOs;
 using BL.DTO.UserDTOs;
@@ -15,8 +10,35 @@ using Utils.Enums;
 
 namespace BL.Services.Reaction
 {
-	public class ReactionService :AppService,IReactionService
+	public class ReactionService : AppService, IReactionService
 	{
+		#region Update
+
+		public void EditReaction(ReactionDTO reaction)
+		{
+			using (var uow = UnitOfWorkProvider.Create())
+			{
+				var reactionEnt = reactionRepository.GetById(reaction.ID, r => r.Account, r => r.Post);
+				reactionEnt.UserReaction = reaction.UserReaction;
+
+				reactionRepository.Update(reactionEnt);
+				uow.Commit();
+			}
+		}
+
+		#endregion
+
+		#region additional
+
+		private IQuery<ReactionDTO> GetQuery(ReactionFilter filter)
+		{
+			var query = reactionListQuery;
+			query.Filter = filter;
+			query.ClearSortCriterias();
+			return query;
+		}
+
+		#endregion
 
 		#region Dependency
 
@@ -25,18 +47,20 @@ namespace BL.Services.Reaction
 		private readonly UserRepository userRepository;
 		private readonly PostRepository postRepository;
 
-		public ReactionService(ReactionRepository reactionRepository, ReactionListQuery reactionListQuery, UserRepository userRepository, PostRepository postRepository)
+		public ReactionService(ReactionRepository reactionRepository, ReactionListQuery reactionListQuery,
+			UserRepository userRepository, PostRepository postRepository)
 		{
 			this.reactionRepository = reactionRepository;
 			this.reactionListQuery = reactionListQuery;
 			this.userRepository = userRepository;
 			this.postRepository = postRepository;
 		}
+
 		#endregion
 
 		#region CreateDelete
 
-		public int CreateReaction( PostDTO post, ReactionEnum reaction,AccountDTO account)
+		public int CreateReaction(PostDTO post, ReactionEnum reaction, AccountDTO account)
 		{
 			var reactCheck = ListReactions(new ReactionFilter {Post = post, Account = account}).ResultReactions.ToList();
 			if (reactCheck.Any())
@@ -73,23 +97,6 @@ namespace BL.Services.Reaction
 
 		#endregion
 
-
-		#region Update
-
-		public void EditReaction(ReactionDTO reaction)
-		{
-			using (var uow = UnitOfWorkProvider.Create())
-			{
-				var reactionEnt = reactionRepository.GetById(reaction.ID,r=>r.Account,r=>r.Post);
-				reactionEnt.UserReaction = reaction.UserReaction;
-
-				reactionRepository.Update(reactionEnt);
-				uow.Commit();
-			}
-		} 
-
-		#endregion
-
 		#region Get
 
 		public ReactionDTO GetReactionById(int id)
@@ -105,35 +112,17 @@ namespace BL.Services.Reaction
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				
 				var query = GetQuery(filter);
 
 				return new ReactionListQueryResultDTO
 				{
 					Filter = filter,
 					ResultCount = query.GetTotalRowCount(),
-					ResultReactions = query.Execute(),
-					
+					ResultReactions = query.Execute()
 				};
-
 			}
 		}
 
 		#endregion
-
-
-		#region additional
-
-		private IQuery<ReactionDTO> GetQuery(ReactionFilter filter)
-		{
-			var query = reactionListQuery;
-			query.Filter = filter;
-			query.ClearSortCriterias();
-			return query;
-		}
-
-		#endregion
-
-
 	}
 }

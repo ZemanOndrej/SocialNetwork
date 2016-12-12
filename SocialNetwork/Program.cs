@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using BL;
 using BL.DTO;
+using BL.DTO.ChatDTOs;
 using BL.DTO.GroupDTOs;
+using BL.DTO.PostDTOs;
 using BL.DTO.UserDTOs;
 using BL.Facades;
 using BL.Services.Chat;
@@ -124,21 +126,14 @@ namespace SocialNetwork
 
 			Init();
 
-			/*TODO MERGE REACTION AND COMMENT AND MAKE COMMENT REACTABLE 
-
-			Tie Game fily si nevsimaj chcel som spravit aj hru na tu socialnu siet
-			ale nevyzsie zatial cas
-
-	
-			*/
 
 
 			Console.WriteLine("//////////////////CHAT FACADE TEST//////////////////");
-//			ChatFacadeTest();
+			ChatFacadeTest();
 			Console.WriteLine("//////////////////POST FACADE TEST//////////////////");
-//			PostFacadeTest();
+			PostFacadeTest();
 			Console.WriteLine("//////////////////GROUP FACADE TEST//////////////////");
-//			GroupFacadeTest();
+			GroupFacadeTest();
 			Console.WriteLine("//////////////////USER FACADE TEST//////////////////");
 			UserFacadeTest();
 

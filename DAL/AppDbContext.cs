@@ -29,51 +29,47 @@ namespace DAL
 		public DbSet<Request> Requests { get; set; }
 
 
-
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 
 
-
 			modelBuilder.Entity<Comment>()
-					   .HasRequired(c => c.Sender)
-					   .WithMany()
-					   .WillCascadeOnDelete(false);
+				.HasRequired(c => c.Sender)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<Reaction>()
-					   .HasRequired(r => r.Account)
-					   .WithMany()
-					   .WillCascadeOnDelete(false);
+				.HasRequired(r => r.Account)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<Friendship>()
-					   .HasRequired(r => r.User1)
-					   .WithMany()
-					   .WillCascadeOnDelete(false);
+				.HasRequired(r => r.User1)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<Friendship>()
-					   .HasRequired(r => r.User2)
-					   .WithMany()
-					   .WillCascadeOnDelete(false);
+				.HasRequired(r => r.User2)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 
 			modelBuilder.Entity<Request>()
-						.HasRequired(r=>r.Sender)
-						.WithMany()
-						.WillCascadeOnDelete(false);
+				.HasRequired(r => r.Sender)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<Request>()
-						.HasRequired(r => r.Receiver)
-						.WithMany()
-						.WillCascadeOnDelete(false);
+				.HasRequired(r => r.Receiver)
+				.WithMany()
+				.WillCascadeOnDelete(false);
 
 
 			modelBuilder.Entity<Account>()
-						.HasOptional(u => u.User)
-						.WithRequired(u => u.Account);
+				.HasOptional(u => u.User)
+				.WithRequired(u => u.Account);
 //						.WillCascadeOnDelete(true);
-
-
 		}
 
 		private void InitializeDbContext()

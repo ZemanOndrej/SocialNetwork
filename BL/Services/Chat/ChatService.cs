@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AutoMapper;
-using BL.DTO;
 using BL.DTO.ChatDTOs;
 using BL.DTO.Filters;
 using BL.DTO.UserDTOs;
 using BL.Queries;
 using BL.Repositories;
-using Castle.Components.DictionaryAdapter;
 using Castle.Core.Internal;
 using Riganti.Utils.Infrastructure.Core;
 
@@ -18,7 +15,6 @@ namespace BL.Services.Chat
 	public class ChatService : AppService, IChatService
 	{
 		public int ChatPageSize => 20;
-
 
 		#region Dependency
 
@@ -46,11 +42,10 @@ namespace BL.Services.Chat
 			int id;
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-
 				if (chatDto.ChatUsers.Count == 2)
 				{
 					var tmp = CheckIfPrivateChatExists(chatDto);
-					if (tmp!=-1) return tmp;
+					if (tmp != -1) return tmp;
 				}
 				var list = chatDto.ChatUsers
 					.Select(chatUser => userRepository.GetById(chatUser.ID))
@@ -65,7 +60,6 @@ namespace BL.Services.Chat
 				var chatEnt = new DAL.Entities.Chat
 				{
 					Name = chatDto.Name
-
 				};
 				chatEnt.ChatUsers.AddRange(list);
 
@@ -98,9 +92,13 @@ namespace BL.Services.Chat
 
 				chatEnt.ChatUsers.Remove(userEnt);
 
+				if (chatEnt.ChatUsers.Count == 0)
+				{
+					chatRepository.Delete(chatEnt);
+					return;
+				}
 				chatRepository.Update(chatEnt);
 				uow.Commit();
-
 			}
 		}
 
@@ -113,13 +111,12 @@ namespace BL.Services.Chat
 				chatEnt.ChatUsers.Add(userEnt);
 				chatRepository.Update(chatEnt);
 				uow.Commit();
-
 			}
 		}
 
 		public void AddUsersToChat(ChatDTO chat, List<AccountDTO> accounts)
 		{
-			accounts.ForEach(a=>AddUserToChat(chat,a));
+			accounts.ForEach(a => AddUserToChat(chat, a));
 		}
 
 		public void EditChatName(ChatDTO chatDto)
@@ -164,7 +161,6 @@ namespace BL.Services.Chat
 						ResultChats = query.Execute(),
 						Filter = filter
 					};
-
 				}
 			}
 		}
@@ -175,7 +171,6 @@ namespace BL.Services.Chat
 			{
 				var chatEnt = chatRepository.GetById(chat.ID, c => c.ChatUsers);
 				return Mapper.Map<List<AccountDTO>>(chatEnt.ChatUsers);
-
 			}
 		}
 
@@ -197,18 +192,14 @@ namespace BL.Services.Chat
 			foreach (var chatTmp in tmpChatList.ResultChats)
 			{
 				if (chatTmp.ChatUsers.Count != 2) continue;
-				if (chatTmp.ChatUsers.Contains(privateChat.ChatUsers[0]) 
+				if (chatTmp.ChatUsers.Contains(privateChat.ChatUsers[0])
 					&& chatTmp.ChatUsers.Contains(privateChat.ChatUsers[1]))
 					return chatTmp.ID;
 			}
 
 			return -1;
 		}
-	
 
-	#endregion
-
-
-
+		#endregion
 	}
 }

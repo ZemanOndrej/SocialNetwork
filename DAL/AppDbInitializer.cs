@@ -6,10 +6,9 @@ using DAL.Entities;
 using DAL.Entities.Identity;
 using DAL.Identity;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Utils.Enums;
 
-namespace DAL.Entities
+namespace DAL
 {
 	public class AppDbInitializer : DropCreateDatabaseAlways<AppDbContext>
 	{
@@ -19,18 +18,16 @@ namespace DAL.Entities
 			Init(context);
 
 			context.SaveChanges();
-
 		}
 
 		private static void Init(AppDbContext context)
 		{
-
 			var roleStore = new AppRoleStore(context);
 			var roleManager = new AppRoleManager(roleStore);
 			var userStore = new AppUserStore(context);
 			var userManager = new AppUserManager(userStore);
-			context.Roles.Add(new AppRole { Name = "admin" });
-			context.Roles.Add(new AppRole { Name = "user" });
+			context.Roles.Add(new AppRole {Name = "admin"});
+			context.Roles.Add(new AppRole {Name = "user"});
 
 			#region UserInit
 
@@ -42,7 +39,7 @@ namespace DAL.Entities
 				DateOfBirth = new DateTime(2000, 1, 1),
 				Surname = "Fors",
 				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
-				User = new User { Email = "a@a.a",UserName = "Sebastian"}
+				User = new User {Email = "a@a.a", UserName = "Sebastian"}
 			};
 
 			var user2 = new Account
@@ -51,8 +48,7 @@ namespace DAL.Entities
 				DateOfBirth = new DateTime(1337, 4, 20),
 				Surname = "Novak",
 				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
-				User = new User { Email ="PogChamp@Kappa.cz",UserName = "Kappa1" }
-
+				User = new User {Email = "PogChamp@Kappa.cz", UserName = "Kappa1"}
 			};
 			var user3 = new Account
 			{
@@ -60,8 +56,7 @@ namespace DAL.Entities
 				DateOfBirth = new DateTime(1996, 2, 13),
 				Surname = "Zeman",
 				Information = "forsenE forsen1 forsen2 forsen3 forsen4 forsenE",
-				User = new User { Email ="forsenE@gmail.com",UserName ="RayMan"}
-
+				User = new User {Email = "forsenE@gmail.com", UserName = "RayMan"}
 			};
 			var user4 = new Account
 			{
@@ -69,7 +64,7 @@ namespace DAL.Entities
 				DateOfBirth = new DateTime(2000, 1, 1),
 				Surname = "admin",
 				Information = "NaM adas das sadas sda ssdas dasd asdas adsda asd asda sd",
-				User = new User { Email = "q@q.q", UserName = "Admin" }
+				User = new User {Email = "q@q.q", UserName = "Admin"}
 			};
 
 			user1.User.Account = user1;
@@ -81,7 +76,7 @@ namespace DAL.Entities
 			userManager.Create(user2.User, password);
 			userManager.Create(user3.User, password);
 			userManager.Create(user4.User, password);
-			
+
 			userManager.AddToRole(user1.ID, "admin");
 			userManager.AddToRole(user2.ID, "user");
 			userManager.AddToRole(user3.ID, "user");
@@ -91,7 +86,6 @@ namespace DAL.Entities
 			context.Friendships.Add(new Friendship(user1, user3));
 			context.Friendships.Add(new Friendship(user2, user3));
 			context.Friendships.Add(new Friendship(user1, user2));
-
 
 			#endregion
 
@@ -116,20 +110,18 @@ namespace DAL.Entities
 			{
 				Name = "groupchat user1 user4"
 			};
-			chatu1u4.ChatUsers.AddRange(new List<Account> { user1, user4 });
+			chatu1u4.ChatUsers.AddRange(new List<Account> {user1, user4});
 
 
-			
 			var chatMsgU1U2 = new ChatMessage
 			{
 				Message = "Ahoj",
 				Chat = chatu1u4,
 				Time = new DateTime(2001, 9, 11, 12, 32, 25),
 				Sender = user1
-
 			};
 			chatu1u4.Messages.Add(chatMsgU1U2);
-			for (int i = 0; i < 50; i++)
+			for (var i = 0; i < 50; i++)
 			{
 				var msgTmp = new ChatMessage
 				{
@@ -139,7 +131,6 @@ namespace DAL.Entities
 				};
 				chatu1u4.Messages.Add(msgTmp);
 			}
-
 
 			#endregion
 
@@ -151,7 +142,6 @@ namespace DAL.Entities
 				Sender = user2,
 				Time = new DateTime(2001, 9, 11, 9, 11, 25)
 			};
-
 
 
 			var reacU1 = new Reaction
@@ -182,25 +172,26 @@ namespace DAL.Entities
 			context.ChatSet.Add(chatu1u4);
 			context.ChatMessages.Add(chatMsgU1U2);
 			context.Comments.Add(commentU1);
-			context.Posts.AddRange(new List<Post> { postU1, postU2 });
+			context.Posts.AddRange(new List<Post> {postU1, postU2});
 
-			for (int i = 0; i < 50; i++)
+			for (var i = 0; i < 50; i++)
 			{
-				var comment = new Comment()
+				var comment = new Comment
 				{
 					CommentMessage = string.Concat(Enumerable.Repeat(i.ToString(), i + 1)),
 					Sender = user4,
-					Time = DateTime.Now,Post = postU1
+					Time = DateTime.Now,
+					Post = postU1
 				};
 				context.Comments.Add(comment);
 			}
 
 
-			for (int i = 0; i < 50; i++)
+			for (var i = 0; i < 50; i++)
 			{
 				var postTmp = new Post
 				{
-					Message = string.Concat(Enumerable.Repeat(i.ToString(), i+1)),
+					Message = string.Concat(Enumerable.Repeat(i.ToString(), i + 1)),
 					Sender = user1,
 					Time = DateTime.Now
 				};
@@ -211,15 +202,11 @@ namespace DAL.Entities
 
 			#region Requests
 
-			context.Requests.Add(new Request {Group = group1,Receiver = user2,Sender = user1 ,Time = DateTime.Now});
-			context.Requests.Add(new Request {Receiver = user4,Sender = user1, Time = DateTime.Now });
-			context.Requests.Add(new Request { Group = group1, Receiver = user4, Sender = user1, Time = DateTime.Now });
+			context.Requests.Add(new Request {Group = group1, Receiver = user2, Sender = user1, Time = DateTime.Now});
+			context.Requests.Add(new Request {Receiver = user4, Sender = user1, Time = DateTime.Now});
+			context.Requests.Add(new Request {Group = group1, Receiver = user4, Sender = user1, Time = DateTime.Now});
 
 			#endregion
-			
-
-
-
 		}
 	}
 }

@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using AutoMapper;
-using BL.DTO;
 using BL.DTO.Filters;
 using BL.DTO.GroupDTOs;
 using BL.DTO.UserDTOs;
@@ -81,20 +80,17 @@ namespace BL.Services.User
 				};
 
 				var appUser = Mapper.Map<DAL.Entities.Identity.User>(user);
-				appUser.Account= Mapper.Map<Account>(account);
-				userManager.Create(appUser,user.Password);
+				appUser.Account = Mapper.Map<Account>(account);
+				userManager.Create(appUser, user.Password);
 
 				uow.Commit();
 				id = appUser.Id;
 			}
 			if (id > 0)
-			{
 				userManager.AddToRole(id, "user");
-			}
-			
+
 
 			return id;
-
 		}
 
 		public ClaimsIdentity Login(string email, string password)
@@ -106,20 +102,15 @@ namespace BL.Services.User
 					var wantedUser = userManager.FindByEmail(email);
 
 					if (wantedUser == null)
-					{
 						return null;
-					}
 
 					var user = userManager.Find(wantedUser.UserName, password);
 
 					if (user == null)
-					{
 						return null;
-					}
 
 					return userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
 				}
-
 			}
 		}
 
@@ -142,40 +133,31 @@ namespace BL.Services.User
 
 		public void EditUser(AccountDTO account)
 		{
-
 			using (var uow = UnitOfWorkProvider.Create())
 			{
 				using (var userManager = userManagerFactory.Invoke())
 				{
-
-
 					var acc = userRepository.GetById(account.ID);
 					Mapper.Map(account, acc);
 
 					userRepository.Update(acc);
 
-					var user = userManager.Users.Include(a => a.Account).FirstOrDefault(u=>u.Email.Equals(acc.User.Email));
-					if (user == null)return;
+					var user = userManager.Users.Include(a => a.Account).FirstOrDefault(u => u.Email.Equals(acc.User.Email));
+					if (user == null) return;
 
 					if (account.Email != null)
-					{
 						user.Email = account.Email;
-					}
 
 
 					if (account.UserName != null)
-					{
 						user.UserName = account.UserName;
-					}
 					if (account.Password != null)
-					{
-						user.PasswordHash =  userManager.PasswordHasher.HashPassword(account.Password);
-					}
+						user.PasswordHash = userManager.PasswordHasher.HashPassword(account.Password);
 
 					userManager.Update(user);
 
 					uow.Commit();
-				}			
+				}
 			}
 		}
 
@@ -188,7 +170,6 @@ namespace BL.Services.User
 
 				friendshipRepository.Insert(new Friendship(user1, user2));
 				uow.Commit();
-
 			}
 		}
 
@@ -196,7 +177,7 @@ namespace BL.Services.User
 		{
 			using (var uow = UnitOfWorkProvider.Create())
 			{
-				var query = GetQuery(new FriendshipFilter { Account = accountDto, Account2 = user2Dto });
+				var query = GetQuery(new FriendshipFilter {Account = accountDto, Account2 = user2Dto});
 
 				var frship = query.Execute().FirstOrDefault();
 				RemoveFriendship(frship);
@@ -204,7 +185,6 @@ namespace BL.Services.User
 			}
 		}
 
-		
 
 		public void RemoveFriendship(FriendshipDTO friendship)
 		{
@@ -228,7 +208,7 @@ namespace BL.Services.User
 		{
 			using (UnitOfWorkProvider.Create())
 			{
-				var user = userRepository.GetById(userId,u=>u.User);
+				var user = userRepository.GetById(userId, u => u.User);
 				if (user == null) return null;
 				var accountDto = Mapper.Map<AccountDTO>(user);
 				accountDto.UserName = user.User.UserName;
@@ -243,7 +223,7 @@ namespace BL.Services.User
 			using (UnitOfWorkProvider.Create())
 			{
 				var query = GetQuery(filter);
-				query.Skip = (page > 0 ? page - 1 : 0) * UserPageSize;
+				query.Skip = (page > 0 ? page - 1 : 0)*UserPageSize;
 				query.Take = UserPageSize;
 				query.AddSortCriteria("Surname");
 
@@ -258,7 +238,7 @@ namespace BL.Services.User
 			}
 		}
 
-		public List<AccountDTO> ListFriendsOfUser(AccountDTO account, int page=0)
+		public List<AccountDTO> ListFriendsOfUser(AccountDTO account, int page = 0)
 		{
 			using (UnitOfWorkProvider.Create())
 			{
@@ -270,7 +250,7 @@ namespace BL.Services.User
 //				query.AddSortCriteria("Surname");
 
 
-				var queryRes= new FriendListQueryResultDTO
+				var queryRes = new FriendListQueryResultDTO
 				{
 					RequestedPage = page,
 					ResultCount = query.GetTotalRowCount(),
@@ -299,16 +279,14 @@ namespace BL.Services.User
 			{
 				var userEnt = userRepository.GetById(account.ID, u => u.Groups);
 				return Mapper.Map<List<GroupDTO>>(userEnt.Groups);
-
 			}
 		}
 
 		#endregion
 
-
 		#region additional
 
-		private IQuery<AccountDTO> GetQuery(UserFilter filter )
+		private IQuery<AccountDTO> GetQuery(UserFilter filter)
 		{
 			var query = userListQuery;
 			query.ClearSortCriterias();
@@ -324,9 +302,6 @@ namespace BL.Services.User
 			return query;
 		}
 
-		
-
 		#endregion
-
 	}
 }

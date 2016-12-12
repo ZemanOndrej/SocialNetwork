@@ -1,12 +1,15 @@
 ﻿@model List<BL.DTO.UserDTOs.AccountDTO>
 
+
 <div>
+
 
 
 	@foreach (var user in Model)
 	{
 		<div style="margin: 10px;">
-			@Html.ActionLink(user.FullName, "UserPage", "Page", new { userId = user.ID }, null)
+
+			@Html.ActionLink(user.FullName, "UserPage", "Page", new {userId = user.ID}, null)
 		</div>
 	}
 </div>

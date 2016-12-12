@@ -4,7 +4,7 @@ using Riganti.Utils.Infrastructure.EntityFramework;
 
 namespace BL.Repositories
 {
-	public class ChatMessageRepository : EntityFrameworkRepository<ChatMessage,int>
+	public class ChatMessageRepository : EntityFrameworkRepository<ChatMessage, int>
 	{
 		public ChatMessageRepository(IUnitOfWorkProvider provider) : base(provider)
 		{

@@ -14,7 +14,6 @@ namespace DAL.Entities
 			Accounts = new List<Account>();
 			GroupPosts = new List<Post>();
 			Requests = new List<Request>();
-
 		}
 
 		[MaxLength(100)]
@@ -32,6 +31,8 @@ namespace DAL.Entities
 		public virtual List<Post> GroupPosts { get; set; }
 		public virtual List<Request> Requests { get; set; }
 
+		public int ID { get; set; }
+
 
 		protected bool Equals(Group other)
 		{
@@ -42,14 +43,12 @@ namespace DAL.Entities
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
-			return obj.GetType() == GetType() && Equals((Group) obj);
+			return (obj.GetType() == GetType()) && Equals((Group) obj);
 		}
 
 		public override int GetHashCode()
 		{
 			return ID;
 		}
-
-		public int ID { get; set; }
 	}
 }
