@@ -52,4 +52,12 @@ namespace PL.Models
 		public string BackView { get; set; }
 		public PostDTO Post { get; set; }
 	}
+
+	public class CommentEditModel
+	{
+		public string BackView { get; set; }
+		public CommentDTO Comment { get; set; }
+		public int PostId { get; set; }
+
+	}
 }

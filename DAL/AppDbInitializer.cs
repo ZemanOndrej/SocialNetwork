@@ -10,12 +10,12 @@ using Utils.Enums;
 
 namespace DAL
 {
-	public class AppDbInitializer : DropCreateDatabaseAlways<AppDbContext>
+	public class AppDbInitializer : CreateDatabaseIfNotExists<AppDbContext>
 	{
 		public override void InitializeDatabase(AppDbContext context)
 		{
 			base.InitializeDatabase(context);
-			Init(context);
+//			Init(context);
 
 			context.SaveChanges();
 		}

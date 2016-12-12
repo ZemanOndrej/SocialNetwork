@@ -1,4 +1,5 @@
 ﻿@using Castle.Core.Internal
+@using Microsoft.AspNet.Identity
 @using Utils.Enums
 @model PL.Models.OpenPostModel
 @{
@@ -69,7 +70,7 @@
 				var reactCount = Model.Reactions.Count(r => r.UserReaction.Equals(i));
 				if (reactCount > 0)
 				{
-					<div style="border: 1px solid gray; float: left; padding: 5px">
+					<div style="border: 1px solid gray; float: left; padding: 5px; background-color: #d3d3d3">
 						@i.ToString() : @reactCount
 					</div>
 				}
@@ -82,12 +83,23 @@
 		@foreach (var comment in Model.Comments)
 		{
 			<div style="border: black 1px solid; clear: both">
-				<div>
-					@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new {userId = comment.Sender.ID}, null)
+				<div class="row">
+					<div class="col-md-7">
+						@Html.ActionLink(comment.Sender.FullName, "UserPage", "Page", new { userId = comment.Sender.ID }, null)
 
-					at @comment.Time
+						at @comment.Time
+					</div>
+					<div class="col-md-3">
+						@if (comment.Sender.ID == int.Parse(User.Identity.GetUserId()))
+						{
+
+							@Html.ActionLink("Delete", "DeleteComment", "Post", new { id = comment.ID, viewName = Model.BackView }, null)
+							@Html.ActionLink("Edit", "EditComment", "Post", new { id = comment.ID, viewName = Model.BackView }, null)
+						}
+					</div>
+
 				</div>
-				<p>
+				<p style="margin: 10px; width: 1100px; word-wrap: break-word; display: inline-block;">
 					@comment.CommentMessage
 				</p>
 			</div>

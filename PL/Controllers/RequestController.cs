@@ -10,6 +10,7 @@ using PL.Models;
 
 namespace PL.Controllers
 {
+	[Authorize]
 	public class RequestController : Controller
 	{
 		public ActionResult Index()

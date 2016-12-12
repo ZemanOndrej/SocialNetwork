@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Antlr.Runtime.Tree;
 using BL.Facades;
 using Microsoft.AspNet.Identity;
 using PL.Models;
@@ -100,6 +101,42 @@ namespace PL.Controllers
 
 			postFacade.CommentPost(post, model.NewComment, user);
 			return RedirectToAction("Reactions", new {id = model.PostId, viewName = model.BackView});
+		}
+
+
+
+		public ActionResult DeleteComment(int id, string backView = "FrontPage")
+		{
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			var comment = postFacade.GetCommentById(id);
+			if (comment.Sender.ID != user.ID) return RedirectToAction("AccessDenied", "Page");
+			return View(new CommentEditModel {BackView = backView, Comment = comment, PostId = comment.Post.ID});
+		}
+
+		[HttpPost]
+		public ActionResult DeleteComment(CommentEditModel model)
+		{
+			postFacade.DeleteComment(model.Comment);
+			return RedirectToAction("Reactions", new {id =model.PostId, viewName = model.BackView});
+
+		}
+
+		public ActionResult EditComment(int id, string backView = "FrontPage")
+		{
+			var user = userFacade.GetUserById(int.Parse(User.Identity.GetUserId()));
+			var comment = postFacade.GetCommentById(id);
+			if (comment.Sender.ID != user.ID) return RedirectToAction("AccessDenied", "Page");
+
+			return View(new CommentEditModel {BackView = backView, Comment = comment, PostId = comment.Post.ID});
+
+		}
+
+		[HttpPost]
+		public ActionResult EditComment(CommentEditModel model)
+		{
+			postFacade.UpdateComment(model.Comment);
+			return RedirectToAction("Reactions", "Post", new {id = model.PostId, backView = model.BackView});
+
 		}
 
 		[HttpPost]
